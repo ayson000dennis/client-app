@@ -1,0 +1,78 @@
+page-user-chat {
+
+  ion-navbar {
+    border-bottom: 1px solid transparent;
+
+    .title {
+      font-size: 16px;
+      color: #565252;
+      text-transform: capitalize;
+    }
+
+    .toolbar-content {
+      text-align: center;
+      margin-right: 25px;
+    }
+  }
+
+  ion-header + ion-content > div.scroll-content {
+    background-color: transparent !important;
+  }
+
+  #messages {
+
+    .loader {
+      position: absolute;
+      top: 30%;
+      left: 45vw;
+
+      font-size: 11vw;
+      color: #a4c73a;
+    }
+
+
+    .list .item:first-child, .list .item {
+      width: 100%;
+      text-align: left;
+    }
+
+    ion-item {
+      height: 60px;
+      background-color: transparent;
+    }
+  }
+
+  ion-footer {
+    background-color: #F5F5F5;
+
+    .item .item-textarea, .item .item-block {
+      background-color: transparent;
+    }
+
+    .item-md.item-block .item-inner {
+      padding-right: 0px !important;
+    }
+
+    .bar-buttons {
+      position: absolute;
+      right: 17px;
+      top: 10px;
+    }
+
+    .item-ios {
+      padding-left: 9px !important;
+      background-color: transparent;
+    }
+
+    .bar-button {
+      color: grey;
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+  }
+
+
+
+
+
+}

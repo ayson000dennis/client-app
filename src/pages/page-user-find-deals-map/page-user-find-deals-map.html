@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-navbar>
+    <img class="header-logo" src="assets/images/logo-min.png" alt="">
+    <div class="holder-menu" (click)="showMenu()">Menu</div>
+    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /><span class="count-msg">1</span></a>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="jumbotron search-banner">
+    <form class="form-inline form-search-deals text-center">
+      <input type="text" class="form-control" placeholder="Search GoPage Deals">
+      <label>
+        <span class="fa fa-map-marker"></span>
+        <input type="text" class="form-control" id="pac-input" placeholder="Los Angeles, CA">
+      </label>
+      <button class="fa fa-search btn-search-deals" type="submit"></button>
+    </form>
+  </div>
+
+  <nav id="filter-sort-map" class="navbar navbar-light">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>
+      </li> -->
+      <li class="nav-item">
+        <a class="nav-link" (click)="goListView()"><i class="fa fa-list"></i> Back to list</a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1301.4096210792902!2d-123.1095483788257!3d49.27982224000646!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x77c545b8651d683a!2sT%26T+Supermarket!5e0!3m2!1sen!2sph!4v1505114924507" id="google-map" frameborder="0" allowfullscreen></iframe> -->
+
+  <!-- <input id="pac-input" class="controls" type="text" placeholder="Search Box"> -->
+  <div #map id="map"></div>
+
+
+</ion-content>

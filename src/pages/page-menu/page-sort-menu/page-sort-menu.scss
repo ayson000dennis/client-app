@@ -1,0 +1,55 @@
+page-sort-menu {
+  .content-sort-menu {
+    background-color: #fff;
+
+    .scroll-content {
+      overflow: hidden;
+    }
+
+    .list {
+      margin: -15px;
+
+      h5 {
+        padding: 5px;
+        padding-left: 25px;
+        font-family: "Raleway SemiBold";
+        font-size: 18px;
+        color: #444;
+      }
+
+      .item {
+        display: inline-flex;
+        padding-left: 25px;
+        width: 100% !important;
+
+        background: none;
+        border-bottom: 1px solid #efefef !important;
+
+        .checkbox-ios .checkbox-checked,
+        .checkbox-md .checkbox-checked {
+          border-color: #a4c73a;
+          background-color: #a4c73a;
+        }
+      }
+
+      .sortby-button {
+        display: flex;
+        justify-content: center;
+        padding: 5px 20px;
+
+        .btn {
+          margin: 15px 2px;
+          width: 48%;
+
+          &.done-btn {
+            background: #a4c73a;
+          }
+
+          &:hover {
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+}

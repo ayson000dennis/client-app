@@ -1,0 +1,92 @@
+page-user-favorites {
+
+  .scroll-content {
+    background: #fff !important;
+
+    .favorites-holder {
+      margin-top: -20px;
+      .favorites {
+        display: flex;
+        margin-top: 20px;
+        border-bottom: 1px solid #e4e4e4;
+
+        .img-holder {
+          margin: 0 15px 15px 0;
+          width: 90px;
+          height: 90px;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+        }
+
+        .text-holder {
+          color: #555;
+
+          h3 {
+            margin-top: 5px;
+            font-size: 16px;
+          }
+
+          div { font-size: 12px; }
+
+          .company-text {
+            margin-bottom: 4px;
+            color: #f5a14e;
+          }
+
+          .location-text { display: block; }
+
+          .expiration-text {
+            display: block;
+            margin: 5px auto;
+          }
+
+          .remove-btn {
+            position: relative;
+            right: -210px;
+            top: -105px;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            font-size: 15px;
+            background: none;
+            color: #929292;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+}
+
+ion-alert {
+  .alert-wrapper {
+    border-radius: 0 !important;
+
+
+    .alert-head {
+      height: 70px !important;
+      .alert-title {
+        font-size: 14px !important;
+        font-weight: 400;
+      }
+    }
+
+    .alert-message { display: none !important; }
+
+    .alert-button {
+      .button-inner {
+        font-size: 14px;
+        font-weight: 400;
+        color: #141414 !important;
+      }
+    }
+
+  }
+}

@@ -1,0 +1,58 @@
+<!-- <ion-header no-shadow>
+  <ion-navbar>
+    <button class="btn-green" (click)="signUp()">Get Started</button>
+    <button class="btn-green-out" (click)="signIn()">Sign In</button>
+  </ion-navbar>
+</ion-header> -->
+
+<ion-content no-bounce class="page-slider text-center">
+  <ion-slides pager="true" (ionSlideNextStart)="onSlideNext($event)">
+    <ion-slide>
+      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
+      <!-- <p class="subtitle">
+        Helping members &amp; small<br> business win
+      </p> -->
+      <img class="slider-img main-image" src="assets/images/member-main-image.png" alt="">
+      <h3 class="main-title">Your Go To App for Local</h3>
+      <h3 class="main-title">Loyalty Deals &amp; Discounts</h3>
+    </ion-slide>
+
+    <ion-slide>
+      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
+
+      <img class="slider-img" src="assets/images/member-iphone-login.png" alt="">
+      <p class="subtitle">
+        With GoPage you are a preferred <br>customer and receive the best deals and <br> alerts from your favorite business.
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
+      <img class="slider-img" src="assets/images/member-iphone-qrcode.png" alt="">
+      <p class="subtitle">
+        Get rewarded for your loyalty! Use your <br>loyalty punchcard and redeem your <br> loyalty rewards from your favorite local <br> businesses.
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
+      <img class="slider-img" src="assets/images/member-iphone-map.png" alt="">
+      <p class="subtitle">
+        Your GoPage App finds the deals you are<br> looking for from registered GoPage <br>businesses.
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
+      <img class="slider-img" src="assets/images/member-iphone-messages.png" alt="">
+      <p class="subtitle">
+        Your favorite businesses alert <br>you first about deals, discounts <br>or events so you never miss out!
+      </p>
+    </ion-slide>
+
+    <ion-slide>
+    </ion-slide>
+  </ion-slides>
+  <button class="btn-slider btn-green" (click)="signUp()">Get Started</button>
+  <button class="btn-slider btn-green-out" (click)="signIn()">Sign In</button>
+</ion-content>

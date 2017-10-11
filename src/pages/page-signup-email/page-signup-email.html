@@ -1,0 +1,45 @@
+<!-- <ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header> -->
+<ion-content padding>
+  <!-- <ion-card *ngIf="userData">
+    <ion-card-header>{{ userData.email }}</ion-card-header>
+  </ion-card> -->
+
+  <p class="title">
+    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">
+  </p>
+  <p class="text-center subtitle">
+    Sign up with <a href="#" (click)="fbConnect()">Facebook</a>, <a href="#" (click)="gpConnect()">Google</a> or <a href="#" (click)="goSignupMobile()">mobile number</a>
+  </p>
+  <div class="divider">
+    <span>or</span>
+  </div>
+
+  <form class="form-signup">
+    <label>
+      <input type="text" name="first_name" placeholder="First name" [(ngModel)]="posts.first_name" />
+      <span class="text-validate">First name is required.</span>
+    </label>
+    <label>
+      <input type="text" name="last_name" placeholder="Last name" [(ngModel)]="posts.last_name" />
+      <span class="text-validate">Last name is required.</span>
+    </label>
+    <label>
+      <input type="email" name="email" placeholder="Email address" [(ngModel)]="posts.email" />
+      <span class="text-validate">Email address is required.</span>
+    </label>
+    <label>
+      <input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" />
+      <span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span>
+    </label>
+    <button class="btn-green" type="submit" (click)="signMeUp()">Sign Up</button>
+  </form>
+  <hr class="hr" />
+  <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>
+</ion-content>

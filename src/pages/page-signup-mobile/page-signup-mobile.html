@@ -1,0 +1,78 @@
+<!-- <ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header> -->
+<ion-content padding>
+  <!-- <ion-card *ngIf="userData">
+    <ion-card-header>{{ userData.email }}</ion-card-header>
+  </ion-card> -->
+
+  <div class="form1">
+    <p class="title">
+      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">
+    </p>
+    <p class="text-center subtitle">
+      Sign up with <a href="#" (click)="fbConnect()">Facebook</a>, <a href="#" (click)="gpConnect()">Google</a> or <a href="#" (click)="goSignupEmail()">email address</a>
+    </p>
+    <div class="divider">
+      <span>or</span>
+    </div>
+    <p class="description">Enter your mobile number</p>
+    <form class="form-signup">
+      <label>
+        <div class="holder-country-code">
+          <div class="country-code">
+            <img src="assets/images/icon-flag-us.jpg" alt=""/>
+            <span class="fa fa-caret-down"></span>
+          </div>
+          <ul class="country-dropdown">
+            <li class="country-dropdown-val">
+              <img src="assets/images/icon-flag-us.jpg" alt=""/><span class="country-name">U.S. </span><span class="country-area-code">(+1)</span>
+            </li>
+            <li class="country-dropdown-val">
+              <img src="assets/images/icon-flag-ca.jpg" alt=""/><span class="country-name">Canada </span><span class="country-area-code">(+1)</span>
+            </li>
+          </ul>
+        </div>
+        <input type="number" name="number" placeholder="Mobile number" [(ngModel)]="posts.number"/>
+        <span class="text-validate"></span>
+      </label>
+      <button class="btn-green" type="submit" (click)="signMeUp()">Sign Up</button>
+    </form>
+    <hr class="hr" />
+    <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>
+  </div>
+
+  <div class="form2">
+    <p class="title">
+      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">
+      Verify Your Mobile Number
+    </p>
+    <form class="form-verify">
+      <label>
+        <input type="text" placeholder="Verification Code">
+        <span class="text-validate"></span>
+      </label>
+      <button class="btn-green" type="submit" (click)="verifyMe()">Verify</button>
+    </form>
+  </div>
+
+  <div class="form3">
+    <p class="title">
+      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">
+      Create a Password
+    </p>
+    <form class="form-password">
+      <label>
+        <input id="enter-password" class="input-mobile" type="password" placeholder="Enter password" />
+        <input id="confirm-password" class="input-mobile" type="password" placeholder="Confirm password" />
+        <span class="text-validate"></span>
+      </label>
+      <button class="btn-green" type="submit" (click)="createMyPass()">Submit</button>
+    </form>
+  </div>
+</ion-content>

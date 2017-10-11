@@ -1,0 +1,106 @@
+<ion-header>
+  <ion-navbar>
+    <img class="header-logo" src="assets/images/logo-min.png" alt="">
+    <div class="holder-menu" (click)="showMenu()">Menu</div>
+    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /><span class="count-msg">1</span></a>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="deals-page">
+  <div *ngIf="hasData">
+    <ion-slides>
+      <ion-slide>
+        <img src="{{business.files.url !== unknown ? business.files.url : 'assets/images/placeholder.jpg'}}" alt="Deals photo">
+      </ion-slide>
+    </ion-slides>
+
+    <div class="row">
+      <div class="col-12">
+        <h4 class="deal-title">{{template}}</h4>
+      </div>
+
+      <!-- <div class="col-12">
+        <div class="media" *ngFor="let deal of deals">
+          <img src="{{deal.photo.url !== unknown ? deal.photo.url : 'assets/images/placeholder.jpg'}}" alt="{{deal.template}}">
+          <div class="media-body">
+            <a href="#"><h5>{{deal.template}}</h5></a>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="col-12 share-deal">
+        <p>Share this deal</p>
+        <ul class="social-list">
+          <li><a href="#"><i class="fa fa-facebook fa-lg"></i></a></li>
+          <li><a href="#"><i class="fa fa-twitter fa-lg"></i></a></li>
+          <li><a href="#"><i class="fa fa-envelope fa-lg"></i></a></li>
+          <li><a href="#"><i class="fa fa-pinterest fa-lg"></i></a></li>
+        </ul>
+      </div>
+
+      <div class="col-12 about-business">
+        <h5 class="about-title">About {{business.company_name}}</h5>
+        <p class="about-description">{{business.description}}</p>
+
+        <ul class="social-links list-unstyled">
+          <li>
+            <i class="fa fa-map-marker fa-2x"></i>
+            <span class="business-name">{{business.company_name}}</span> <br>
+            <span class="business-address"> {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
+          </li>
+          <li *ngIf="business.operations.length === 0">
+          </li>
+          <li *ngIf="business.operations[0] === '2'">
+            <i class="fa fa-clock-o fa-2x"></i>
+            Open 24 Hours
+          </li>
+          <li *ngIf="business.operations[0] !== '2' && business.operations.length !== 0 && hasData === true">
+            <i class="fa fa-clock-o fa-2x"></i>
+              Opening Hours
+              <a class="toggle-collapse" (click)="showHours()">(show more)</a>
+              <!-- *ngFor="let operations of business.operations; let i = index" -->
+              <ul class="list-unstyled operations-list">
+                 <!-- {{ business.sample_data.Monday.start }} -  {{ business.sample_data.Monday.end}}  -->
+                <li *ngIf="business.sample_data.Monday != null"><strong>Monday</strong> {{ business.sample_data.Monday.start }} -  {{ business.sample_data.Monday.end}}  </li>
+                <li *ngIf="business.sample_data.Tuesday != null"><strong>Tuesday</strong>  {{ business.sample_data.Tuesday.start }} -  {{ business.sample_data.Tuesday.end}}  </li>
+                <li *ngIf="business.sample_data.Wednesday != null"><strong>Wednesday</strong> {{ business.sample_data.Wednesday.start }} -  {{ business.sample_data.Wednesday.end}} </li>
+                <li *ngIf="business.sample_data.Thursday != null"><strong>Thursday</strong> {{ business.sample_data.Thursday.start }} -  {{ business.sample_data.Thursday.end}}</li>
+                <li *ngIf="business.sample_data.Friday != null"><strong>Friday</strong> {{ business.sample_data.Friday.start }} -  {{ business.sample_data.Friday.end}}</li>
+                <li *ngIf="business.sample_data.Saturday != null"><strong>Saturday</strong> {{ business.sample_data.Saturday.start }} -  {{ business.sample_data.Saturday.end}}</li>
+                <li *ngIf="business.sample_data.Sunday != null"><strong>Sunday</strong> {{ business.sample_data.Sunday.start }} -  {{ business.sample_data.Sunday.end}}</li>
+              </ul>
+          </li>
+          <li>
+            <i class="fa fa-phone fa-2x"></i>
+            {{business.phone_number}}
+          </li>
+          <li>
+            <i class="fa fa-globe fa-2x"></i>
+            {{business.company_website}}
+          </li>
+          <li>
+            <i class="fa fa-envelope fa-2x"></i>
+            {{business.business_email}}
+          </li>
+          <!-- <li>
+            <i class="fa fa-facebook fa-2x"></i>
+            GoPageApp
+          </li>
+          <li>
+            <i class="fa fa-twitter fa-2x"></i>
+            @gopageapp
+          </li>
+          <li>
+            <i class="fa fa-instagram fa-2x"></i>
+            @gopageco
+          </li> -->
+        </ul>
+      </div>
+
+      <div class="col-12 location-map">
+        <h5>Location</h5>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1301.4096210792902!2d-123.1095483788257!3d49.27982224000646!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x77c545b8651d683a!2sT%26T+Supermarket!5e0!3m2!1sen!2sph!4v1505114924507" id="google-map" frameborder="0" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</ion-content>

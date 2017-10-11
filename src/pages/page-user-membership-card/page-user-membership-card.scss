@@ -1,0 +1,45 @@
+page-user-membership-card {
+  .scroll-content {
+    background-color: #fff !important;
+    overflow: hidden;
+
+    .holder-qrcode {
+      border: 1px solid #d7d7d7;
+
+      .member-name {
+        margin: 0;
+        padding: 20px;
+
+        font-family: "Raleway SemiBold";
+        font-size: 20px;
+        color: #fff;
+        text-align: center;
+        text-transform: capitalize;
+
+        background-color: #a4c73a;
+
+        br {
+          display: block !important;
+        }
+      }
+
+      .card {
+        box-shadow: none!important;
+        -webkit-box-shadow: none!important;
+      }
+
+      .qrcode-id {
+        padding: 15px;
+        margin: 0 37px 23px;
+
+        font-family: "Raleway SemiBold";
+        font-size: 22px;
+        color: #a4c73a;
+        text-align: center;
+
+        border: 1px solid #a4c73a;
+        border-radius: 2px;
+      }
+    }
+  }
+}

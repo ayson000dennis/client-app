@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar>
+    <img class="header-logo" src="assets/images/logo-min.png" alt="">
+    <div class="holder-menu" (click)="showMenu()">Menu</div>
+    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /><span class="count-msg">1</span></a>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="favorites-holder">
+    <div class="favorites" *ngFor="let favorite of favorites; let i = index">
+      <div class="img-holder">
+        <img [src]="favorite.deals_id[0].photo.url" alt="">
+      </div>
+      <div class="text-holder">
+        <h3 class="title-text" tappable (click)="getBusiness(favorite.business_id[0])">{{favorite.deals_id[0].title}}</h3>
+        <div class="company-text">{{favorite.deals_id[0].business_name}}</div>
+        <div class="location-text">{{favorite.business_id[0].country}}</div>
+        <div class="expiration-text"><i class="fa fa-clock-o"></i> Expires {{favorite.deals_id[0].end_date | date : 'MM/dd/yyyy'}}</div>
+        <button class="remove-btn" tappable (click)="removeFavorite(favorite._id, i)">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</ion-content>

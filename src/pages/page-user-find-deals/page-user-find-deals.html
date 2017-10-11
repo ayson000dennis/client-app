@@ -1,0 +1,115 @@
+<ion-header>
+  <ion-navbar>
+    <img class="header-logo" src="assets/images/logo-min.png" alt="">
+    <div class="holder-menu" (click)="showMenu()">Menu</div>
+    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /><span class="count-msg">1</span></a>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div class="jumbotron search-banner">
+    <form class="form-inline form-search-deals text-center">
+      <input type="text" class="form-control" placeholder="Search GoPage Deals">
+      <label>
+        <span class="fa fa-map-marker"></span>
+        <input type="text" class="form-control" placeholder="Los Angeles, CA">
+      </label>
+      <button class="fa fa-search btn-search-deals" type="submit"></button>
+    </form>
+  </div>
+
+  <nav id="filter-sort-map" class="navbar navbar-light">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>
+      </li>
+      <!-- <li class="nav-item">
+        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>
+      </li> -->
+      <li class="nav-item">
+        <a class="nav-link" (click)="goMapView()"><i class="fa fa-map-marker"></i> Map view</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="categories-header">
+    <div class="row">
+      <div class="col">
+        <p class="deals-counter">
+          <span class="deals-found">72</span> out of <span class="deals-total">262</span> deals
+        </p>
+        <ion-item>
+          <ion-label> Show Image</ion-label>
+          <ion-toggle [(ngModel)]="toggleImage"></ion-toggle>
+        </ion-item>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div *ngIf="hasData">
+    <div *ngFor="let deal of deals">
+      <p>{{deal.business_name}}</p>
+    </div>
+  </div> (click)=this.business({{deal.business[0]._id }})"" href=""-->
+
+  <div class="categories-main">
+    <div class="row">
+      <div class="col-12 col-sm-9 holder-categories-result1">
+        <div class="row">
+          <div class="col categories-result" *ngIf="hasData">
+            <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let deal of pagedDeals; let i = index">
+              <div class="col-xs-8">
+                <a class="deal-thumbnail" href="" *ngIf="toggleImage">
+                  <img class="d-flex mr-3" src="{{deal.photo.url !== unknown ? deal.photo.url : 'assets/images/placeholder.jpg'}}" alt="{{deal.template}}">
+                </a>
+                <div class="media-body align-self-center">
+                  <a class="deal-title" href="">
+                    <h6 class="mt-0">{{deal.template}}</h6>
+                  </a>
+                  <a class="business-link" href="">{{deal.business_name}}</a>
+                  <p class="business-address">{{deal.business_id[0].country}}, {{deal.business_id[0].state}}</p>
+                  <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{deal.end_date | date: 'MM/dd/yyyy'}}</p>
+                </div>
+              </div>
+
+              <div class="col-xs-4">
+                <div class="deals-button">
+                  <div *ngIf="deal.is_favorite; then Favorite  else  notFavorite"></div>
+                  <ng-template #notFavorite>
+                    <div class="claim-btn-holder">
+                      <a class="btn btn-claim" [attr.id]="'addToFavorite'+deal._id" id="addToFavorite" (click)="addToFavorites(deal)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                      <a class="btn btn-claimed" id="addedToFavorite" (click)="goToFavorites()">Added to Favorites</a>
+                    </div>
+                  </ng-template>
+                  <br class="btn-break">
+                  <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" (click)="goToFavorites()">Added to Favorites</a> <br class="btn-break"></ng-template>
+                  <a class="btn btn-more" (click)="getBusiness(deal.business_id[0],deal.template)" >More deals <i class="fa fa-chevron-right"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <nav class="col-12 holder-pagination">
+      <ul class="pagination list-unstyled" *ngIf="pager.pages && pager.pages.length">
+        <li class="page-item prev-page">
+          <button class="page-link prev-page" [ngClass]="{disabled:pager.currentPage === 1}" (click)="setPagination(pager.currentPage - 1)" ion-button small><i class="fa fa-angle-left"></i>&nbsp;<span class="prev">Prev</span></button>
+        </li>
+        <li class="page-item" *ngFor="let page of pager.pages">
+          <button class="page-link" [ngClass]="{active:pager.currentPage === page}" (click)="setPagination(page)" ion-button small>
+            {{page}}
+          </button>
+        </li>
+        <li class="page-item">
+          <button class="page-link next-page" [ngClass]="{disabled:pager.currentPage === pager.totalPages}" (click)="setPagination(pager.currentPage + 1)" ion-button small><span class="next">Next</span>&nbsp;<i class="fa fa-angle-right"></i></button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+</ion-content>

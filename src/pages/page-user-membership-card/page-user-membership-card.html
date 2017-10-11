@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <img class="header-logo" src="assets/images/logo-min.png" alt="">
+    <div class="holder-menu" (click)="showMenu()">Menu</div>
+    <a class="inbox" (click)="viewInbox()"><img src="assets/images/icon-mail.png" alt="" /><span class="count-msg">1</span></a>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div class="holder-qrcode" *ngIf="hasData" >
+    <p class="member-name">{{user.first_name}} {{user.last_name}}</p>
+    <ion-card *ngIf="createdCode">
+    <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
+    </ion-card>
+    <p class="qrcode-id">{{user.membership_number}}</p>
+  </div>
+</ion-content>
+
+<!-- <button ion-button full icon-left (click)="createCode()"><ion-icon name="barcode"></ion-icon>Create Code</button> -->
+  <!-- <button ion-button full icon-left (click)="scanCode()" color="secondary"><ion-icon name="qr-scanner"></ion-icon>Scan Code</button> -->
+ <!--  <ion-item>
+
+    <ion-input type="text" placeholder="MY QR Code data" [(ngModel)]="qrData">
+    </ion-input>
+  </ion-item>
+ -->

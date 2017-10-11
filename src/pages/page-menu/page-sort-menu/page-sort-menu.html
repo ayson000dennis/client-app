@@ -1,0 +1,28 @@
+<ion-content padding class="content-sort-menu">
+  <p class="title">
+    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">
+  </p>
+
+  <ion-list>
+    <h5>Sort by</h5>
+    <ion-item>
+      <ion-label>Sort by Relevance</ion-label>
+      <ion-checkbox [(ngModel)]="relevance"></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Sort by Distance</ion-label>
+      <ion-checkbox [(ngModel)]="distance"></ion-checkbox>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Sort by Favorites</ion-label>
+      <ion-checkbox [(ngModel)]="favorites"></ion-checkbox>
+    </ion-item>
+
+    <div class="sortby-button">
+      <button class="btn cancel-btn" role="button" (click)="goBack()">Cancel</button>
+      <button class="btn done-btn" role="button" (click)="goBack()">Done</button>
+    </div>
+  </ion-list>
+</ion-content>
