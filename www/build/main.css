@@ -26517,6 +26517,11 @@ page-user-deals .content .scroll-content .row .about-business .social-links li i
   color: #aaa;
 }
 
+page-user-favorites ion-navbar i.fa {
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
 page-user-favorites .scroll-content {
   background: #fff !important;
 }
@@ -27776,6 +27781,11 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text
   margin: 5px auto;
 }
 
+page-user-loyalty-cards ion-navbar i.fa-chevron-left {
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
 page-user-loyalty-cards .scroll-content {
   background: #fff !important;
 }
@@ -27787,6 +27797,7 @@ page-user-loyalty-cards .scroll-content .title {
 }
 
 page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards {
+  position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -27822,6 +27833,14 @@ page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .
   display: block;
   margin: 5px auto;
   color: #f5a14e;
+}
+
+page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards i.fa-chevron-right {
+  position: absolute;
+  top: 27%;
+  right: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
 }
 
 page-user-loyalty-stamp-card .scroll-content {
@@ -27902,6 +27921,11 @@ page-user-membership-card .scroll-content {
 
 page-user-membership-card .scroll-content .holder-qrcode {
   border: 1px solid #d7d7d7;
+}
+
+page-user-membership-card .scroll-content .holder-qrcode .qrcode img {
+  margin: 0 auto;
+  width: 70%;
 }
 
 page-user-membership-card .scroll-content .holder-qrcode .member-name {

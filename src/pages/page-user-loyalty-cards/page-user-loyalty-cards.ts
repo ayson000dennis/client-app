@@ -12,6 +12,7 @@ import { Storage } from '@ionic/storage';
 import { ApiService } from '../../service/api.service.component';
 
 import { UserLoyaltyCardDealsPage } from '../page-user-loyalty-card-deals/page-user-loyalty-card-deals';
+import { UserMembershipCardPage } from '../page-user-membership-card/page-user-membership-card';
 
 @Component({
   selector: 'page-user-loyalty-cards',
@@ -34,6 +35,13 @@ export class UserLoyaltyCardsPage {
     this.navCtrl.push(MenuPage, {
       animate: true,
       direction: 'forward'
+    });
+  }
+
+  goBack() {
+    this.navCtrl.setRoot(UserMembershipCardPage, {}, {
+      animate: true,
+      direction: 'back'
     });
   }
 

@@ -4,26 +4,11 @@
   </p>
 
   <ion-list class="menu-list">
-    <ul class="categories-list" *ngFor="let business of business_category">
-
-      <li><a href="#"><img src="assets/icon/icon-books.svg" (click)="goFilterBusiness(business.name)">  {{ business.name }}</a></li>
-      <!-- <li class="active"><a href="#"><img src="assets/icon/icon-automotive.svg" alt="Automotive">Automotive</a></li>
-      <li><a href="#"><img src="assets/icon/icon-books.svg" alt="Books, Music &amp; Cinema">Books, Music &amp; Cinema</a></li>
-      <li><a href="#"><img src="assets/icon/icon-culture.svg" alt="Culture &amp; Arts">Culture &amp; Arts</a></li>
-      <li><a href="#"><img src="assets/icon/icon-dining.svg" alt="Dining, Cafes &amp; Restaurants">Dining, Cafes &amp; Restaurants</a></li>
-      <li><a href="#"><img src="assets/icon/icon-education.svg" alt="Education">Education</a></li>
-      <li><a href="#"><img src="assets/icon/icon-finance.svg" alt="Finance, Banks &amp; Insurance">Finance, Banks &amp; Insurance</a></li>
-      <li><a href="#"><img src="assets/icon/icon-food.svg" alt="Food Stores">Food Stores</a></li>
-      <li><a href="#"><img src="assets/icon/icon-government.svg" alt="Government Services">Government Services</a></li>
-      <li><a href="#"><img src="assets/icon/icon-health.svg" alt="Health &amp; Beauty">Health &amp; Beauty</a></li>
-      <li><a href="#"><img src="assets/icon/icon-house.svg" alt="House &amp; Home Services">House &amp; Home Services</a></li>
-      <li><a href="#"><img src="assets/icon/icon-nightlife.svg" alt="Nightlife &amp; Clubs">Nightlife &amp; Clubs</a></li>
-      <li><a href="#"><img src="assets/icon/icon-outdoor.svg" alt="Outdoor Adventures">Outdoor Adventures</a></li>
-      <li><a href="#"><img src="assets/icon/icon-professional.svg" alt="Professional Services">Professional Services</a></li>
-      <li><a href="#"><img src="assets/icon/icon-real-estate.svg" alt="Real Estate &amp; Related">Real Estate &amp; Related</a></li>
-      <li><a href="#"><img src="assets/icon/icon-shopping.svg" alt="Shopping &amp; Stores">Shopping &amp; Stores</a></li>
-      <li><a href="#"><img src="assets/icon/icon-sports.svg" alt="Sports &amp; Fitness">Sports &amp; Fitness</a></li>
-      <li><a href="#"><img src="assets/icon/icon-travel.svg" alt="Travel &amp; Transportation">Travel &amp; Transportation</a></li> -->
+    <ul class="categories-list" >
+      <li><a href="#"><img src="assets/icon/icon-alldeals.svg">All Deals</a></li>
+      <div *ngFor="let business of business_category; let k = index;">
+        <li (click)="goFilterBusiness(business.name)"><a href="#"><img src="assets/icon/icon-category-{{first_word[k]}}.svg">  {{ business.name }}</a></li>
+      </div>
     </ul>
   </ion-list>
 </ion-content>

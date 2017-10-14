@@ -1,5 +1,13 @@
 page-user-favorites {
 
+  ion-navbar {
+    i.fa {
+      color: #b1b1b1 !important;
+
+      cursor: pointer;
+    }
+  }
+
   .scroll-content {
     background: #fff !important;
 

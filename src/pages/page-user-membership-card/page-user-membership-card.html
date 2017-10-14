@@ -8,7 +8,7 @@
 
 <ion-content padding>
   <div class="holder-qrcode" *ngIf="hasData" >
-    <p class="member-name">{{user.first_name}} {{user.last_name}}</p>
+    <!-- <p class="member-name">{{user.first_name}} {{user.last_name}}</p> -->
     <ion-card *ngIf="createdCode">
     <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
     </ion-card>

@@ -6,6 +6,14 @@ page-user-membership-card {
     .holder-qrcode {
       border: 1px solid #d7d7d7;
 
+      .qrcode {
+        img {
+          margin: 0 auto;
+          
+          width: 70%;
+        }
+      }
+
       .member-name {
         margin: 0;
         padding: 20px;

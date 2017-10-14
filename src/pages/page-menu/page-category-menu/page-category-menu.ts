@@ -17,7 +17,8 @@ export class CategoryMenuPage {
   pages: Array<{title: string, component: any}>;
     business_category : string[];
     business_filter_data: string[];
-      hasData :boolean = false;
+    hasData :boolean = false;
+    private first_word = [];
 
   constructor(
     public navCtrl: NavController,
@@ -27,8 +28,20 @@ export class CategoryMenuPage {
 
   ionViewWillEnter(){
       this.api.BusinessCategory.business_category().then(business_category =>{
-            this.business_category = business_category;
-            this.hasData = true;
+        this.business_category = business_category;
+        this.hasData = true;
+        business_category.forEach(business => {
+          let category = business.name;
+          let chena = category.split(/[ ,]+/);
+          this.first_word.push(chena[0].toLowerCase());
+        });
+        console.log(this.first_word);
+        this.first_word.forEach(first_word => {
+          console.log(first_word);
+          this.business_category.push(first_word);
+          console.log(business_category);
+        });
+
       });
   }
 
@@ -52,6 +65,7 @@ export class CategoryMenuPage {
             direction: 'back'
           });
     });
+
   }
 
   goBack() {

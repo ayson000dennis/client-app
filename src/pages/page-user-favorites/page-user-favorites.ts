@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Platform, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
+import { UserMembershipCardPage } from '../page-user-membership-card/page-user-membership-card';
 import { MenuPage } from '../page-menu/page-menu';
 import { UserDealsPage } from '../page-user-deals/page-user-deals';
 
@@ -30,6 +31,13 @@ export class UserFavoritesPage {
 
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
+      animate: true,
+      direction: 'back'
+    });
+  }
+
+  goBack() {
+    this.navCtrl.setRoot(UserMembershipCardPage, {}, {
       animate: true,
       direction: 'back'
     });

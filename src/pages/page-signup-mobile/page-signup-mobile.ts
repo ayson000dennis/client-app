@@ -114,7 +114,7 @@ export class SignupMobilePage {
       if (mobileRegex.test(getMobileVal)) {
         getMobileVal = '+1' + getMobileVal;
         $.ajax({
-          url: '//warm-beach-10670.herokuapp.com/api/users/send_sms/' + getMobileVal,
+          url: '//gopage-api.herokuapp.com/api/users/send_sms/' + getMobileVal,
           type: 'POST',
           dataType: 'json',
           data: {
@@ -150,7 +150,7 @@ export class SignupMobilePage {
 
     if (getCodeVal) {
       $.ajax({
-        url: '//warm-beach-10670.herokuapp.com/api/users/verify_sms/' + getCodeVal,
+        url: '//gopage-api.herokuapp.com/api/users/verify_sms/' + getCodeVal,
         type: 'POST',
         dataType: 'json',
         beforeSend: function() {
@@ -186,7 +186,7 @@ export class SignupMobilePage {
         getPassConfirm.removeClass('has-error').next('.text-validate').text('');
         var numberVal = '+1' + this.posts.number;
         $.ajax({
-          url: '//warm-beach-10670.herokuapp.com/api/users/add',
+          url: '//gopage-api.herokuapp.com/api/users/add',
           type: 'POST',
           dataType: 'json',
           data: {
