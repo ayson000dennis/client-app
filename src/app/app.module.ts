@@ -25,6 +25,7 @@ import { UserFindDealsPage } from '../pages/page-user-find-deals/page-user-find-
 import { UserFilteredDealsPage } from '../pages/page-user-filtered-deals/page-user-filtered-deals';
 import { UserFindDealsMapPage } from '../pages/page-user-find-deals-map/page-user-find-deals-map';
 import { UserFavoritesPage } from '../pages/page-user-favorites/page-user-favorites';
+import { UserLoyaltyStampCardPage } from '../pages/page-user-loyalty-stamp-card/page-user-loyalty-stamp-card';
 
 import { UserLoyaltyCardDealsPage } from '../pages/page-user-loyalty-card-deals/page-user-loyalty-card-deals';
 import { UserInboxPage } from '../pages/page-user-inbox/page-user-inbox';
@@ -74,7 +75,8 @@ import {Keyboard} from "@ionic-native/keyboard";
     ListPage,
     UserDealsPage,
     UserLoyaltyCardDealsPage,
-     ElasticTextarea,
+    UserLoyaltyStampCardPage,
+    ElasticTextarea,
     ChatBubble,
     KeyboardAttachDirective,
     UserChatPage
@@ -109,6 +111,7 @@ import {Keyboard} from "@ionic-native/keyboard";
     UserFilteredDealsPage,
     UserFindDealsMapPage,
     UserInboxPage,
+    UserLoyaltyStampCardPage,
     ListPage,
     UserDealsPage,
     UserLoyaltyCardDealsPage,

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular'
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular'
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { UserLoyaltyStampCardPage } from '../page-user-loyalty-stamp-card/page-user-loyalty-stamp-card';
 
 import * as $ from "jquery";
 
@@ -17,24 +19,30 @@ import { ApiService } from '../../service/api.service.component';
 
 @IonicPage()
 @Component({
-  selector: 'page-page-user-loyalty-card-deals',
+  selector: 'page-user-loyalty-card-deals',
   templateUrl: 'page-user-loyalty-card-deals.html',
 })
 export class UserLoyaltyCardDealsPage {
   deals: string[];
   business_id : any;
-  hasData : boolean = true; 
+  hasData : boolean = true;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private api:ApiService,
-    private storage: Storage) {
+    private storage: Storage,
+    public platform: Platform,
+    public screenOrientation: ScreenOrientation) {
   }
 
   ionViewDidLoad() {
   }
 
   ionViewWillEnter() {
+    this.platform.ready().then(() => {
+      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+    });
+
     this.business_id = this.navParams.get('business_id')
     this.storage.get('user').then(user => {
 
@@ -54,4 +62,10 @@ export class UserLoyaltyCardDealsPage {
     });
   }
 
+  goCard(title, stamps, stamps_needed) {
+    this.navCtrl.push(UserLoyaltyStampCardPage, {title, stamps, stamps_needed}, {
+      animate: true,
+      direction: 'forward'
+    });
+  }
 }

@@ -12,10 +12,8 @@
 </ion-header>
 
 <ion-content padding>
-
-
   <div class="card-deals-holder" *ngIf="hasData">
-    <div class="card-deal" *ngFor="let deal of deals;">
+    <div class="card-deal" *ngFor="let deal of deals" (click)="goCard(deal.deals_id[0].template, deal.loyalty_details.stamp, deal.deals_id[0].buy_pcs)">
       <div class="img-holder">
         <img [src]="deal.deals_id[0].photo.url" alt="">
       </div>
