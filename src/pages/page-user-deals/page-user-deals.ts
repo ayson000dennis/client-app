@@ -33,6 +33,7 @@ export class UserDealsPage {
   }
 
   ionViewWillEnter(){
+    console.log(location);
     this.business = this.navParams.get('business');
     this.template = this.navParams.get('template');
     var self = this;
@@ -95,11 +96,8 @@ export class UserDealsPage {
     });
   }
 
-  goListView() {
-    this.navCtrl.setRoot(UserFindDealsPage, {}, {
-      animate: true,
-      direction: 'back'
-    });
+  goPrevious() {
+    this.navCtrl.pop();
   }
 
   showHours() {

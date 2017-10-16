@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <i class="fa fa-chevron-left fa-lg" (click)="goBack()"></i>
+    <img class="header-logo" src="assets/images/logo-min.png" alt="">
     <div class="holder-menu" (click)="showMenu()">Menu</div>
     <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /></a>
   </ion-navbar>
@@ -14,16 +14,16 @@
   </div>
 
   <div class="business-cards-holder" *ngIf="hasData">
-    <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id)">
+    <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">
       <div class="img-holder">
         <img [src]="loyalty.deals_id[0].photo.url" alt="">
       </div>
       <div class="text-holder">
         <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>
         <span class="card-location-text">{{loyalty.business_id[0].country}}</span>
-         <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>
+        <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>
+        <i class="fa fa-chevron-right fa-2x"></i>
       </div>
-      <i class="fa fa-chevron-right fa-2x" (click)="showCardDeals(loyalty.business_id[0]._id)"></i>
     </div>
   </div>
 

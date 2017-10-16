@@ -42,7 +42,12 @@ export class UserFindDealsPage {
     {
     }
 
-
+    getBusiness(business) {
+      this.navCtrl.push(UserDealsPage, {business : business}, {
+         animate: true,
+         direction: 'forward'
+      });
+    }
   ionViewWillEnter(){
 
     this.getFilteredDealsAndFavorites();

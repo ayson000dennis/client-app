@@ -65,7 +65,7 @@ export class UserFavoritesPage {
   }
 
   getBusiness(business) {
-    this.navCtrl.setRoot(UserDealsPage, {business : business}, {
+    this.navCtrl.push(UserDealsPage, {business : business}, {
        animate: true,
        direction: 'forward'
     });

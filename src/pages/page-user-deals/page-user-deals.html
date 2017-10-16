@@ -1,8 +1,7 @@
 <ion-header>
-  <ion-navbar>
-    <img class="header-logo" src="assets/images/logo-min.png" alt="">
-    <div class="holder-menu" (click)="showMenu()">Menu</div>
-    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /></a>
+  <ion-navbar *ngIf="hasData">
+    <i class="fa fa-chevron-left fa-lg" (click)="goPrevious()"></i>
+    <span class="business-title">{{business.company_name}}</span>
   </ion-navbar>
 </ion-header>
 
@@ -48,7 +47,7 @@
             <span class="business-name">{{business.company_name}}</span> <br>
             <span class="business-address"> {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
           </li>
-          <li *ngIf="business.operations.length === 0">
+          <!-- <li *ngIf="business.operations.length === 0">
           </li>
           <li *ngIf="business.operations[0] === '2'">
             <i class="fa fa-clock-o fa-2x"></i>
@@ -57,11 +56,11 @@
           <li *ngIf="business.operations[0] !== '2' && business.operations.length !== 0 && hasData === true">
             <i class="fa fa-clock-o fa-2x"></i>
               Opening Hours
-              <a class="toggle-collapse" (click)="showHours()">(show more)</a>
+              <a class="toggle-collapse" (click)="showHours()">(show more)</a> -->
               <!-- *ngFor="let operations of business.operations; let i = index" -->
-              <ul class="list-unstyled operations-list">
+              <!-- <ul class="list-unstyled operations-list"> -->
                  <!-- {{ business.sample_data.Monday.start }} -  {{ business.sample_data.Monday.end}}  -->
-                <li *ngIf="business.sample_data.Monday != null"><strong>Monday</strong> {{ business.sample_data.Monday.start }} -  {{ business.sample_data.Monday.end}}  </li>
+                <!-- <li *ngIf="business.sample_data.Monday != null"><strong>Monday</strong> {{ business.sample_data.Monday.start }} -  {{ business.sample_data.Monday.end}}  </li>
                 <li *ngIf="business.sample_data.Tuesday != null"><strong>Tuesday</strong>  {{ business.sample_data.Tuesday.start }} -  {{ business.sample_data.Tuesday.end}}  </li>
                 <li *ngIf="business.sample_data.Wednesday != null"><strong>Wednesday</strong> {{ business.sample_data.Wednesday.start }} -  {{ business.sample_data.Wednesday.end}} </li>
                 <li *ngIf="business.sample_data.Thursday != null"><strong>Thursday</strong> {{ business.sample_data.Thursday.start }} -  {{ business.sample_data.Thursday.end}}</li>
@@ -69,7 +68,7 @@
                 <li *ngIf="business.sample_data.Saturday != null"><strong>Saturday</strong> {{ business.sample_data.Saturday.start }} -  {{ business.sample_data.Saturday.end}}</li>
                 <li *ngIf="business.sample_data.Sunday != null"><strong>Sunday</strong> {{ business.sample_data.Sunday.start }} -  {{ business.sample_data.Sunday.end}}</li>
               </ul>
-          </li>
+          </li> -->
           <li>
             <i class="fa fa-phone fa-2x"></i>
             {{business.phone_number}}

@@ -26,6 +26,7 @@ export class UserLoyaltyCardDealsPage {
   deals: string[];
   business_id : any;
   hasData : boolean = true;
+  business_name : string;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -35,15 +36,15 @@ export class UserLoyaltyCardDealsPage {
     public screenOrientation: ScreenOrientation) {
   }
 
-  ionViewDidLoad() {
-  }
-
   ionViewWillEnter() {
     this.platform.ready().then(() => {
       this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
     });
 
     this.business_id = this.navParams.get('business_id')
+    this.business_name = this.navParams.get('business_name')
+    console.log(this.business_name)
+
     this.storage.get('user').then(user => {
 
     this.api.Loyalties.loyalty_customer_list(user._id,this.business_id).then(deal => {
@@ -55,7 +56,7 @@ export class UserLoyaltyCardDealsPage {
     });
   }
 
-  backToLoyaltyCards() {
+  goPrevious() {
     this.navCtrl.pop({
       animate: true,
       direction: 'back'
@@ -63,7 +64,7 @@ export class UserLoyaltyCardDealsPage {
   }
 
   goCard(title, stamps, stamps_needed) {
-    this.navCtrl.push(UserLoyaltyStampCardPage, {title, stamps, stamps_needed}, {
+    this.navCtrl.push(UserLoyaltyStampCardPage, {title, stamps, stamps_needed,}, {
       animate: true,
       direction: 'forward'
     });

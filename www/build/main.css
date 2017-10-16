@@ -26356,8 +26356,29 @@ page-user-chat ion-footer .bar-button {
   letter-spacing: 1px;
 }
 
+page-user-deals ion-navbar i.fa {
+  position: absolute;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-deals ion-navbar .business-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway Medium";
+  font-size: 18px;
+  color: #aaa;
+}
+
 page-user-deals .content .scroll-content {
-  padding-top: 0 !important;
+  padding: 10vh 16px 0 !important;
   background-color: #fff !important;
 }
 
@@ -26517,11 +26538,6 @@ page-user-deals .content .scroll-content .row .about-business .social-links li i
   color: #aaa;
 }
 
-page-user-favorites ion-navbar i.fa {
-  color: #b1b1b1 !important;
-  cursor: pointer;
-}
-
 page-user-favorites .scroll-content {
   background: #fff !important;
 }
@@ -26530,32 +26546,56 @@ page-user-favorites .scroll-content .favorites-holder {
   margin-top: -20px;
 }
 
+page-user-favorites .scroll-content .favorites-holder .page-title {
+  color: #555;
+  font-size: 25px;
+  text-align: left;
+}
+
 page-user-favorites .scroll-content .favorites-holder .favorites {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: block;
   margin-top: 20px;
   border-bottom: 1px solid #e4e4e4;
 }
 
+page-user-favorites .scroll-content .favorites-holder .favorites .media-body {
+  display: block;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  margin-top: 0;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .col-xs-8 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 page-user-favorites .scroll-content .favorites-holder .favorites .img-holder {
-  margin: 0 15px 15px 0;
+  margin: 0 15px 0 0;
   width: 90px;
   height: 90px;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 
 page-user-favorites .scroll-content .favorites-holder .favorites .img-holder img {
   width: 100%;
   height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 
 page-user-favorites .scroll-content .favorites-holder .favorites .text-holder {
+  position: relative;
   color: #555;
 }
 
 page-user-favorites .scroll-content .favorites-holder .favorites .text-holder h3 {
-  margin-top: 5px;
+  margin-top: 0px;
   font-size: 16px;
 }
 
@@ -26577,16 +26617,61 @@ page-user-favorites .scroll-content .favorites-holder .favorites .text-holder .e
   margin: 5px auto;
 }
 
-page-user-favorites .scroll-content .favorites-holder .favorites .text-holder .remove-btn {
+page-user-favorites .scroll-content .favorites-holder .favorites .text-holder .fa-chevron-right {
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  margin: 10px 0;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button .btn {
   position: relative;
-  right: -210px;
-  top: -105px;
-  padding: 0;
-  width: 20px;
-  height: 20px;
-  font-size: 15px;
-  background: none;
-  color: #929292;
+  padding: 15px;
+  margin: 3px;
+  width: 50%;
+  font-family: "Raleway Regular";
+  font-size: 13px;
+  text-align: left;
+  text-decoration: none;
+  color: #fff;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button .btn:first-child {
+  margin-left: 0;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button .btn:nth-child(2) {
+  margin-right: 0;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button .btn i {
+  position: absolute;
+  top: 18px;
+  left: 85%;
+  font-size: 12px;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button .btn.remove-btn {
+  color: #807f7f;
+  background-color: #e1e1e1;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+
+page-user-favorites .scroll-content .favorites-holder .favorites .favorites-button .btn.btn-more {
+  background-color: #f79122;
 }
 
 ion-alert .alert-wrapper {
@@ -27719,6 +27804,31 @@ page-user-inbox #inbox-list #btn-message .button-inner {
   display: inline;
 }
 
+page-user-loyalty-card-deals ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-loyalty-card-deals ion-navbar i.fa {
+  position: absolute;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-loyalty-card-deals ion-navbar .business-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway Medium";
+  font-size: 18px;
+  color: #aaa;
+}
+
 page-user-loyalty-card-deals .header .back-btn-holder {
   margin: 30px 15px;
   color: #555;
@@ -27744,6 +27854,7 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder {
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal {
+  position: relative;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -27761,6 +27872,8 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .img-
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .img-holder img {
   width: 100%;
   height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text-holder {
@@ -27779,6 +27892,14 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text-holder .card-expiration-text {
   display: block;
   margin: 5px auto;
+}
+
+page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .fa-chevron-right {
+  position: absolute;
+  top: 30px;
+  right: 5px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
 }
 
 page-user-loyalty-cards ion-navbar i.fa-chevron-left {

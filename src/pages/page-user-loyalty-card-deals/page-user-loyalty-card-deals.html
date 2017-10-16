@@ -5,10 +5,14 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-  <div class="back-btn-holder" tappable (click)="backToLoyaltyCards()">
+  <!-- <div class="back-btn-holder" tappable (click)="backToLoyaltyCards()">
     <ion-icon ios="ios-arrow-back"></ion-icon>
     <p>Back to Loyalty Cards</p>
-  </div>
+  </div> -->
+  <ion-navbar *ngIf="hasData">
+    <i class="fa fa-chevron-left fa-lg" (click)="goPrevious()"></i>
+    <span class="business-title">{{business_name}}</span>
+  </ion-navbar>
 </ion-header>
 
 <ion-content padding>
@@ -21,6 +25,7 @@
         <h3 class="deal-title-text">{{deal.deals_id[0].template}}</h3>
          <span class="card-stamp-text">{{deal.loyalty_details.stamp}} of {{deal.deals_id[0].buy_pcs}}</span>
         <span class="card-expiration-text">Expires {{deal.deals_id[0].end_date | date : 'MM/dd/yyyy'}}</span>
+        <i class="fa fa-chevron-right fa-2x"></i>
       </div>
     </div>
   </div>

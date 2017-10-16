@@ -1,4 +1,28 @@
 page-user-loyalty-card-deals {
+
+  ion-navbar {
+    .back-button {
+      display: none !important;
+    }
+
+    i.fa {
+      position: absolute;
+      color: #b1b1b1 !important;
+
+      cursor: pointer;
+    }
+
+    .business-title {
+      display: flex;
+      justify-content: center;
+      margin-top: -5px;
+
+      font-family: "Raleway Medium";
+      font-size: 18px;
+      color: #aaa;
+    }
+  }
+
   .header {
     .back-btn-holder {
       margin: 30px 15px;
@@ -20,6 +44,7 @@ page-user-loyalty-card-deals {
     .card-deals-holder {
       margin-top: -20px;
       .card-deal {
+        position: relative;
         display: flex;
         margin-top: 15px;
         border-bottom: 1px solid #e4e4e4;
@@ -32,11 +57,13 @@ page-user-loyalty-card-deals {
           img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
           }
         }
 
         .text-holder {
           color: #555;
+
           .deal-title-text {
             margin-top: 5px;
             font-size: 16px;
@@ -48,7 +75,16 @@ page-user-loyalty-card-deals {
             display: block;
             margin: 5px auto;
           }
+        }
 
+        .fa-chevron-right {
+          position: absolute;
+          top: 30px;
+          right: 5px;
+
+          color: #b1b1b1 !important;
+
+          cursor: pointer;
         }
 
       }
