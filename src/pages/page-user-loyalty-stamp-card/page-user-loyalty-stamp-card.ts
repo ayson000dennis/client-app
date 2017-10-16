@@ -48,7 +48,7 @@ export class UserLoyaltyStampCardPage {
     $('.stamp').css({'width': stampWidth, 'height': stampWidth});
 
     if (this.stamps_needed > 10) {
-      $('.holder-stamps').css('width', parseInt(stampWidth) * (Math.ceil(this.stamps_needed) / 2));
+      $('.holder-stamps').css('width', parseInt(stampWidth) * (Math.ceil(this.stamps_needed / 2)));
     }
   }
 
