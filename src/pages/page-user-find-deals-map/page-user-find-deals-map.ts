@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
@@ -11,6 +11,7 @@ import { UserFindDealsPage } from '../page-user-find-deals/page-user-find-deals'
 
 import * as $ from "jquery";
 
+import {} from '@types/googlemaps';
 declare var google: any;
 
 @Component({
@@ -19,11 +20,12 @@ declare var google: any;
 })
 
 export class UserFindDealsMapPage {
-  pages: Array<{title: string, component: any}>;
-  deals : string[]
-  hasData :boolean = false
+  deals : string[];
 
-  @ViewChild('map') mapRef: ElementRef;
+  //google map
+  map: any;
+  default_location: any;
+  markers = [];
 
   constructor(
     public navCtrl: NavController,
@@ -33,177 +35,172 @@ export class UserFindDealsMapPage {
 
   ionViewWillEnter(){
 
-  }
-
-  ionViewDidLoad() {
     this.initMap();
   }
 
+  ionViewDidLoad() {
+  }
+
   initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -33.8688, lng: 151.2195},
-      zoom: 20
+    var self = this
+    this.default_location = new google.maps.LatLng(34.0522, -118.2437);
+
+    this.map = new google.maps.Map(document.getElementById('mapView'), {
+      center: this.default_location,
+      zoom: 9
     });
-    var input = document.getElementById('pac-input');
-    // var card = document.getElementById('pac-card');
-    // var types = document.getElementById('type-selector');
-    // var strictBounds = document.getElementById('strict-bounds-selector');
 
-    // map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
-
-    var autocomplete = new google.maps.places.Autocomplete(input);
-
-    // Bind the map's bounds (viewport) property to the autocomplete object,
-    // so that the autocomplete requests use the current map bounds for the
-    // bounds option in the request.
-    autocomplete.bindTo('bounds', map);
-
+    var geocoder = new google.maps.Geocoder;
     var infowindow = new google.maps.InfoWindow();
-    // var infowindowContent = document.getElementById('infowindow-content');
-    // infowindow.setContent(infowindowContent);
+
+    //Geolocation
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        var lat_lng = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+
+        infowindow.setPosition(lat_lng);
+        this.map.setCenter(lat_lng);
+        this.map.setZoom(9);
+        this.geocodeLatLng(geocoder, this.map, lat_lng);
+      }, function() {
+        // handleLocationError(true, infoWindow, map.getCenter());
+      });
+    } else {
+      // Browser doesn't support Geolocation
+      // handleLocationError(false, infoWindow, map.getCenter());
+    }
+
+    var deal = document.getElementById('deal-name');
+    var location = document.getElementById('deal-location');
+
+    var options = {
+      types: ['(cities)'],
+      componentRestrictions: {country: ['us', 'ca']}
+    };
+
+    var autocomplete = new google.maps.places.Autocomplete(location, options);
+    var searchBox = new google.maps.places.SearchBox(deal);
+
+    autocomplete.bindTo('bounds', self.map);
+    searchBox.bindTo('bounds', self.map);
+
+    var infowindowContent = document.getElementById('infowindow-content');
+    infowindow.setContent(infowindowContent);
+
     var marker = new google.maps.Marker({
-      map: map,
+      map: self.map,
       anchorPoint: new google.maps.Point(0, -29)
     });
 
     autocomplete.addListener('place_changed', function() {
-      // infowindow.close();
-      marker.setVisible(false);
+
+      self.removeMarkers();
       var place = autocomplete.getPlace();
-      if (!place.geometry) {
-        // User entered the name of a Place that was not suggested and
-        // pressed the Enter key, or the Place Details request failed.
-        window.alert("No details available for input: '" + place.name + "'");
-        return;
-      }
+      console.log(place)
 
-      // If the place has a geometry, then present it on a map.
+      if (!place.geometry) return;
+
       if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
+        console.log(place.geometry.location)
+        self.map.setCenter(place.geometry.location);
+        self.map.fitBounds(place.geometry.viewport);
+        self.map.setZoom(9);
       } else {
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);  // Why 17? Because it looks good.
-      }
-      marker.setPosition(place.geometry.location);
-      marker.setVisible(true);
-
-      var address = '';
-      if (place.address_components) {
-        address = [
-          (place.address_components[0] && place.address_components[0].short_name || ''),
-          (place.address_components[1] && place.address_components[1].short_name || ''),
-          (place.address_components[2] && place.address_components[2].short_name || '')
-        ].join(' ');
+        self.map.setCenter(place.geometry.location);
       }
 
-      // infowindowContent.children['place-icon'].src = place.icon;
-      // infowindowContent.children['place-name'].textContent = place.name;
-      // infowindowContent.children['place-address'].textContent = address;
-      // infowindow.open(map, marker);
     });
-
-    // Sets a listener on a radio button to change the filter type on Places
-    // Autocomplete.
-    // function setupClickListener(id, types) {
-    //   var radioButton = document.getElementById(id);
-    //   radioButton.addEventListener('click', function() {
-    //     autocomplete.setTypes(types);
-    //   });
-    // }
-
-    // setupClickListener('changetype-all', []);
-    // setupClickListener('changetype-address', ['address']);
-    // setupClickListener('changetype-establishment', ['establishment']);
-    // setupClickListener('changetype-geocode', ['geocode']);
-
-    // document.getElementById('use-strict-bounds')
-    //     .addEventListener('click', function() {
-    //       console.log('Checkbox clicked! New state=' + this.checked);
-    //       autocomplete.setOptions({strictBounds: this.checked});
-    //     });
-  }
-
-  showMap() {
-    //location lat -
-    const location = new google.maps.LatLng(15.135524, 120.589630);
-
-    //map options
-    const options = {
-      center: location,
-      zoom: 20,
-      mapTypeId: 'roadmap'
-    };
-
-    const map = new google.maps.Map(this.mapRef.nativeElement, options);
-    this.addMarker(location, map);
-    this.setupSearchBox();
-
-    var searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
-
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(searchBox);
-
-    map.addListener('bounds_changed', function() {
-      searchBox.setBounds(map.getBounds());
-    });
-
-    var markers = [];
 
     searchBox.addListener('places_changed', function() {
       var places = searchBox.getPlaces();
 
-      if(places.length == 0) {
-        return;
+      if (places.length == 0) {
+       return;
+     }
+     // Clear out the old markers.
+     self.markers.forEach(marker => {
+       marker.setMap(null);
+     });
+     self.markers = [];
+
+     // For each place, get the icon, name and location.
+     var bounds = new google.maps.LatLngBounds();
+
+     var count = 1;
+     places.forEach(function(place, i) {
+       if (!place.geometry) {
+         console.log("Returned place contains no geometry");
+         return;
+       }
+       //place.icon
+       var nonPartner = {
+         url: 'https://cdn.filestackcontent.com/LMxusLVXREOzfotniwb6',
+         size: new google.maps.Size(80, 80),
+         origin: new google.maps.Point(0, 0),
+         anchor: new google.maps.Point(15, 30),
+         scaledSize: new google.maps.Size(24, 20)
+       };
+       places[i].count =  count;
+       count++;
+       // Create a marker for each place.
+       self.markers.push(new google.maps.Marker({
+         map: self.map,
+         icon: nonPartner,
+         title: place.name,
+         position: place.geometry.location
+       }));
+
+       if (place.geometry.viewport) {
+         // Only geocodes have viewport.
+         bounds.union(place.geometry.viewport);
+       } else {
+         bounds.extend(place.geometry.location);
+       }
+     });
+     self.map.fitBounds(self.map);
+   });
+
+  }
+
+  createMarker(data) {
+    data.forEach(d => {
+      var position = new google.maps.LatLng(d._source.lat, d._source.lng);
+      var inBounds = this.map.getBounds().contains(position);
+      if (inBounds == true) {
+        var marker = new google.maps.Marker({
+          map: this.map,
+          position: position
+        });
+        this.markers.push(marker);
       }
-
-      markers.forEach(function(marker) {
-        marker.setMap(null);
-      });
-      markers = [];
-
-      var bounds = new google.map.LatLngBounds();
-      places.forEach(function(place) {
-        if(!place.geometry) {
-          console.log('returned place contains no geometry');
-          return;
-        }
-
-        var icon = {
-          url: place.icon,
-          size: new google.maps.Size(71, 71),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(17, 34),
-          scaledSize: new google.maps.Size(25, 25)
-        };
-
-        markers.push(new google.maps.Marker({
-          map: map,
-          icon: icon,
-          title: place.name,
-          position: place.geometry.location
-        }));
-
-        if(place.geometry.viewport) {
-          bounds.union(place.geometry.viewport);
-        } else {
-          bounds.extend(place.geometry.location);
-        }
-      });
-
-      map.fitBounds(bounds);
-
     });
+
+    // google.maps.event.addListener(marker, 'click', function() {
+    //   infowindow.setContent(place.name);
+    //   infowindow.open(this.map, this);
+    // });
 
   }
 
-  addMarker(position, map) {
-    return new google.maps.Marker({
-      position,
-      map
+  setMapOnAll(map) {
+    this.markers.forEach(marker => {
+      marker.setMap(map);
     });
   }
 
-  setupSearchBox() {
+  showMarkers() {
+   this.setMapOnAll(this.map);
+  }
 
+  removeMarkers() {
+    this.setMapOnAll(null);
+    this.markers = [];
+
+      console.log(this.markers)
+      console.log(this.map)
   }
 
 

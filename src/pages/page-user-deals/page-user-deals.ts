@@ -18,11 +18,13 @@ import * as $ from "jquery";
 export class UserDealsPage {
   pages: Array<{title: string, component: any}>;
   business : string[];
+  business_imgs : any[];
   deals : string[];
   hasData :boolean = false;
   operations  : string[];
   template : any;
   days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  map: any;
 
   constructor(
     public navCtrl: NavController,
@@ -33,11 +35,12 @@ export class UserDealsPage {
   }
 
   ionViewWillEnter(){
-    console.log(location);
-    this.business = this.navParams.get('business');
-    this.template = this.navParams.get('template');
     var self = this;
-    console.log(this.business)
+    var businessHolder = this.navParams.get('business');
+    this.business = businessHolder.business_id[0];
+    this.business_imgs = businessHolder.business_id[0].files;
+    this.template = this.navParams.get('template');
+    console.log(businessHolder)
 
     this.api.Deals.deals_list().then(deals =>{
       this.deals = deals
@@ -79,7 +82,10 @@ export class UserDealsPage {
     //   // console.log(this.business.operations);
     // }
     // this.operations = this.business;
-    console.log(this.operations);
+  }
+
+  ionViewDidLoad() {
+    this.initMap();
   }
 
   goHome() {
@@ -96,8 +102,11 @@ export class UserDealsPage {
     });
   }
 
-  goPrevious() {
-    this.navCtrl.pop();
+  goListView() {
+    this.navCtrl.setRoot(UserFindDealsPage, {}, {
+      animate: true,
+      direction: 'back'
+    });
   }
 
   showHours() {
@@ -110,4 +119,26 @@ export class UserDealsPage {
       $(".toggle-collapse").text("(show less)");
     }
   }
+
+  initMap() {
+    var businessHolder2 = this.navParams.get('business');
+    var business2 = businessHolder2.business_id[0];
+    var lat = business2.lat;
+    var lng = business2.lng;
+
+    // var default_location = new google.maps.LatLng(lat, lng);
+    var center = {lat: business2.lat, lng: business2.lng};
+    var self = this;
+    this.map = new google.maps.Map(document.getElementById('dealMapView'), {
+      center: center,
+      zoom: 9
+    });
+
+    var marker = new google.maps.Marker({
+      position: center,
+      map: this.map,
+    });
+
+  }
+
 }

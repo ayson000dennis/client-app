@@ -22,7 +22,6 @@ import { ItemDetailsPage } from '../pages/item-details/item-details';
 import { UserMembershipCardPage } from '../pages/page-user-membership-card/page-user-membership-card';
 import { UserLoyaltyCardsPage } from '../pages/page-user-loyalty-cards/page-user-loyalty-cards';
 import { UserFindDealsPage } from '../pages/page-user-find-deals/page-user-find-deals';
-import { UserFilteredDealsPage } from '../pages/page-user-filtered-deals/page-user-filtered-deals';
 import { UserFindDealsMapPage } from '../pages/page-user-find-deals-map/page-user-find-deals-map';
 import { UserFavoritesPage } from '../pages/page-user-favorites/page-user-favorites';
 import { UserLoyaltyStampCardPage } from '../pages/page-user-loyalty-stamp-card/page-user-loyalty-stamp-card';
@@ -69,7 +68,6 @@ import {Keyboard} from "@ionic-native/keyboard";
     UserLoyaltyCardsPage,
     UserFavoritesPage,
     UserFindDealsPage,
-    UserFilteredDealsPage,
     UserFindDealsMapPage,
     UserInboxPage,
     ListPage,
@@ -108,7 +106,6 @@ import {Keyboard} from "@ionic-native/keyboard";
     UserLoyaltyCardsPage,
     UserFavoritesPage,
     UserFindDealsPage,
-    UserFilteredDealsPage,
     UserFindDealsMapPage,
     UserInboxPage,
     UserLoyaltyStampCardPage,

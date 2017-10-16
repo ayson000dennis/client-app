@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
 
 export class PaginationService {
-    getPager(totalItems: number, currentPage: number = 1, pageSize: number = 2) {
+    getPager(totalItems: number, currentPage: number = 1, pageSize: number = 4) {
         // calculate total pages
         let totalPages = Math.ceil(totalItems / pageSize);
 

@@ -10,12 +10,12 @@
 
   <div class="jumbotron search-banner">
     <form class="form-inline form-search-deals text-center">
-      <input type="text" class="form-control" placeholder="Search GoPage Deals">
+      <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">
       <label>
         <span class="fa fa-map-marker"></span>
-        <input type="text" class="form-control" placeholder="Los Angeles, CA">
+        <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">
       </label>
-      <button class="fa fa-search btn-search-deals" type="submit"></button>
+      <button class="fa fa-search btn-search-deals" type="submit" (click)="searchDeals()"></button>
     </form>
   </div>
 
@@ -55,7 +55,7 @@
 
   <div class="categories-main">
     <div class="row">
-      <div class="col-12 col-sm-9 holder-categories-result1">
+      <div class="col holder-categories-result1">
         <div class="row">
           <div class="col categories-result" *ngIf="hasData">
             <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let deal of pagedDeals; let i = index">

@@ -1,26 +1,7 @@
 page-user-deals {
-  ion-navbar {
-    i.fa {
-      position: absolute;
-      color: #b1b1b1 !important;
-
-      cursor: pointer;
-    }
-
-    .business-title {
-      display: flex;
-      justify-content: center;
-      margin-top: -5px;
-
-      font-family: "Raleway Medium";
-      font-size: 18px;
-      color: #aaa;
-    }
-  }
-
   .content {
     .scroll-content {
-      padding: 10vh 16px 0 !important;
+      padding-top: 0 !important;
       background-color: #fff !important;
 
       ion-slides {
@@ -87,9 +68,9 @@ page-user-deals {
           &.location-map {
             width: 100%;
 
-            #google-map {
+            #dealMapView {
               width: 100%;
-              height: 330px;
+              height: 300px;
             }
           }
         }
