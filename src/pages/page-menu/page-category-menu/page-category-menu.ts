@@ -45,6 +45,13 @@ export class CategoryMenuPage {
       });
   }
 
+  seeAll() {
+    this.navCtrl.setRoot(UserFindDealsPage, { business_category: null }, {
+      animate: true,
+      direction: 'back'
+    });
+  }
+
   goFilterBusiness(business_name){
     // console.log(business_category);
     var business_category =  {

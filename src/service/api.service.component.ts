@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http }  from '@angular/http';
+import { Headers, Http }  from '@angular/http';
 import Config from '../app/config';
 import "rxjs/Rx";
 import * as $ from "jquery";
@@ -9,6 +9,13 @@ export class ApiService {
     private http :Http
     ) { }
 
+  private username = "gopage";
+  private password = "gopage321";
+  private userAuth = btoa(this.username + ":" + this.password);
+
+  getHeaders() {
+    return new Headers({'Authorization': 'Basic ' + this.userAuth});
+  }
 
   Users = {
 		user: (userId: string) => {
@@ -18,11 +25,39 @@ export class ApiService {
     }
   }
 
+  // deals_list: () => {
+  //       return this.http.get(Config.baseUrl + "api/deals/list_all/").map(response => {
+  //           return response.json();
+  //       }).toPromise();
+  // }
   Deals = {
-		deals_list: () => {
-          return this.http.get(Config.baseUrl + "api/deals/list_all/").map(response => {
+    deals_search: (input) => {
+          return this.http.get(Config.ElasticSearch + "deals/_search?q=" + input, {
+            headers : this.getHeaders()}).map(response => {
+            return response.json();
+          }).toPromise();
+    },
+
+    deals_list: () => {
+          return this.http.get(Config.ElasticSearch + "deals/_search", {
+            headers : this.getHeaders()}).map(response => {
               return response.json();
           }).toPromise();
+    },
+    deals_count: () => {
+          return this.http.get(Config.ElasticSearch + "deals/_count", {
+            headers : this.getHeaders()}).map(response => {
+              return response.json();
+          }).toPromise();
+    }
+
+  }
+
+  Business = {
+    business_deal: (temp) => {
+      return this.http.get(Config.baseUrl + "api/deals/template/" + temp).map(response =>{
+          return response.json();
+      }).toPromise();
     }
   }
 

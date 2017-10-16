@@ -38,6 +38,7 @@ export class UserFindDealsPage {
   hasData : boolean = false;
   user : any;
   favorites : any;
+  showPagination : boolean = true;
 
   // pager object and items
   pager: any = {};
@@ -90,6 +91,15 @@ export class UserFindDealsPage {
     this.pagedDeals = this.deals.slice(this.pager.startIndex, this.pager.endIndex + 1);
 
     this.content.scrollToTop();
+
+    if (this.pager.totalPages < 2) {
+      this.showPagination = false;
+    } else {
+      this.showPagination = true;
+    }
+
+   $('.deals-total').text(this.pager.totalItems);
+   $('.deals-found').text(this.pagedDeals.length);
 
   }
 
