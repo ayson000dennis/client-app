@@ -75,7 +75,7 @@
                     <a class="deal-title" href="">
                       <h6 class="mt-0">{{deal.template}}</h6>
                     </a>
-                    <a class="business-link" (click)="getBusiness(deal.template)">{{deal.business_name}}</a>
+                    <a class="business-link" tappable (click)="getBusiness(deal.template)">{{deal.business_name}}</a>
                     <p class="business-address">{{deal.business_id[0].country}}, {{deal.business_id[0].state}}</p>
                     <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{deal.end_date | date: 'MM/dd/yyyy'}}</p>
                   </div>

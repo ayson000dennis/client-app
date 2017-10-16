@@ -193,6 +193,7 @@ export class UserFindDealsPage {
     }
   }
 
+ 
   goMapView() {
     this.navCtrl.setRoot(UserFindDealsMapPage, {}, {
       animate: true,
