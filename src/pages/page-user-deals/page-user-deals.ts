@@ -9,6 +9,7 @@ import { Storage } from '@ionic/storage'
 import moment from 'moment';
 
 import * as $ from "jquery";
+declare var google: any;
 
 @Component({
   selector: 'page-user-deals',
