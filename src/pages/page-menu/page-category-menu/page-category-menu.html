@@ -5,7 +5,7 @@
 
   <ion-list class="menu-list">
     <ul class="categories-list" >
-      <li><a href="#"><img src="assets/icon/icon-alldeals.svg">All Deals</a></li>
+      <li (click)="seeAll()"><a href="#"><img src="assets/icon/icon-alldeals.svg">All Deals</a></li>
       <div *ngFor="let business of business_category; let k = index;">
         <li (click)="goFilterBusiness(business.name)"><a href="#"><img src="assets/icon/icon-category-{{first_word[k]}}.svg">  {{ business.name }}</a></li>
       </div>

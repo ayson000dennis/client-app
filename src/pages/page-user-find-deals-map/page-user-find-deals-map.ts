@@ -22,6 +22,7 @@ declare var google: any;
 export class UserFindDealsMapPage {
   deals : string[];
 
+
   //google map
   map: any;
   default_location: any;
@@ -31,14 +32,30 @@ export class UserFindDealsMapPage {
     public navCtrl: NavController,
     public platform: Platform,
     private api : ApiService){
+
   }
 
   ionViewWillEnter(){
-
-    this.initMap();
+    // this.initMap();
+    // var self = this;
+    // var thisMap = function() {
+    //   self.initMap();
+    //   console.log('hello')
+    // };
+    //
+    // var refreshIntervalId = setInterval(thisMap, 10000);
+    //
+    // if($('#viewMap').find('div').length > 0) {
+    //   clearInterval(refreshIntervalId);
+    // }
   }
 
   ionViewDidLoad() {
+    this.initMap();
+    var self = this;
+    setTimeout(function(){
+      self.initMap();
+    }, 800);
   }
 
   initMap() {

@@ -59,36 +59,44 @@
       <div class="col holder-categories-result1">
         <div class="row">
           <div class="col categories-result" *ngIf="hasData">
-            <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let deal of pagedDeals; let i = index">
-              <div class="col-xs-8">
-                <a class="deal-thumbnail" href="" *ngIf="toggleImage">
-                  <img class="d-flex mr-3" src="{{deal.photo.url !== unknown ? deal.photo.url : 'assets/images/placeholder.jpg'}}" alt="{{deal.template}}">
-                </a>
-                <div class="media-body align-self-center">
-                  <a class="deal-title" href="">
-                    <h6 class="mt-0">{{deal.template}}</h6>
+            <div *ngIf="pagedDeals.length === 0; then noData else hasData"></div>
+            <ng-template #noData>
+              <div class="no-data-holder">
+                <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">
+              </div>
+            </ng-template>
+            <ng-template #hasData>
+              <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let deal of pagedDeals; let i = index">
+                <div class="col-xs-8">
+                  <a class="deal-thumbnail" href="" *ngIf="toggleImage">
+                    <img class="d-flex mr-3" src="{{deal.photo.url !== unknown ? deal.photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{deal.template}}">
                   </a>
-                  <a class="business-link" href="">{{deal.business_name}}</a>
-                  <p class="business-address">{{deal.business_id[0].country}}, {{deal.business_id[0].state}}</p>
-                  <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{deal.end_date | date: 'MM/dd/yyyy'}}</p>
+                  <div class="media-body align-self-center">
+                    <a class="deal-title" href="">
+                      <h6 class="mt-0">{{deal.template}}</h6>
+                    </a>
+                    <a class="business-link" (click)="getBusiness(deal.template)">{{deal.business_name}}</a>
+                    <p class="business-address">{{deal.business_id[0].country}}, {{deal.business_id[0].state}}</p>
+                    <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{deal.end_date | date: 'MM/dd/yyyy'}}</p>
+                  </div>
                 </div>
-              </div>
 
-              <div class="col-xs-4">
-                <div class="deals-button">
-                  <div *ngIf="deal.is_favorite; then Favorite  else  notFavorite"></div>
-                  <ng-template #notFavorite>
-                    <div class="claim-btn-holder">
-                      <a class="btn btn-claim" [attr.id]="'addToFavorite'+deal._id" id="addToFavorite" (click)="addToFavorites(deal)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
-                      <a class="btn btn-claimed" id="addedToFavorite" (click)="goToFavorites()">Added to Favorites</a>
-                    </div>
-                  </ng-template>
-                  <br class="btn-break">
-                  <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" (click)="goToFavorites()">Added to Favorites</a> <br class="btn-break"></ng-template>
-                  <a class="btn btn-more" (click)="getBusiness(deal.template)" >More Deals <i class="fa fa-chevron-right"></i></a>
+                <div class="col-xs-4">
+                  <div class="deals-button">
+                    <div *ngIf="deal.is_favorite; then Favorite  else  notFavorite"></div>
+                    <ng-template #notFavorite>
+                      <div class="claim-btn-holder">
+                        <a class="btn btn-claim" [attr.id]="'addToFavorite'+deal._id" id="addToFavorite" (click)="addToFavorites(deal)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                        <a class="btn btn-claimed" id="addedToFavorite" (click)="goToFavorites()">Added to Favorites</a>
+                      </div>
+                    </ng-template>
+                    <br class="btn-break">
+                    <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" (click)="goToFavorites()">Added to Favorites</a> <br class="btn-break"></ng-template>
+                    <a class="btn btn-more" (click)="getBusiness(deal.template)" >More Deals <i class="fa fa-chevron-right"></i></a>
+                  </div>
                 </div>
               </div>
-            </div>
+            </ng-template>
           </div>
         </div>
       </div>
