@@ -26294,6 +26294,14 @@ page-user-chat ion-navbar {
   border-bottom: 1px solid transparent;
 }
 
+page-user-chat ion-navbar .back-button-text {
+  display: none;
+}
+
+page-user-chat ion-navbar .back-button-icon {
+  color: grey;
+}
+
 page-user-chat ion-navbar .title {
   font-size: 16px;
   color: #565252;
@@ -26307,6 +26315,10 @@ page-user-chat ion-navbar .toolbar-content {
 
 page-user-chat ion-header + ion-content > div.scroll-content {
   background-color: transparent !important;
+}
+
+page-user-chat #messages .message {
+  text-transform: none;
 }
 
 page-user-chat #messages .loader {

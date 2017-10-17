@@ -26,6 +26,8 @@ export class UserInboxPage {
   user: string[];
   hasData: boolean = false;
   hasNotify : boolean = false;
+  hasLeave : boolean = false;
+  hasNewMsgBusinessId : string;
   message = [];
 
   constructor(
@@ -34,18 +36,21 @@ export class UserInboxPage {
     public api: ApiService,
     public _zone: NgZone,
     public socketService: SocketService) {
-    this.init();
+    this.initNotification();
   }
 
   ionViewWillEnter() {
+    this.socketService.connect();
+  }
+
+  ionViewDidLoad() {
     this.storage.get('user').then(user =>{
       this.user = user;
-      console.log(user)
+      // console.log(user)
 
         this.api.Message.business_list(user._id).then(business => {
           this.businessList = business;
-          console.log(business);
-          // var room_id = user._id +
+          // console.log(business);
 
           this.hasData = true;
           this.socketService.connect();
@@ -61,17 +66,21 @@ export class UserInboxPage {
 
   ionViewWillLeave() {
     this.socketService.disconnect();
+    this.hasLeave = true;
+    this.hasData = false;
   }
 
-  init() {
+  initNotification() {
     // Get real time message notification
     this.socketService.notify.subscribe((chatNotification) => {
+      // console.log(chatNotification);
+        console.log('Notif from business');
       this._zone.run(() => {
         this.storage.get('user').then(user =>{
 
           // if(chatNotification.user_id == user._id) {
           //     this.hasNotify = true;
-          //     console.log('notify')
+          //     this.hasNewMsgBusinessId = chatNotification.business_id;
           // }
 
         }).catch((error) => {

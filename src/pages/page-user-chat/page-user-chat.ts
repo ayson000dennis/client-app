@@ -31,7 +31,9 @@ export class UserChatPage {
   private businessDetail;
   private userDetail;
   hasData : boolean = false;
-  hasNotify : boolean = false;
+  hasLeave : boolean = false;
+  hasNewMsg : boolean = false;
+
   pages: Array<{title: string, component: any}>;
 
   constructor(
@@ -57,21 +59,38 @@ export class UserChatPage {
 
   ionViewWillEnter() {
     var room_id = this.userDetail._id + this.businessDetail._id;
-
-    // GET MESSAGES FROM DATABASE
-    this.api.Message.fetch_chats(room_id).then(chats => {
-      this.messages = chats;
-
-          this.hasData = true;
-          $('body').find('.fa.loader').remove();
-          this.scrollToBottom();
-        }).catch((error) => {
-            console.log(error);
-        });
+    this.socketService.joinRoom(room_id);
 
     this.socketService.connect();
-    this.socketService.joinRoom(room_id);
   }
+
+  ionViewDidLoad(){
+    this.fetchChats();
+  }
+
+  ionViewWillLeave() {
+    this.socketService.disconnect();
+    this.hasLeave = true;
+  }
+
+ fetchChats(){
+   var room_id = this.userDetail._id + this.businessDetail._id;
+
+   // GET MESSAGES FROM DATABASE
+   this.api.Message.fetch_chats(room_id).then(chats => {
+     if(this.hasLeave){
+       return;
+     }
+
+    this.messages = chats;
+    this.hasData = true;
+    $('body').find('.fa.loader').remove();
+    this.scrollToBottom();
+   }).catch((error) => {
+       console.log(error);
+   });
+
+ }
 
   init() {
     // Get real time message response
@@ -102,9 +121,6 @@ export class UserChatPage {
     this.scrollToBottom();
   }
 
-  ionViewWillLeave() {
-    this.socketService.disconnect();
-  }
 
   scrollToBottom() {
     this._zone.run(() => {

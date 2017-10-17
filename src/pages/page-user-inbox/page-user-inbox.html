@@ -11,7 +11,8 @@
 
     <ion-list id="inbox-list">
       <ion-item  *ngFor="let business of businessList;" tappable (click)="viewMessage(business.business_id[0],business.user_id[0])">
-        <span class="name" *ngIf="business.business_id[0] && business.business_id[0].company_name"> {{business.business_id[0].company_name}}  </span>
+
+        <span [ngClass]="[hasNewMsgBusinessId == business.business_id[0]._id  ? 'name-new' : 'name']" *ngIf="business.business_id[0] && business.business_id[0].company_name"> {{business.business_id[0].company_name}}  </span>
 
         <span class="name" *ngIf="business.business_id[0] && !business.business_id[0].company_name"> No Company Name </span>
 
