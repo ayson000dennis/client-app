@@ -11,10 +11,10 @@
     <p class="page-title">Favorites</p>
     <div class="favorites media" *ngFor="let favorite of favorites; let i = index">
       <div class="col-xs-8">
-        <div class="img-holder" tappable (click)="getBusiness(favorite.business_id[0])">
+        <div class="img-holder" tappable (click)="getBusiness(favorite.deals_id[0].template)">
           <img class="d-flex mr-3" [src]="favorite.deals_id[0].photo.url" alt="">
         </div>
-        <div class="text-holder media-body" tappable (click)="getBusiness(favorite.business_id[0])">
+        <div class="text-holder media-body" tappable (click)="getBusiness(favorite.deals_id[0].template)">
           <h3 class="title-text">{{favorite.deals_id[0].business_name}}</h3>
           <div class="company-text">{{favorite.deals_id[0].title}}</div>
           <div class="location-text">{{favorite.business_id[0].country}}</div>
@@ -25,7 +25,7 @@
 
       <div class="favorites-button">
         <a class="btn remove-btn" tappable (click)="removeFavorite(favorite._id, i)">Remove</a>
-        <a class="btn btn-more" tappable (click)="getBusiness(favorite.business_id[0])">More Deals <i class="fa fa-chevron-right"></i></a>
+        <a class="btn btn-more" tappable (click)="getBusiness(favorite.deals_id[0].template)">More Deals <i class="fa fa-chevron-right"></i></a>
       </div>
 
     </div>

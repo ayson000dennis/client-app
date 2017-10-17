@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform, NavController,NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, NavController,NavParams,Slides } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
@@ -20,12 +20,16 @@ export class UserDealsPage {
   pages: Array<{title: string, component: any}>;
   business : string[];
   business_imgs : any[];
+  business_address : string;
   deals : string[];
   hasData :boolean = false;
   operations  : string[];
   template : any;
   days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   map: any;
+  swiper:any;
+  @ViewChild('slider') slider: Slides;
+  slidesOptions = { initialSlide: 0 }
 
   constructor(
     public navCtrl: NavController,
@@ -35,6 +39,14 @@ export class UserDealsPage {
     private storage : Storage){
   }
 
+  slideNext(){
+    this.slider.slideNext();
+  }
+
+  slidePrev(){
+    this.slider.slidePrev();
+  }
+
   ionViewWillEnter(){
     var self = this;
     var businessHolder = this.navParams.get('business');
@@ -42,6 +54,10 @@ export class UserDealsPage {
     this.business_imgs = businessHolder.business_id[0].files;
     this.template = this.navParams.get('template');
     console.log(businessHolder)
+
+    this.business_address = businessHolder.business_id[0].country + " " + businessHolder.business_id[0].state + " " + businessHolder.business_id[0].zip_postal;
+    this.business_address = this.business_address.replace(/^[, ]+|[, ]+$|[, ]+/g, "+").trim();
+    // console.log(this.business_address)
 
     this.api.Deals.deals_list().then(deals =>{
       this.deals = deals
@@ -108,6 +124,10 @@ export class UserDealsPage {
       animate: true,
       direction: 'back'
     });
+  }
+
+  goPrevious() {
+    this.navCtrl.pop();
   }
 
   showHours() {

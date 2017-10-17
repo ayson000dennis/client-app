@@ -29,6 +29,7 @@ page-user-loyalty-cards {
           img {
             width: 100%;
             height: 100%;
+            object-fit: cover;
           }
         }
 
@@ -51,7 +52,7 @@ page-user-loyalty-cards {
         i.fa-chevron-right {
           position: absolute;
           top: 27%;
-          right: 30px;
+          right: 0;
 
           color: #b1b1b1 !important;
 

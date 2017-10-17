@@ -154,9 +154,9 @@ export class UserFindDealsPage {
       //     }
       //   });
       // });
-      this.api.Deals.deals_count().then(count => {
-        this.count = count.count;
-      });
+      // this.api.Deals.deals_count().then(count => {
+      //   this.count = count.count;
+      // });
 
       this.api.Deals.deals_list().then(deals => {
         this.deals = [];
@@ -193,7 +193,7 @@ export class UserFindDealsPage {
     }
   }
 
- 
+
   goMapView() {
     this.navCtrl.setRoot(UserFindDealsMapPage, {}, {
       animate: true,
@@ -232,7 +232,7 @@ export class UserFindDealsPage {
 
   getBusiness(template) {
     this.api.Business.business_deal(template).then(business => {
-      this.navCtrl.setRoot(UserDealsPage, {business: business.business}, {
+      this.navCtrl.push(UserDealsPage, {business: business.business}, {
         animate: true,
         direction: 'forward'
       });

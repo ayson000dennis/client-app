@@ -219,11 +219,22 @@ page-user-find-deals {
                 .btn-claim {
                   margin-right: 10px;
                 }
-                @media screen and (max-width: 350px) {
+                @media (min-width: 445px) {
                   .btn {
                     i {
-                      left: 110px !important;
+                      left: 90% !important;
                     }
+                  }
+                }
+
+                @media screen and (max-width: 335px) {
+                  .btn-more {
+                    display: flex;
+                    align-items: center;
+                  }
+
+                  .btn i {
+                    top: 25px;
                   }
                 }
               }
@@ -283,6 +294,7 @@ page-user-find-deals {
               margin-top: 0;
               width: 150px;
               .btn {
+                padding: 15px 10px;
                 margin: 5px 0;
                 width: inherit;
                 font-family: "Raleway Regular";
@@ -294,7 +306,7 @@ page-user-find-deals {
                 cursor: pointer;
                 i {
                   position: absolute;
-                  left: 130px;
+                  left: 85%;
                   font-size: 12px;
                   top: 18px;
                 }

@@ -54,7 +54,6 @@ export class UserFavoritesPage {
     this.getFavorites();
   }
 
-
   getFavorites() {
     this.storage.get("user").then(user => {
       this.api.Favorites.favorite_list(user._id).then(favorites => {
@@ -64,10 +63,14 @@ export class UserFavoritesPage {
     });
   }
 
-  getBusiness(business) {
-    this.navCtrl.push(UserDealsPage, {business : business}, {
-       animate: true,
-       direction: 'forward'
+  getBusiness(template) {
+    this.api.Business.business_deal(template).then(business => {
+      this.navCtrl.push(UserDealsPage, {business: business.business}, {
+        animate: true,
+        direction: 'forward'
+      });
+    }).catch(error => {
+      console.log(error);
     });
   }
 
@@ -81,7 +84,7 @@ export class UserFavoritesPage {
             this.api.Favorites.remove_to_favorites(id).then(response => {
               console.log(response);
             });
-            this.favorites.splice(index);
+            this.favorites.splice(index, 1);
           }
         },
         {
@@ -95,10 +98,5 @@ export class UserFavoritesPage {
     });
 
     remove.present();
-
-
   }
-
-
-
 }

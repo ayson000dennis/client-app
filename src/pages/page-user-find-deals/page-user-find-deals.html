@@ -67,15 +67,15 @@
             </ng-template>
             <ng-template #hasData>
               <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let deal of pagedDeals; let i = index">
-                <div class="col-xs-8">
-                  <a class="deal-thumbnail" href="" *ngIf="toggleImage">
+                <div class="col-xs-8" tappable (click)="getBusiness(deal.template)">
+                  <a class="deal-thumbnail" *ngIf="toggleImage">
                     <img class="d-flex mr-3" src="{{deal.photo.url !== unknown ? deal.photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{deal.template}}">
                   </a>
                   <div class="media-body align-self-center">
-                    <a class="deal-title" href="">
+                    <a class="deal-title">
                       <h6 class="mt-0">{{deal.template}}</h6>
                     </a>
-                    <a class="business-link" tappable (click)="getBusiness(deal.template)">{{deal.business_name}}</a>
+                    <a class="business-link">{{deal.business_name}}</a>
                     <p class="business-address">{{deal.business_id[0].country}}, {{deal.business_id[0].state}}</p>
                     <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{deal.end_date | date: 'MM/dd/yyyy'}}</p>
                   </div>
@@ -86,13 +86,12 @@
                     <div *ngIf="deal.is_favorite; then Favorite  else  notFavorite"></div>
                     <ng-template #notFavorite>
                       <div class="claim-btn-holder">
-                        <a class="btn btn-claim" [attr.id]="'addToFavorite'+deal._id" id="addToFavorite" (click)="addToFavorites(deal)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
-                        <a class="btn btn-claimed" id="addedToFavorite" (click)="goToFavorites()">Added to Favorites</a>
+                        <a class="btn btn-claim" [attr.id]="'addToFavorite'+deal.u_id" id="addToFavorite" tappable (click)="addToFavorites(deal)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                        <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
                       </div>
                     </ng-template>
-                    <br class="btn-break">
-                    <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" (click)="goToFavorites()">Added to Favorites</a> <br class="btn-break"></ng-template>
-                    <a class="btn btn-more" (click)="getBusiness(deal.template)" >More Deals <i class="fa fa-chevron-right"></i></a>
+                    <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>
+                    <a class="btn btn-more" tappable (click)="getBusiness(deal.template)" >More Deals <i class="fa fa-chevron-right"></i></a>
                   </div>
                 </div>
               </div>

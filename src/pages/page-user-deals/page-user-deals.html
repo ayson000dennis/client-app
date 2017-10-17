@@ -1,18 +1,22 @@
 <ion-header>
-  <ion-navbar>
-    <img class="header-logo" src="assets/images/logo-min.png" alt="">
-    <div class="holder-menu" (click)="showMenu()">Menu</div>
-    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /></a>
+  <ion-navbar *ngIf="hasData">
+    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>
+    <span class="business-title">{{business.company_name}}</span>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="deals-page">
   <div *ngIf="hasData">
-    <ion-slides>
-      <ion-slide *ngFor="let img of business_imgs; let i = index;">
-        <img src="{{img.length !== 0 ? img.url : 'assets/images/placeholder.jpg'}}" alt="Deals photo">
-      </ion-slide>
-    </ion-slides>
+    <div class="slider-holder">
+      <ion-slides #slider loop="true">
+        <ion-slide *ngFor="let img of business_imgs; let i = index;">
+          <img src="{{img.length !== 0 ? img.url : 'assets/images/placeholder.jpg'}}" alt="Deals photo">
+        </ion-slide>
+      </ion-slides>
+
+      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>
+      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>
+    </div>
 
     <div class="row">
       <div class="col-12">
@@ -31,10 +35,10 @@
       <div class="col-12 share-deal">
         <p>Share this deal</p>
         <ul class="social-list">
-          <li><a href="#"><i class="fa fa-facebook fa-lg"></i></a></li>
-          <li><a href="#"><i class="fa fa-twitter fa-lg"></i></a></li>
-          <li><a href="#"><i class="fa fa-envelope fa-lg"></i></a></li>
-          <li><a href="#"><i class="fa fa-pinterest fa-lg"></i></a></li>
+          <li><a href="http://facebook.com" target="_blank"><i class="fa fa-facebook fa-lg"></i></a></li>
+          <li><a href="http://twitter.com" target="_blank"><i class="fa fa-twitter fa-lg"></i></a></li>
+          <li><a href="http://instagram.com" target="_blank"><i class="fa fa-instagram fa-lg"></i></a></li>
+          <li><a href="http://pinterest.com" target="_blank"><i class="fa fa-pinterest fa-lg"></i></a></li>
         </ul>
       </div>
 
@@ -43,10 +47,12 @@
         <p class="about-description">{{business.description}}</p>
 
         <ul class="social-links list-unstyled">
-          <li>
-            <i class="fa fa-map-marker fa-2x"></i>
-            <span class="business-name">{{business.company_name}}</span> <br>
-            <span class="business-address"> {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
+          <li class="address-link">
+            <a href="https://www.google.com/maps/dir/{{business_address}}" target="_blank">
+              <i class="fa fa-map-marker fa-2x"></i>
+              <span class="business-name">{{business.company_name}}</span> <br>
+              <span class="business-address"> {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
+            </a>
           </li>
           <!-- <li *ngIf="business.operations.length === 0">
           </li>
@@ -70,17 +76,23 @@
                 <li *ngIf="business.sample_data.Sunday != null"><strong>Sunday</strong> {{ business.sample_data.Sunday.start }} -  {{ business.sample_data.Sunday.end}}</li>
               </ul>
           </li> -->
-          <li>
-            <i class="fa fa-phone fa-2x"></i>
-            {{business.phone_number}}
+          <li class="info-link">
+            <a href="tel:{{business.phone_number}}">
+              <i class="fa fa-phone fa-2x"></i>
+              {{business.phone_number}}
+            </a>
           </li>
-          <li>
-            <i class="fa fa-globe fa-2x"></i>
-            {{business.company_website}}
+          <li class="info-link">
+            <a href="{{business.company_website}}" target="_blank">
+              <i class="fa fa-globe fa-2x"></i>
+              {{business.company_website}}
+            </a>
           </li>
-          <li>
-            <i class="fa fa-envelope fa-2x"></i>
-            {{business.business_email}}
+          <li class="info-link">
+            <a href="mailto:{{business.business_email}}">
+              <i class="fa fa-envelope fa-2x"></i>
+              {{business.business_email}}
+            </a>
           </li>
           <!-- <li>
             <i class="fa fa-facebook fa-2x"></i>
