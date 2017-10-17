@@ -27,6 +27,24 @@ export class UserFindDealsMapPage {
   map: any;
   default_location: any;
   markers = [];
+  tempMarkers = [];
+
+  //place.icon
+  memberMarker = {
+    url: 'https://cdn.filestackcontent.com/LMxusLVXREOzfotniwb6',
+    size: new google.maps.Size(80, 80),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(15, 30),
+    scaledSize: new google.maps.Size(24, 20)
+  };
+
+  premiumMemberMarker = {
+    url: 'https://cdn.filestackcontent.com/vOZ62vjnSrCsfUs6or1C',
+    size: new google.maps.Size(80, 80),
+    origin: new google.maps.Point(0, 0),
+    anchor: new google.maps.Point(15, 30),
+    scaledSize: new google.maps.Size(24, 20)
+  };
 
   constructor(
     public navCtrl: NavController,
@@ -55,7 +73,7 @@ export class UserFindDealsMapPage {
     var self = this;
     setTimeout(function(){
       self.initMap();
-    }, 800);
+    }, 650);
   }
 
   initMap() {
@@ -152,23 +170,15 @@ export class UserFindDealsMapPage {
          console.log("Returned place contains no geometry");
          return;
        }
-       //place.icon
-       var nonPartner = {
-         url: 'https://cdn.filestackcontent.com/LMxusLVXREOzfotniwb6',
-         size: new google.maps.Size(80, 80),
-         origin: new google.maps.Point(0, 0),
-         anchor: new google.maps.Point(15, 30),
-         scaledSize: new google.maps.Size(24, 20)
-       };
+
        places[i].count =  count;
        count++;
        // Create a marker for each place.
-       self.markers.push(new google.maps.Marker({
-         map: self.map,
-         icon: nonPartner,
-         title: place.name,
-         position: place.geometry.location
-       }));
+       self.tempMarkers.push({
+         lat: place.geometry.location.lat(),
+         lng: place.geometry.location.lng(),
+         icon: self.memberMarker
+       });
 
        if (place.geometry.viewport) {
          // Only geocodes have viewport.
@@ -184,12 +194,13 @@ export class UserFindDealsMapPage {
 
   createMarker(data) {
     data.forEach(d => {
-      var position = new google.maps.LatLng(d._source.lat, d._source.lng);
+      var position = new google.maps.LatLng(d.lat, d.lng);
       var inBounds = this.map.getBounds().contains(position);
       if (inBounds == true) {
         var marker = new google.maps.Marker({
           map: this.map,
-          position: position
+          position: position,
+          icon: d.icon
         });
         this.markers.push(marker);
       }
@@ -220,6 +231,23 @@ export class UserFindDealsMapPage {
       console.log(this.map)
   }
 
+  search() {
+
+    this.api.Deals.deals_list().then(deals => {
+      var businessHolder = deals.hits.hits;
+      console.log(businessHolder)
+      businessHolder.forEach(bus => {
+        this.tempMarkers.push({
+          lat: bus._source.business_id[0].lat,
+          lng: bus._source.business_id[0].lng,
+          icon: this.premiumMemberMarker
+        });
+      });
+      console.log(this.tempMarkers);
+      this.createMarker(this.tempMarkers);
+    });
+
+  }
 
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
