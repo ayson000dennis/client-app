@@ -187,6 +187,14 @@ page-user-find-deals {
         }
         .categories-result {
           padding-bottom: 15px;
+
+          .no-data-holder {
+            img {
+              width: 100%;
+              height: 250px;
+              object-fit: contain;
+            }
+          }
           .deal {
             display: flex;
             align-items: flex-start;
