@@ -28,22 +28,29 @@ export class UserFindDealsMapPage {
   default_location: any;
   markers = [];
   tempMarkers = [];
+  mapResults = [];
+  selectedMapCenter: any;
 
   //place.icon
-  memberMarker = {
-    url: 'https://cdn.filestackcontent.com/LMxusLVXREOzfotniwb6',
-    size: new google.maps.Size(80, 80),
+  googleMarker = {
+    url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
+    size: new google.maps.Size(50, 50),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(15, 30),
-    scaledSize: new google.maps.Size(24, 20)
+    scaledSize: new google.maps.Size(48, 50)
+  };
+
+  memberMarker = {
+    url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
+    size: new google.maps.Size(50, 50),
+    origin: new google.maps.Point(0, 0),
+    scaledSize: new google.maps.Size(48, 50)
   };
 
   premiumMemberMarker = {
-    url: 'https://cdn.filestackcontent.com/vOZ62vjnSrCsfUs6or1C',
-    size: new google.maps.Size(80, 80),
+    url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
+    size: new google.maps.Size(50, 50),
     origin: new google.maps.Point(0, 0),
-    anchor: new google.maps.Point(15, 30),
-    scaledSize: new google.maps.Size(24, 20)
+    scaledSize: new google.maps.Size(48, 50)
   };
 
   constructor(
@@ -74,11 +81,13 @@ export class UserFindDealsMapPage {
     setTimeout(function(){
       self.initMap();
     }, 650);
+    $('#deal-location2').val('Los Angeles, CA');
   }
 
   initMap() {
+
     var self = this
-    this.default_location = new google.maps.LatLng(34.0522, -118.2437);
+    this.default_location = new google.maps.LatLng(34.0522, -118.24369999999999);
 
     this.map = new google.maps.Map(document.getElementById('mapView'), {
       center: this.default_location,
@@ -86,7 +95,6 @@ export class UserFindDealsMapPage {
     });
 
     var geocoder = new google.maps.Geocoder;
-    var infowindow = new google.maps.InfoWindow();
 
     //Geolocation
     if (navigator.geolocation) {
@@ -96,7 +104,6 @@ export class UserFindDealsMapPage {
           lng: position.coords.longitude
         };
 
-        infowindow.setPosition(lat_lng);
         this.map.setCenter(lat_lng);
         this.map.setZoom(9);
         this.geocodeLatLng(geocoder, this.map, lat_lng);
@@ -109,7 +116,7 @@ export class UserFindDealsMapPage {
     }
 
     var deal = document.getElementById('deal-name');
-    var location = document.getElementById('deal-location');
+    var location = document.getElementById('deal-location2');
 
     var options = {
       types: ['(cities)'],
@@ -117,13 +124,10 @@ export class UserFindDealsMapPage {
     };
 
     var autocomplete = new google.maps.places.Autocomplete(location, options);
-    var searchBox = new google.maps.places.SearchBox(deal);
-
     autocomplete.bindTo('bounds', self.map);
-    searchBox.bindTo('bounds', self.map);
 
-    var infowindowContent = document.getElementById('infowindow-content');
-    infowindow.setContent(infowindowContent);
+    var searchBox = new google.maps.places.SearchBox(deal);
+    searchBox.bindTo('bounds', self.map);
 
     var marker = new google.maps.Marker({
       map: self.map,
@@ -134,12 +138,11 @@ export class UserFindDealsMapPage {
 
       self.removeMarkers();
       var place = autocomplete.getPlace();
-      console.log(place)
+      self.selectedMapCenter = place.formatted_address;
 
       if (!place.geometry) return;
 
       if (place.geometry.viewport) {
-        console.log(place.geometry.location)
         self.map.setCenter(place.geometry.location);
         self.map.fitBounds(place.geometry.viewport);
         self.map.setZoom(9);
@@ -150,8 +153,9 @@ export class UserFindDealsMapPage {
     });
 
     searchBox.addListener('places_changed', function() {
+      self.mapResults = [];
       var places = searchBox.getPlaces();
-
+      console.log(places)
       if (places.length == 0) {
        return;
      }
@@ -166,6 +170,7 @@ export class UserFindDealsMapPage {
 
      var count = 1;
      places.forEach(function(place, i) {
+
        if (!place.geometry) {
          console.log("Returned place contains no geometry");
          return;
@@ -173,12 +178,27 @@ export class UserFindDealsMapPage {
 
        places[i].count =  count;
        count++;
-       // Create a marker for each place.
-       self.tempMarkers.push({
+       var photo = place.photos[0].getUrl({
+           'maxWidth' : 120,
+           'maxHeight' : 120
+       });
+
+       self.mapResults.push({
+         title: place.name,
+         address: place.formatted_address,
          lat: place.geometry.location.lat(),
          lng: place.geometry.location.lng(),
-         icon: self.memberMarker
+         photo: photo,
+         type: 3
        });
+
+       // Create a marker for each place.
+      //  self.tempMarkers.push({
+      //    lat: place.geometry.location.lat(),
+      //    lng: place.geometry.location.lng(),
+      //    icon: self.googleMarker,
+      //    optimized: false
+      //  });
 
        if (place.geometry.viewport) {
          // Only geocodes have viewport.
@@ -193,23 +213,40 @@ export class UserFindDealsMapPage {
   }
 
   createMarker(data) {
+    var infowindow = new google.maps.InfoWindow();
     data.forEach(d => {
       var position = new google.maps.LatLng(d.lat, d.lng);
       var inBounds = this.map.getBounds().contains(position);
       if (inBounds == true) {
+        if (d.type === '1') {
+          var icon = this.premiumMemberMarker;
+        }
+        else if (d.type === '2' || d.type === '0') {
+          var icon = this.memberMarker;
+        }
+        else {
+          var icon = this.googleMarker;
+        }
         var marker = new google.maps.Marker({
           map: this.map,
           position: position,
-          icon: d.icon
+          icon: icon,
+          optimized: false
         });
         this.markers.push(marker);
+
+        var content = '<div class="d-flex info-window"><div class="img-holder"><img src="'+d.photo+'"/></div>' +
+                      '<div class="info-holder">' +
+                        '<h3>'+d.title+'</h3>' +
+                        '<p class="address-holder">'+d.address+'</p>' +
+                      '</div></div>';
+        marker.addListener('click', () => {
+          infowindow.close();
+          infowindow.setContent(content);
+          infowindow.open(this.map, marker);
+        });
       }
     });
-
-    // google.maps.event.addListener(marker, 'click', function() {
-    //   infowindow.setContent(place.name);
-    //   infowindow.open(this.map, this);
-    // });
 
   }
 
@@ -228,23 +265,36 @@ export class UserFindDealsMapPage {
     this.markers = [];
 
       console.log(this.markers)
-      console.log(this.map)
+      console.log(this.map.center.lat(), this.map.center.lng())
   }
 
   search() {
-
-    this.api.Deals.deals_list().then(deals => {
+    this.removeMarkers();
+    if($('#deal-location2').val() === '') {
+      $('#deal-location2').val(this.selectedMapCenter);
+    } else {
+      $('#deal-location2').val(this.selectedMapCenter);
+    }
+    this.api.Deals.deals_list1().then(deals => {
       var businessHolder = deals.hits.hits;
       console.log(businessHolder)
       businessHolder.forEach(bus => {
-        this.tempMarkers.push({
+        this.mapResults.push({
+          title: bus._source.business_id[0].company_name,
+          address: bus._source.business_id[0].city + ', ' + bus._source.business_id[0].state + ', ' + bus._source.business_id[0].country,
           lat: bus._source.business_id[0].lat,
           lng: bus._source.business_id[0].lng,
-          icon: this.premiumMemberMarker
-        });
+          photo: bus._source.photo.url,
+          type: bus._source.business_id[0].business_type
+        })
+        // this.tempMarkers.push({
+        //   lat: bus._source.business_id[0].lat,
+        //   lng: bus._source.business_id[0].lng,
+        //   icon: this.premiumMemberMarker
+        // });
       });
-      console.log(this.tempMarkers);
-      this.createMarker(this.tempMarkers);
+      console.log(this.mapResults);
+      this.createMarker(this.mapResults);
     });
 
   }

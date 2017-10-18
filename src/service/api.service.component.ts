@@ -44,6 +44,14 @@ export class ApiService {
               return response.json();
           }).toPromise();
     },
+
+    deals_list1: () => {
+          return this.http.get(Config.ElasticSearch + "deals1/_search", {
+            headers : this.getHeaders()}).map(response => {
+              return response.json();
+          }).toPromise();
+    },
+
     deals_count: () => {
           return this.http.get(Config.ElasticSearch + "deals/_count", {
             headers : this.getHeaders()}).map(response => {
