@@ -271,32 +271,36 @@ export class UserFindDealsMapPage {
   search() {
     this.removeMarkers();
     if($('#deal-location2').val() === '') {
-      $('#deal-location2').val(this.selectedMapCenter);
+      $('#deal-location2').addClass('danger');
+      $('.alert-holder').fadeIn();
+      setTimeout(function() {
+        $('#deal-location2').removeClass('danger');
+        $('.alert-holder').fadeOut();
+      }, 3000);
     } else {
       $('#deal-location2').val(this.selectedMapCenter);
-    }
-    this.api.Deals.deals_list1().then(deals => {
-      var businessHolder = deals.hits.hits;
-      console.log(businessHolder)
-      businessHolder.forEach(bus => {
-        this.mapResults.push({
-          title: bus._source.business_id[0].company_name,
-          address: bus._source.business_id[0].city + ', ' + bus._source.business_id[0].state + ', ' + bus._source.business_id[0].country,
-          lat: bus._source.business_id[0].lat,
-          lng: bus._source.business_id[0].lng,
-          photo: bus._source.photo.url,
-          type: bus._source.business_id[0].business_type
-        })
-        // this.tempMarkers.push({
-        //   lat: bus._source.business_id[0].lat,
-        //   lng: bus._source.business_id[0].lng,
-        //   icon: this.premiumMemberMarker
-        // });
+      this.api.Deals.deals_list1().then(deals => {
+        var businessHolder = deals.hits.hits;
+        console.log(businessHolder)
+        businessHolder.forEach(bus => {
+          this.mapResults.push({
+            title: bus._source.business_id[0].company_name,
+            address: bus._source.business_id[0].city + ', ' + bus._source.business_id[0].state + ', ' + bus._source.business_id[0].country,
+            lat: bus._source.business_id[0].lat,
+            lng: bus._source.business_id[0].lng,
+            photo: bus._source.photo.url,
+            type: bus._source.business_id[0].business_type
+          })
+          // this.tempMarkers.push({
+          //   lat: bus._source.business_id[0].lat,
+          //   lng: bus._source.business_id[0].lng,
+          //   icon: this.premiumMemberMarker
+          // });
+        });
+        console.log(this.mapResults);
+        this.createMarker(this.mapResults);
       });
-      console.log(this.mapResults);
-      this.createMarker(this.mapResults);
-    });
-
+    }
   }
 
   goHome() {

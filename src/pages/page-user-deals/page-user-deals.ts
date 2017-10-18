@@ -9,6 +9,8 @@ import { Storage } from '@ionic/storage'
 import moment from 'moment';
 
 import * as $ from "jquery";
+
+import {} from '@types/googlemaps';
 declare var google: any;
 
 @Component({
@@ -27,6 +29,8 @@ export class UserDealsPage {
   template : any;
   days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   map: any;
+  lat: any;
+  lng: any;
   swiper:any;
   @ViewChild('slider') slider: Slides;
   slidesOptions = { initialSlide: 0 }
@@ -48,12 +52,17 @@ export class UserDealsPage {
   }
 
   ionViewWillEnter(){
-    var self = this;
+    // var self = this;
     var businessHolder = this.navParams.get('business');
+    console.log(businessHolder.business_id[0].lat)
+    this.lat = businessHolder.business_id[0].lat;
+    this.lng = businessHolder.business_id[0].lng;
     this.business = businessHolder.business_id[0];
     this.business_imgs = businessHolder.business_id[0].files;
     this.template = this.navParams.get('template');
     console.log(businessHolder)
+
+    this.initMap(businessHolder.business_id[0].lat, businessHolder.business_id[0].lng);
 
     this.business_address = businessHolder.business_id[0].country + " " + businessHolder.business_id[0].state + " " + businessHolder.business_id[0].zip_postal;
     this.business_address = this.business_address.replace(/^[, ]+|[, ]+$|[, ]+/g, "+").trim();
@@ -99,10 +108,16 @@ export class UserDealsPage {
     //   // console.log(this.business.operations);
     // }
     // this.operations = this.business;
+    // this.initMap();
   }
 
   ionViewDidLoad() {
-    this.initMap();
+    console.log(this.lat, this.lng)
+    // this.initMap();
+    // var self = this;
+    // setTimeout(function(){
+    //   self.initMap();
+    // }, 650);
   }
 
   goHome() {
@@ -141,23 +156,18 @@ export class UserDealsPage {
     }
   }
 
-  initMap() {
-    var businessHolder2 = this.navParams.get('business');
-    var business2 = businessHolder2.business_id[0];
-    var lat = business2.lat;
-    var lng = business2.lng;
-
-    // var default_location = new google.maps.LatLng(lat, lng);
-    var center = {lat: business2.lat, lng: business2.lng};
-    var self = this;
-    this.map = new google.maps.Map(document.getElementById('dealMapView'), {
+  initMap(lat, lng) {
+    var center = new google.maps.LatLng(lat, lng);
+    // var center = {lat: business2.lat, lng: business2.lng};
+    // console.log(center.lat(), center.lng())
+    var map = new google.maps.Map(document.getElementById('mapView'), {
       center: center,
       zoom: 9
     });
 
     var marker = new google.maps.Marker({
       position: center,
-      map: this.map,
+      map: map,
     });
 
   }

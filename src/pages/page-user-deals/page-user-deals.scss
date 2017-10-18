@@ -116,11 +116,12 @@ page-user-deals {
           &.location-map {
             width: 100%;
 
-            #dealMapView {
-              width: 100%;
-              height: 300px;
-            }
           }
+        }
+
+        #mapView {
+          width: 100%;
+          height: 250px;
         }
 
         .share-deal {

@@ -29,6 +29,7 @@ export class UserFindDealsPage {
   map: any;
   default_location: any;
   markers = [];
+  selectedMapCenter: any;
 
   @ViewChild(Content) content: Content;
 
@@ -79,7 +80,9 @@ export class UserFindDealsPage {
 
   ionViewDidLoad() {
     this.initMap();
+    $('#deal-location2').val('Los Angeles, CA');
   }
+
 
   setPagination(page: number) {
     if (page < 1 || page > this.pager.totalPages) {
@@ -232,7 +235,7 @@ export class UserFindDealsPage {
 
   getBusiness(template) {
     this.api.Business.business_deal(template).then(business => {
-      this.navCtrl.push(UserDealsPage, {business: business.business}, {
+      this.navCtrl.push(UserDealsPage, {business: business.business, map: this.map}, {
         animate: true,
         direction: 'forward'
       });
@@ -242,23 +245,34 @@ export class UserFindDealsPage {
   }
 
   searchDeals() {
-    this.api.Deals.deals_search(this.search.input).then(results => {
-      var result = results.hits.hits;
-      var filtered_deals = this.getDealsWithinBound(result);
-      if (filtered_deals.length > 0) {
-        this.deals = [];
-        filtered_deals.forEach(deal => {
-          this.deals.push(deal._source);
+    if($('#deal-location').val() === '') {
+      $('#deal-location').addClass('danger');
+      $('.alert-holder').fadeIn();
+      setTimeout(function() {
+        $('#deal-location').removeClass('danger');
+        $('.alert-holder').fadeOut();
+      }, 3000);
+    } else {
+      $('#deal-location').val(this.selectedMapCenter);
+      this.api.Deals.deals_search(this.search.input).then(results => {
+        var result = results.hits.hits;
+        var filtered_deals = this.getDealsWithinBound(result);
+        if (filtered_deals.length > 0) {
+          this.deals = [];
+          filtered_deals.forEach(deal => {
+            this.deals.push(deal._source);
+            this.setPagination(1);
+          });
+        } else {
+          this.deals.splice(0, 0);
+          this.deals = [];
           this.setPagination(1);
-        });
-      } else {
-        this.deals.splice(0, 0);
-        this.deals = [];
-        this.setPagination(1);
-      }
-    }).catch(error => {
-      console.log(error);
-    });
+        }
+      }).catch(error => {
+        console.log(error);
+      });
+    }
+
   }
 
   initMap() {
@@ -316,7 +330,7 @@ export class UserFindDealsPage {
     autocomplete.addListener('place_changed', function() {
 
       var place = autocomplete.getPlace();
-
+      self.selectedMapCenter = place.formatted_address;
       if (!place.geometry) return;
 
       if (place.geometry.viewport) {

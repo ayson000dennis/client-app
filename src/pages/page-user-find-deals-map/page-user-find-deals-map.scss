@@ -56,6 +56,21 @@ page-user-find-deals-map {
               width: 100%;
             }
           }
+          &.danger {
+            border: 2px solid indianred;
+            transition: all 0,3s ease-in-out;
+          }
+        }
+
+        .alert-holder {
+          display: none;
+          position: absolute;
+          left: 37px;
+          margin-top: 7px;
+          color: indianred;
+          .fa {
+            margin-right: 6px;
+          }
         }
 
         ::-webkit-input-placeholder {
