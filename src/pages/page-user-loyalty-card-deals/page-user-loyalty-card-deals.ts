@@ -38,7 +38,9 @@ export class UserLoyaltyCardDealsPage {
 
   ionViewWillEnter() {
     this.platform.ready().then(() => {
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      if ($(window).width() <= 768) {
+        this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.PORTRAIT);
+      }
     });
 
     this.business_id = this.navParams.get('business_id')

@@ -28,7 +28,9 @@ export class UserLoyaltyStampCardPage {
 
   ionViewWillEnter() {
     this.platform.ready().then(() => {
-      this.screenOrientation.lock(this.screenOrientation.ORIENTATIONS.LANDSCAPE);
+      if ($(window).width() <= 768) {
+        this.screenOrientation.unlock();        
+      }
     });
   }
 

@@ -17,6 +17,9 @@ import {Keyboard} from "@ionic-native/keyboard";
 import {DatabaseService} from '../providers/database.service';
 import {Sql} from '../providers/sql';
 import {SocketService} from '../providers/socket.service';
+
+import * as $ from "jquery";
+
 @Component({
   templateUrl: 'app.html',
   providers: [Keyboard,DatabaseService,Sql,SocketService]
@@ -39,7 +42,9 @@ export class MyApp {
     public keyboard:Keyboard
   ) {
     platform.ready().then(() => {
-      this.screenOrientation.lock(screenOrientation.ORIENTATIONS.PORTRAIT);
+      if ($(window).width() <= 768) {
+        this.screenOrientation.lock(screenOrientation.ORIENTATIONS.PORTRAIT);
+      }
     });
 
     this.initializeApp();
