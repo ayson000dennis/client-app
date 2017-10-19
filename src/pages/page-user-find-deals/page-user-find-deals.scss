@@ -240,7 +240,20 @@ page-user-find-deals {
                 width: 100%;
                 .btn-claim {
                   margin-right: 10px;
+
+                  @media screen and (max-width: 360px) {
+                    padding-top: 8px !important;
+                    padding-bottom: 8px !important;
+                    padding-right: 27px !important;
+
+                    white-space: pre-wrap;
+
+                    &.disabled {
+                      padding-right: 10px !important;
+                    }
+                  }
                 }
+
                 @media (min-width: 445px) {
                   .btn {
                     i {
@@ -256,7 +269,7 @@ page-user-find-deals {
                   }
 
                   .btn i {
-                    top: 25px;
+                    top: 19px;
                   }
                 }
               }
@@ -277,34 +290,34 @@ page-user-find-deals {
               }
             }
             .media-body {
-              margin-top: 2vh;
+              margin-top: 1vh;
               .deal-title {
                 text-decoration: none;
                 .mt-0 {
                   margin-bottom: 5px;
                   font-family: "Raleway SemiBold";
-                  font-size: 15px;
-                  color: #444;
+                  font-size: 14px;
+                  color: #a4c73a;
                 }
               }
               .business-link {
-                font-family: "Raleway Regular";
-                font-size: 14px;
-                color: #f79122;
+                font-family: "Raleway SemiBold";
+                font-size: 15px;
+                color: #444;
                 line-height: 1.5;
                 text-decoration: none;
               }
               .business-address {
-                margin: 0;
+                margin: 2px 0 8px;
                 font-family: "Raleway Regular";
                 font-size: 14px;
                 color: #464646;
               }
               .expiration-date {
                 margin: 0;
-                padding-top: 5px;
+
                 font-family: "Raleway Regular";
-                font-size: 14px;
+                font-size: 13px;
                 color: #606060;
                 pointer-events: none;
                 i {
