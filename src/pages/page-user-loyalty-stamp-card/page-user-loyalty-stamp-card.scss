@@ -1,5 +1,9 @@
 page-user-loyalty-stamp-card {
-  .scroll-content {
+  ion-navbar button {
+    display: none !important;
+  }
+
+  ion-header + ion-content > div.scroll-content {
     padding: 16px !important;
 
     background: #fff !important;
@@ -8,10 +12,12 @@ page-user-loyalty-stamp-card {
   .title {
     position: initial;
 
+    margin: -10px auto 0;
+
     font-size: 20px;
 
     .btn-nav {
-      top: 6px;
+      top: 9px;
       left: 8px;
 
       height: 40px;
@@ -29,14 +35,14 @@ page-user-loyalty-stamp-card {
         display: table;
         float: left;
         padding: 8px;
-        width: 20%;
+        width: 50%;
 
-        font-size: 7vw;
+        font-size: 18vw;
         color: #c1bfc0;
         text-align: center;
 
         &:last-child {
-          font-size: 5vw;
+          font-size: 9vw;
           color: #a4c73a;
         }
 
@@ -77,6 +83,16 @@ page-user-loyalty-stamp-card {
         span {
           display: table-cell;
           vertical-align: middle;
+        }
+
+        @media screen and (orientation: landscape) {
+          width: 20%;
+
+          font-size: 7vw;
+
+          &:last-child {
+            font-size: 5vw;
+          }
         }
       }
     }

@@ -27761,18 +27761,23 @@ page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards i
   cursor: pointer;
 }
 
-page-user-loyalty-stamp-card .scroll-content {
+page-user-loyalty-stamp-card ion-navbar button {
+  display: none !important;
+}
+
+page-user-loyalty-stamp-card ion-header + ion-content > div.scroll-content {
   padding: 16px !important;
   background: #fff !important;
 }
 
 page-user-loyalty-stamp-card .title {
   position: initial;
+  margin: -10px auto 0;
   font-size: 20px;
 }
 
 page-user-loyalty-stamp-card .title .btn-nav {
-  top: 6px;
+  top: 9px;
   left: 8px;
   height: 40px;
 }
@@ -27787,14 +27792,14 @@ page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp {
   display: table;
   float: left;
   padding: 8px;
-  width: 20%;
-  font-size: 7vw;
+  width: 50%;
+  font-size: 18vw;
   color: #c1bfc0;
   text-align: center;
 }
 
 page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp:last-child {
-  font-size: 5vw;
+  font-size: 9vw;
   color: #a4c73a;
 }
 
@@ -27830,6 +27835,16 @@ page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp img + span {
 page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp span {
   display: table-cell;
   vertical-align: middle;
+}
+
+@media screen and (orientation: landscape) {
+  page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp {
+    width: 20%;
+    font-size: 7vw;
+  }
+  page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp:last-child {
+    font-size: 5vw;
+  }
 }
 
 page-user-membership-card .scroll-content {

@@ -29,12 +29,14 @@ export class UserLoyaltyStampCardPage {
   ionViewWillEnter() {
     this.platform.ready().then(() => {
       if ($(window).width() <= 768) {
-        this.screenOrientation.unlock();        
+        this.screenOrientation.unlock();
       }
     });
   }
 
   ionViewDidEnter() {
+    var self = this;
+
     for (var x = 1; x <= this.stamps_needed; x++) {
       x == this.stamps_needed ?
       $('.holder-stamps').append('<div class="stamp"><span>FREE</span></div>') :
@@ -45,13 +47,38 @@ export class UserLoyaltyStampCardPage {
       $('.stamp').eq(x).prepend('<img src="assets/images/stamp.png" alt="" />');
     }
 
-    var stampWidth = $('.stamp').css('width');
+    var stampsCss = function () {
+      var stampWidth = $('.stamp').css('width');
+      $('.stamp').css({'width': stampWidth, 'height': stampWidth});
 
-    $('.stamp').css({'width': stampWidth, 'height': stampWidth});
-
-    if (this.stamps_needed > 10) {
-      $('.holder-stamps').css('width', parseInt(stampWidth) * (Math.ceil(this.stamps_needed / 2)));
+      if ($(window).width() > $(window).height()) {
+        if (self.stamps_needed > 10) {
+          $('.holder-stamps').css('width', parseInt(stampWidth) * (Math.ceil(self.stamps_needed / 2)));
+        } else {
+          $('.holder-stamps').css('width', 'auto');
+        }
+      }
     }
+
+    stampsCss();
+
+    var currentWidth = $(window).width();
+
+    $(window).resize(function() {
+      if (currentWidth != $(window).width()) {
+        console.log('resized');
+        $('.stamp').css('width', '');
+        $('.holder-stamps').css('width', 'auto');
+
+        setTimeout(function() {
+          var newWidth = $(window).width();
+
+          stampsCss();
+
+          currentWidth = newWidth;
+        },100);
+    	}
+    });
   }
 
   goBack() {
