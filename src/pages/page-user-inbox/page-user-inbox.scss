@@ -1,9 +1,55 @@
 page-user-inbox {
+  ion-header {
+    ion-navbar {
+      .toolbar {
+        &.statusbar-padding {
+          &:first-child {
+            padding-top: 35px !important;
+          }
+        }
+      }
+
+      .back-button {
+        display: none !important;
+      }
+
+      i.fa {
+        position: absolute;
+        top: 20px;
+        font-size: 30px;
+        color: #b1b1b1 !important;
+
+        cursor: pointer;
+      }
+
+      .page-title {
+        display: flex;
+        justify-content: center;
+        margin-top: -5px;
+
+        font-family: "Raleway SemiBold";
+        font-size: 18px;
+        color: #757575;
+      }
+
+      &.toolbar-ios {
+        .toolbar-content-ios {
+          i {
+            top: 24px;
+          }
+        }
+      }
+    }
+  }
 
   ion-header + ion-content > div.scroll-content {
     padding: 0px !important;
 
     background-color: transparent !important;
+  }
+
+  .show-back-button {
+    display: none !important;
   }
 
   .hidden {
@@ -64,7 +110,8 @@ page-user-inbox {
 
     .date-time {
       font-size: 10px;
-      right: 13px;
+      right: 15px;
+      top: -40px;
       float: right;
       color: grey;
     }
@@ -75,22 +122,12 @@ page-user-inbox {
       color: grey;
     }
 
-    .date-time-new {
-      font-size: 10px;
-      right: 13px;
+    .message {
+      font-size: 12px;
       color: grey;
-      float: right;
-      color: black;
-
     }
 
-    .name-new {
-      font-size: 15px;
-      text-transform: capitalize;
-      color: black;
-    }
-
-    .message-new {
+    .new {
       color: black;
     }
 

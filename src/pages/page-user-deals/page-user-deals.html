@@ -7,7 +7,8 @@
 
 <ion-content padding class="deals-page">
   <div *ngIf="hasData">
-    <div class="slider-holder">
+    <div *ngIf="business.deal_id.length !== 0;"></div>
+    <div class="slider-holder" [hidden]="!business.deal_id.length">
       <ion-slides #slider loop="true">
         <ion-slide *ngFor="let img of business_imgs; let i = index;">
           <img src="{{img.length !== 0 ? img.url : 'assets/images/placeholder.jpg'}}" alt="Deals photo">
@@ -19,7 +20,7 @@
     </div>
 
     <div class="row">
-      <div class="col-12">
+      <div class="col-12" [hidden]="!business.deal_id.length">
         <h4 class="deal-title">{{template}}</h4>
       </div>
 
@@ -32,7 +33,7 @@
         </div>
       </div> -->
 
-      <div class="col-12 share-deal">
+      <div class="col-12 share-deal" [hidden]="!business.deal_id.length">
         <p>Share this deal</p>
         <ul class="social-list">
           <li><a href="http://facebook.com" target="_blank"><i class="fa fa-facebook fa-lg"></i></a></li>
@@ -76,6 +77,10 @@
                 <li *ngIf="business.sample_data.Sunday != null"><strong>Sunday</strong> {{ business.sample_data.Sunday.start }} -  {{ business.sample_data.Sunday.end}}</li>
               </ul>
           </li> -->
+          <!-- <div *ngIf"business.phone_number !== null;"></div>
+          <div *ngIf="business.company_website !== null;"></div>
+          <div *ngIf="business.business_email !== null;"></div> -->
+          <li></li>
           <li class="info-link">
             <a href="tel:{{business.phone_number}}">
               <i class="fa fa-phone fa-2x"></i>

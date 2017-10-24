@@ -1,4 +1,85 @@
+.pac-container {
+  &:nth-of-type(even) {
+    margin-top: 46px !important;
+    border-radius: 0;
+    border-top: none;
+    color: #000;
+    box-shadow: 0px 0px 0px 1px #eee !important;
+    .pac-item {
+      padding: 10px 15px;
+      height: 41px;
+      width: 100%;
+      border: none;
+    }
+    .pac-item-query {
+      font-size: 14px;
+      color: #000;
+    }
+  }
+  &:nth-of-type(odd) {
+    border-radius: 0;
+    border-top: none;
+    color: #000;
+    box-shadow: 0px 0px 0px 1px #eee !important;
+    .pac-item {
+      padding: 10px 15px;
+      height: 41px;
+      border: none;
+    }
+    .pac-item-query {
+      font-size: 14px;
+      color: #000;
+    }
+  }
+  &::after {
+    display: none;
+  }
+}
+
 page-user-find-deals-map {
+  ion-header {
+    ion-navbar {
+      .toolbar {
+        &.statusbar-padding {
+          &:first-child {
+            padding-top: 35px !important;
+          }
+        }
+      }
+
+      .back-button {
+        display: none !important;
+      }
+
+      i.fa {
+        position: absolute;
+        top: 20px;
+        font-size: 30px;
+        color: #b1b1b1 !important;
+
+        cursor: pointer;
+      }
+
+      .page-title {
+        display: flex;
+        justify-content: center;
+        margin-top: -5px;
+
+        font-family: "Raleway SemiBold";
+        font-size: 18px;
+        color: #757575;
+      }
+
+      &.toolbar-ios {
+        .toolbar-content-ios {
+          i {
+            top: 24px;
+          }
+        }
+      }
+    }
+  }
+
   .content {
     .scroll-content {
       padding-top: 0 !important;
@@ -105,7 +186,43 @@ page-user-find-deals-map {
         }
       }
     }
-
+    .locations-holder {
+      visibility: hidden;
+      position: relative;
+      .location-holder {
+        z-index: 9999999;
+        height: 41px;
+        width: 255px;
+        background-color: #fff;
+        color: #888;
+        position: absolute;
+        left: 11px;
+        top: -32px;
+        font-size: 17px;
+        box-shadow: 0px 0px 0px 1px #eee;
+        ul {
+          margin: 10px 15px;
+          padding: 0;
+          list-style: none;
+          li {
+            a {
+              color: #888;
+              cursor: pointer;
+              transition: ease 0.3s ease-in-out;
+              .fa.fa-compass {
+                left: 15px;
+                margin-right: 9px;
+                color: #888;
+                transition: ease 0.3s ease-in-out;
+              }
+            }
+          }
+        }
+        &:hover {
+          background-color: #fafafa;
+        }
+      }
+    }
     #filter-sort-map {
       margin-left: -15px;
       margin-right: -15px;
@@ -236,13 +353,16 @@ page-user-find-deals-map {
         .img-holder {
           margin-right: 10px;
           img {
-            width: 120px;
-            height: 120px;
+            width: 50px;
+            height: 50px;
           }
         }
         .info-holder {
-          h3 { font-size: 20px; }
-          p { font-size: 14px; }
+          h3 { font-size: 16px; }
+          p {
+            margin: 5px;
+            font-size: 12px;
+          }
         }
       }
     }

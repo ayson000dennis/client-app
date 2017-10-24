@@ -3,10 +3,12 @@ import { NavController } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
+import { DashboardPage } from '../page-dashboard/page-dashboard';
 
 import { UserChatPage } from '../page-user-chat/page-user-chat';
 import { Storage } from '@ionic/storage';
 import { ApiService } from '../../service/api.service.component';
+
 // import { ApiServiceChat } from '../../service/api.service.component.chat';
 
 import {ChatMessage, DatabaseService, SocketService, UtilService} from "../../providers";
@@ -29,6 +31,8 @@ export class UserInboxPage {
   hasLeave : boolean = false;
   hasNewMsgBusinessId : string;
   message = [];
+  room_id : string;
+  rooms : string[];
 
   constructor(
     public navCtrl: NavController,
@@ -36,41 +40,90 @@ export class UserInboxPage {
     public api: ApiService,
     public _zone: NgZone,
     public socketService: SocketService) {
-    this.initNotification();
+    this.init();
   }
 
   ionViewWillEnter() {
     this.socketService.connect();
+    this.fetchInboxData();
   }
 
   ionViewDidLoad() {
-    this.storage.get('user').then(user =>{
-      this.user = user;
-      // console.log(user)
-
-        this.api.Message.business_list(user._id).then(business => {
-          this.businessList = business;
-          // console.log(business);
-
-          this.hasData = true;
-          this.socketService.connect();
-          $('body').find('.fa.loader').remove();
-        }).catch((error) => {
-            console.log(error);
-        });
-
-    }).catch((error) => {
-        console.log(error);
-    });
+    // this.storage.get('user').then(user =>{
+    //   this.user = user;
+    //   // console.log(user)
+    //
+    //     this.api.Message.business_list(user._id).then(business => {
+    //       this.businessList = business;
+    //       // console.log(business);
+    //
+    //       this.hasData = true;
+    //       this.socketService.connect();
+    //       $('body').find('.fa.loader').remove();
+    //     }).catch((error) => {
+    //         console.log(error);
+    //     });
+    //
+    // }).catch((error) => {
+    //     console.log(error);
+    // });
   }
 
   ionViewWillLeave() {
     this.socketService.disconnect();
-    this.hasLeave = true;
     this.hasData = false;
   }
 
-  initNotification() {
+  fetchInboxData() {
+    console.log('data inbox fetching... INBOX PAGE')
+      // Display all business
+      this.storage.get('user').then(user =>{
+        this.user = user;
+
+        this.api.Message.room_list(user._id).then(business => {
+
+          var withChats = [],
+            noChats = [];
+
+          for (var x = 0; x < business.length; x++) {
+            if (business[x].last_chat.length > 0) {
+              withChats.push(business[x]);
+            } else {
+              noChats.push(business[x]);
+            }
+          }
+
+          var chatsSort = withChats.sort(function(a, b){
+              return b.last_chat[0].epoch - a.last_chat[0].epoch;
+          });
+
+          var newChats = withChats;
+
+          noChats.forEach(function(res) {
+            newChats.push(res);
+          });
+
+          this.businessList = newChats;
+
+          this.hasData = true;
+          this.socketService.connect();
+          $('body').find('.fa.loader').remove();
+
+          // this.businessList = business;
+
+        }).catch((error) => {
+            console.log(error);
+        });
+
+      });
+    }
+
+    formatEpoch(epoch) {
+        return UtilService.getCalendarDay(epoch);
+    }
+
+
+  init() {
     // Get real time message notification
     this.socketService.notify.subscribe((chatNotification) => {
       // console.log(chatNotification);
@@ -78,14 +131,16 @@ export class UserInboxPage {
       this._zone.run(() => {
         this.storage.get('user').then(user =>{
 
-          // if(chatNotification.user_id == user._id) {
-          //     this.hasNotify = true;
-          //     this.hasNewMsgBusinessId = chatNotification.business_id;
-          // }
+          if(chatNotification.user_id == user._id) {
+              this.hasNotify = true;
+              // this.hasNewMsgBusinessId = chatNotification.business_id;
+          }
 
         }).catch((error) => {
             console.log(error);
         });
+
+          this.fetchInboxData();
 
       });
     });
@@ -95,6 +150,13 @@ export class UserInboxPage {
     this.navCtrl.push(MenuPage, {
       animate: true,
       direction: 'forward'
+    });
+  }
+
+  goBack() {
+    this.navCtrl.setRoot(DashboardPage, {
+      animate: true,
+      direction: 'back'
     });
   }
 

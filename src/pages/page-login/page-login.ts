@@ -5,6 +5,7 @@ import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
 
 import { SignupPage } from '../page-signup/page-signup';
+import { DashboardPage } from '../page-dashboard/page-dashboard';
 import { ResetPassPage } from '../page-reset-pass/page-reset-pass';
 import { UserMembershipCardPage } from '../page-user-membership-card/page-user-membership-card';
 import { ApiService } from '../../service/api.service.component';
@@ -125,7 +126,7 @@ export class LoginPage {
   getUser(token){
    this.api.Users.user(token.user_id).then(user =>{
       this.storage.set('user', user);
-       this.navCtrl.setRoot(UserMembershipCardPage, {}, {
+       this.navCtrl.setRoot(DashboardPage, {}, {
             animate: true,
             direction: 'forward'
           });

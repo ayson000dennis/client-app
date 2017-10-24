@@ -6,15 +6,17 @@
 </ion-header> -->
 
 <ion-content no-bounce class="page-slider text-center">
-  <ion-slides pager="true" (ionSlideNextStart)="onSlideNext($event)">
+  <ion-slides #slider pager="true" (ionSlideNextStart)="onSlideNext($event)">
     <ion-slide>
       <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
       <!-- <p class="subtitle">
         Helping members &amp; small<br> business win
       </p> -->
-      <img class="slider-img main-image" src="assets/images/member-main-image.png" alt="">
-      <h3 class="main-title">Your Go To App for Local</h3>
-      <h3 class="main-title">Loyalty Deals &amp; Discounts</h3>
+      <img class="slider-img main-image" src="assets/images/member-main-image.jpg" alt="">
+      <!-- <h3 class="main-title">Your Go To App for Local</h3>
+      <h3 class="main-title">Loyalty Deals &amp; Discounts</h3> -->
+
+      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>
     </ion-slide>
 
     <ion-slide>
@@ -24,14 +26,20 @@
       <p class="subtitle">
         With GoPage you are a preferred <br>customer and receive the best deals and <br> alerts from your favorite business.
       </p>
+
+      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>
+      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>
     </ion-slide>
 
     <ion-slide>
       <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">
-      <img class="slider-img" src="assets/images/member-iphone-qrcode.png" alt="">
+      <img class="slider-img" src="assets/images/member-iphone-card.png" alt="">
       <p class="subtitle">
         Get rewarded for your loyalty! Use your <br>loyalty punchcard and redeem your <br> loyalty rewards from your favorite local <br> businesses.
       </p>
+
+      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>
+      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>
     </ion-slide>
 
     <ion-slide>
@@ -40,6 +48,9 @@
       <p class="subtitle">
         Your GoPage App finds the deals you are<br> looking for from registered GoPage <br>businesses.
       </p>
+
+      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>
+      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>
     </ion-slide>
 
     <ion-slide>
@@ -48,11 +59,15 @@
       <p class="subtitle">
         Your favorite businesses alert <br>you first about deals, discounts <br>or events so you never miss out!
       </p>
+
+      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>
+      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>
     </ion-slide>
 
     <ion-slide>
     </ion-slide>
   </ion-slides>
+
   <button class="btn-slider btn-green" (click)="signUp()">Get Started</button>
   <button class="btn-slider btn-green-out" (click)="signIn()">Sign In</button>
 </ion-content>

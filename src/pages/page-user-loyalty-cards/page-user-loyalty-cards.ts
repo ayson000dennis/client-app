@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
+import { DashboardPage } from '../page-dashboard/page-dashboard';
 
 import * as $ from "jquery";
 
@@ -40,7 +41,7 @@ export class UserLoyaltyCardsPage {
   }
 
   goBack() {
-    this.navCtrl.setRoot(UserMembershipCardPage, {}, {
+    this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
       direction: 'back'
     });
@@ -48,12 +49,13 @@ export class UserLoyaltyCardsPage {
 
   ionViewWillEnter() {
     this.storage.get('user').then(user => {
-      // console.log(user)
+      console.log(user._id)
        this.api.Loyalties.business(user._id).then(loyalty => {
         //  console.log(loyalty)
         this.loyalties = loyalty;
         this.hasData = true
-        // console.log(loyalty[0].busines)
+
+        console.log(this.loyalties.length);
       });
     });
   }

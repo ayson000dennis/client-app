@@ -1,8 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <img class="header-logo" src="assets/images/logo-min.png" alt="">
-    <div class="holder-menu" (click)="showMenu()">Menu</div>
-    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /></a>
+    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>
+    <span class="page-title">Find Deals</span>
   </ion-navbar>
 </ion-header>
 
@@ -16,8 +15,16 @@
         <input type="text" class="form-control" id="deal-location2" placeholder="Los Angeles, CA">
       </label>
       <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>
-      <button class="fa fa-search btn-search-deals" type="submit" (click)="search()"></button>
+      <button class="fa fa-search btn-search-deals" type="submit" (click)="searchBusinessDeals()"></button>
     </form>
+  </div>
+
+  <div class="locations-holder">
+    <div class="location-holder" id="getLocation">
+      <ul>
+        <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>
+      </ul>
+    </div>
   </div>
 
   <nav id="filter-sort-map" class="navbar navbar-light">

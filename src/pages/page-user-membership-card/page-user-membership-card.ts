@@ -3,6 +3,7 @@ import { Platform, NavController,NavParams } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
+import { DashboardPage } from '../page-dashboard/page-dashboard';
 
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Storage } from '@ionic/storage';
@@ -37,12 +38,21 @@ export class UserMembershipCardPage {
       direction: 'back'
     });
   }
+
+  goBack() {
+    this.navCtrl.setRoot(DashboardPage, {}, {
+      animate: true,
+      direction: 'back'
+    });
+  }
+
   viewInbox() {
     this.navCtrl.setRoot(UserInboxPage, {}, {
       animate: true,
       direction: 'back'
     });
   }
+
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,

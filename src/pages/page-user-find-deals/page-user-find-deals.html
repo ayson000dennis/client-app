@@ -1,8 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <img class="header-logo" src="assets/images/logo-min.png" alt="">
-    <div class="holder-menu" (click)="showMenu()">Menu</div>
-    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /></a>
+    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>
+    <span class="page-title">Find Deals</span>
   </ion-navbar>
 </ion-header>
 
@@ -11,13 +10,22 @@
   <div class="jumbotron search-banner">
     <form class="form-inline form-search-deals text-center">
       <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">
+      <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;">
       <label>
         <span class="fa fa-map-marker"></span>
         <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">
       </label>
       <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>
-      <button class="fa fa-search btn-search-deals" type="submit" (click)="searchDeals()"></button>
+      <button class="fa fa-search btn-search-deals" type="submit" (click)="searchBusinessDeals()"></button>
     </form>
+  </div>
+
+  <div class="locations-holder">
+    <div class="location-holder" id="getLocation">
+      <ul>
+        <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>
+      </ul>
+    </div>
   </div>
 
   <nav id="filter-sort-map" class="navbar navbar-light">
@@ -37,7 +45,7 @@
   <div class="categories-header">
     <div class="row">
       <div class="col">
-        <p class="deals-counter">
+        <p class="deals-counter" style="visibility: hidden;">
           <span class="deals-found"></span> out of <span class="deals-total"></span> deals
         </p>
         <ion-item>
@@ -48,53 +56,84 @@
     </div>
   </div>
 
-  <!-- <div *ngIf="hasData">
-    <div *ngFor="let deal of deals">
-      <p>{{deal.business_name}}</p>
-    </div>
-  </div> (click)=this.business({{deal.business[0]._id }})"" href=""-->
-
   <div class="categories-main">
     <div class="map-view" id="mapView"></div>
     <div class="row">
       <div class="col holder-categories-result1">
         <div class="row">
           <div class="col categories-result" *ngIf="hasData">
-            <div *ngIf="pagedDeals.length === 0; then noData else hasData"></div>
+
+            <div *ngIf="business_deals.length === 0; then noData else hasData"></div>
             <ng-template #noData>
               <div class="no-data-holder">
                 <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">
               </div>
             </ng-template>
             <ng-template #hasData>
-              <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let deal of pagedDeals; let i = index">
-                <div class="col-xs-8" tappable (click)="getBusiness(deal.template)">
-                  <a class="deal-thumbnail" *ngIf="toggleImage">
-                    <img class="d-flex mr-3" src="{{deal.photo.url !== unknown ? deal.photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{deal.template}}">
-                  </a>
-                  <div class="media-body align-self-center">
-                    <a class="business-link">{{deal.business_name}}</a>
-                    <p class="business-address">{{deal.business_id[0].country}}, {{deal.business_id[0].state}}</p>
-                    <a class="deal-title">
-                      <h6 class="mt-0"><i class="fa fa-tag"></i> {{deal.template}}</h6>
-                    </a>
-                    <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{deal.end_date | date: 'MM/dd/yyyy'}}</p>
-                  </div>
-                </div>
+              <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let business of business_deals | slice:0:slice; let i=index">
+                <span *ngIf="business.deal_id.length !== 0; then hasDeal else noDeal "></span>
 
-                <div class="col-xs-4">
-                  <div class="deals-button">
-                    <div *ngIf="deal.is_favorite; then Favorite  else  notFavorite"></div>
-                    <ng-template #notFavorite>
-                      <div class="claim-btn-holder">
-                        <a class="btn btn-claim" [attr.id]="'addToFavorite'+deal.u_id" id="addToFavorite" tappable (click)="addToFavorites(deal)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
-                        <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
+                <!-- has deal -->
+                <ng-template #hasDeal>
+                  <!-- <span class="hasdeal-holder" *ngFor="let deal of business.deal_id"> -->
+                    <div class="hasdeal-template">
+                      <div class="col-xs-8" tappable (click)="getBusiness(business.deal_id[0].template)">
+                        <a class="deal-thumbnail" *ngIf="toggleImage">
+                          <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{business.deal_id[0].template}}">
+                        </a>
+                        <div class="media-body align-self-center">
+                          <a class="business-link">{{business.company_name}}</a>
+                          <p class="business-address">{{business.country}}, {{business.state}}</p>
+                          <a class="deal-title">
+                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>
+                          </a>
+                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: 'MM/dd/yyyy'}}</p>
+                        </div>
                       </div>
-                    </ng-template>
-                    <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>
-                    <a class="btn btn-more" tappable (click)="getBusiness(deal.template)" >More Deals <i class="fa fa-chevron-right"></i></a>
+
+                      <div class="col-xs-4">
+                        <div class="deals-button">
+                          <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>
+                          <ng-template #notFavorite>
+                            <div class="claim-btn-holder">
+                              <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business.u_id)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                              <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
+                            </div>
+                          </ng-template>
+                          <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>
+                          <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>
+                        </div>
+                      </div>
+                    </div>
+                  <!-- </span> -->
+                </ng-template>
+
+                <!-- no deal -->
+                <ng-template #noDeal>
+                  <div class="col-xs-8">
+                    <a class="deal-thumbnail" *ngIf="toggleImage">
+                      <img class="d-flex mr-3" src="{{business.files.length !== 0 ? business.files[0].url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{business.company_name}}">
+                    </a>
+                    <div class="media-body align-self-center">
+                      <a class="business-link">{{business.company_name}}</a>
+                      <p class="business-address">{{business.country}}, {{business.state}}</p>
+                    </div>
                   </div>
-                </div>
+
+                  <div class="col-xs-4">
+                    <div class="deals-button">
+                      <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>
+                      <ng-template #notFavorite>
+                        <div class="claim-btn-holder">
+                          <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business.u_id)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                          <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
+                        </div>
+                      </ng-template>
+                      <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>
+                      <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>
+                    </div>
+                  </div>
+                </ng-template>
               </div>
             </ng-template>
           </div>
@@ -103,7 +142,13 @@
     </div>
   </div>
 
-  <div class="row" *ngIf="showPagination">
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  <!-- <div class="row" *ngIf="showPagination">
     <nav class="col-12 holder-pagination">
       <ul class="pagination list-unstyled" *ngIf="pager.pages && pager.pages.length">
         <li class="page-item prev-page">
@@ -119,6 +164,6 @@
         </li>
       </ul>
     </nav>
-  </div>
+  </div> -->
 
 </ion-content>

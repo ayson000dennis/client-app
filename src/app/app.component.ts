@@ -8,6 +8,7 @@ import { UserFindDealsPage } from '../pages/page-user-find-deals/page-user-find-
 import { UserMembershipCardPage } from '../pages/page-user-membership-card/page-user-membership-card';
 import { SignupMobilePage } from '../pages/page-signup-mobile/page-signup-mobile';
 import { UserLoyaltyCardDealsPage } from '../pages/page-user-loyalty-card-deals/page-user-loyalty-card-deals';
+import { UserLoyaltyCardsPage } from '../pages/page-user-loyalty-cards/page-user-loyalty-cards';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';

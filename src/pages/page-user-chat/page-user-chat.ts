@@ -1,6 +1,7 @@
 import { NavController,NavParams } from 'ionic-angular';
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
+import { UserInboxPage } from '../page-user-inbox/page-user-inbox';
 
 import { Storage } from '@ionic/storage';
 
@@ -25,6 +26,7 @@ export class UserChatPage {
   @ViewChild('content') content: any;
   messages: any[];
   chatBox: string;
+  room_id: string;
   btnEmitter: EventEmitter<string>;
   user: string[];
 
@@ -51,6 +53,7 @@ export class UserChatPage {
     this.btnEmitter = new EventEmitter<string>();
     this.messages = [];
     this.chatBox = "";
+    this.room_id = this.userDetail._id + this.businessDetail._id
     this.init();
 
     // console.log(this.businessDetail);
@@ -58,14 +61,13 @@ export class UserChatPage {
   }
 
   ionViewWillEnter() {
-    var room_id = this.userDetail._id + this.businessDetail._id;
-    this.socketService.joinRoom(room_id);
-
     this.socketService.connect();
+    this.socketService.joinRoom(this.room_id);
   }
 
   ionViewDidLoad(){
     this.fetchChats();
+     this.updateRead();
   }
 
   ionViewWillLeave() {
@@ -74,16 +76,23 @@ export class UserChatPage {
   }
 
  fetchChats(){
-   var room_id = this.userDetail._id + this.businessDetail._id;
 
    // GET MESSAGES FROM DATABASE
-   this.api.Message.fetch_chats(room_id).then(chats => {
+   this.api.Message.fetch_chats(this.room_id).then(chats => {
      if(this.hasLeave){
        return;
      }
 
-    this.messages = chats;
-    this.hasData = true;
+     if(this.hasNewMsg && !this.hasData){
+       this.hasNewMsg = false;
+       console.log('load again')
+       return this.fetchChats();
+     }
+
+     this.messages = chats;
+     this.hasData = true;
+     console.log('Chats loaded')
+
     $('body').find('.fa.loader').remove();
     this.scrollToBottom();
    }).catch((error) => {
@@ -92,12 +101,21 @@ export class UserChatPage {
 
  }
 
+ updateRead(){
+   this.api.Message.update_read(this.room_id,'business').then(update => {
+     console.log('is_read updated');
+   });
+ }
+
   init() {
     // Get real time message response
     this.socketService.messages.subscribe((chatMessage: ChatMessage) => {
       this._zone.run(() => {
         this.messages.push(chatMessage);
       });
+
+      this.hasNewMsg = true;
+
      this.scrollToBottom();
     });
   }
@@ -132,6 +150,13 @@ export class UserChatPage {
 
   showMenu() {
     this.navCtrl.push(MenuPage, {
+      animate: true,
+      direction: 'forward'
+    });
+  }
+
+  goToInbox() {
+    this.navCtrl.push(UserInboxPage, {
       animate: true,
       direction: 'forward'
     });

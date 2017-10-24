@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Platform, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { LoginPage } from '../page-login/page-login';
+import { DashboardPage } from '../page-dashboard/page-dashboard';
 import { UserMembershipCardPage } from '../page-user-membership-card/page-user-membership-card';
 import { MenuPage } from '../page-menu/page-menu';
 import { UserDealsPage } from '../page-user-deals/page-user-deals';
@@ -18,7 +19,7 @@ import { Storage } from '@ionic/storage';
 
 export class UserFavoritesPage {
   pages: Array<{title: string, component: any}>;
-  favorites : String[];
+  favorites : any[];
 
   constructor(
     public navCtrl: NavController,
@@ -37,7 +38,7 @@ export class UserFavoritesPage {
   }
 
   goBack() {
-    this.navCtrl.setRoot(UserMembershipCardPage, {}, {
+    this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
       direction: 'back'
     });
@@ -58,20 +59,34 @@ export class UserFavoritesPage {
     this.storage.get("user").then(user => {
       this.api.Favorites.favorite_list(user._id).then(favorites => {
         this.favorites = favorites;
-        console.log(favorites);
       });
     });
   }
 
-  getBusiness(template) {
-    this.api.Business.business_deal(template).then(business => {
-      this.navCtrl.push(UserDealsPage, {business: business.business}, {
-        animate: true,
-        direction: 'forward'
-      });
-    }).catch(error => {
-      console.log(error);
+  getBusiness(business) {
+    const alert = this.alertCtrl.create({
+      title: 'Coming Soon',
+      subTitle: 'This feature is under construction right now. Check back soon!',
+      buttons: ['Dismiss']
     });
+    alert.present();
+    // console.log(business)
+    // var template;
+    // if(business.business_id[0].deal_id.length !== 0) {
+    //   var temp = business.business_id[0].deal_id[0].template;
+    //   var b_template = temp.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
+    //   template = b_template;
+    // } else {
+    //   var name = business.business_id[0].company_name;
+    //   var b_name = name.replace(/\s+/g, '-').toLowerCase();
+    //   var city = business.business_id[0].city;
+    //   var b_city = city.toLowerCase();
+    //   template = b_name + '&' + b_city;
+    // }
+    // this.navCtrl.push(UserDealsPage, {template: template}, {
+    //   animate: true,
+    //   direction: 'forward'
+    // });
   }
 
   removeFavorite(id, index) {

@@ -52,28 +52,34 @@ export class UserDealsPage {
   }
 
   ionViewWillEnter(){
-    // var self = this;
-    var businessHolder = this.navParams.get('business');
-    console.log(businessHolder.business_id[0].lat)
-    this.lat = businessHolder.business_id[0].lat;
-    this.lng = businessHolder.business_id[0].lng;
-    this.business = businessHolder.business_id[0];
-    this.business_imgs = businessHolder.business_id[0].files;
-    this.template = this.navParams.get('template');
-    console.log(businessHolder)
+    var self = this;
+    var template = this.navParams.get('template');
 
-    this.initMap(businessHolder.business_id[0].lat, businessHolder.business_id[0].lng);
+    if(template.match("&")) {
+      this.api.Business.business(template).then(business => {
+        console.log(business)
+        this.business = business;
+        this.hasData = true;
+      }).catch(error => {
+        this.hasData = false;
+      });
+    } else {
+      this.api.Business.business_deal(template).then(business => {
+        this.business = business.business.business_id[0];
+        this.business_imgs = business.business.business_id[0].files;
+        console.log(this.business_imgs)
+        this.hasData = true;
+      }).catch(error => {
+        this.hasData = false;
+      });
+    }
 
-    this.business_address = businessHolder.business_id[0].country + " " + businessHolder.business_id[0].state + " " + businessHolder.business_id[0].zip_postal;
-    this.business_address = this.business_address.replace(/^[, ]+|[, ]+$|[, ]+/g, "+").trim();
-    // console.log(this.business_address)
 
-    this.api.Deals.deals_list().then(deals =>{
-      this.deals = deals
-      console.log(deals)
-      this.hasData =true
-      // console.log(this.deals)
-    })
+
+    // this.initMap(businessHolder.business_id[0].lat, businessHolder.business_id[0].lng);
+
+    // this.business_address = businessHolder.country + " " + businessHolder.state + " " + businessHolder.zip_postal;
+    // this.business_address = this.business_address.replace(/^[, ]+|[, ]+$|[, ]+/g, "+").trim();
 
     // console.log(this.business);
     // if(this.business.operations[0] !== '2' && this.business.operations.length !== 0 && this.hasData == true){
@@ -112,7 +118,6 @@ export class UserDealsPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.lat, this.lng)
     // this.initMap();
     // var self = this;
     // setTimeout(function(){

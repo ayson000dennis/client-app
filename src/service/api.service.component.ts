@@ -25,48 +25,40 @@ export class ApiService {
     }
   }
 
-  // deals_list: () => {
-  //       return this.http.get(Config.baseUrl + "api/deals/list_all/").map(response => {
-  //           return response.json();
-  //       }).toPromise();
-  // }
-  Deals = {
-    deals_search: (input) => {
-          return this.http.get(Config.ElasticSearch + "deals/_search?q=" + input, {
+  Business = {
+
+    business_deals_search: (input) => {
+          return this.http.get(Config.ElasticSearch + "business/_search?size=300&q=" + input, {
             headers : this.getHeaders()}).map(response => {
             return response.json();
           }).toPromise();
     },
 
-    deals_list: () => {
-          return this.http.get(Config.ElasticSearch + "deals/_search", {
+    business_deals_list: () => {
+          return this.http.get(Config.ElasticSearch + "business/_search?size=300", {
             headers : this.getHeaders()}).map(response => {
               return response.json();
           }).toPromise();
     },
 
-    deals_list1: () => {
-          return this.http.get(Config.ElasticSearch + "deals1/_search", {
-            headers : this.getHeaders()}).map(response => {
-              return response.json();
-          }).toPromise();
+    business_deal: (template) => {
+      return this.http.get(Config.baseUrl + "api/deals/template/" + template).map(response =>{
+          return response.json();
+      }).toPromise();
     },
 
-    deals_count: () => {
-          return this.http.get(Config.ElasticSearch + "deals/_count", {
-            headers : this.getHeaders()}).map(response => {
-              return response.json();
-          }).toPromise();
-    }
+    business: (business_name) => {
+      return this.http.get(Config.baseUrl + "api/deals/business/" + business_name).map(response =>{
+          return response.json();
+      }).toPromise();
+    },
 
-  }
-
-  Business = {
-    business_deal: (temp) => {
-      return this.http.get(Config.baseUrl + "api/deals/template/" + temp).map(response =>{
+    business_all: () => {
+      return this.http.get(Config.baseUrl + "api/business/list_all").map(response =>{
           return response.json();
       }).toPromise();
     }
+
   }
 
   BusinessCategory = {
@@ -100,6 +92,7 @@ export class ApiService {
       }).toPromise();
     }
   }
+
    LoyaltyCards = {
 
   }
@@ -142,18 +135,38 @@ export class ApiService {
     }
   }
 
-  Message = {
-    business_list: (user_id: string) => {
-      return this.http.get(Config.baseUrl + "api/business_owners/list/" + user_id ).map(response => {
-        return response.json();
-      }).toPromise();
-    },
-    fetch_chats: (room_id: string) => {
-      return this.http.get(Config.ChatBaseUrl + "api/inbox/members/" + room_id ).map(response => {
-        return response.json();
-      }).toPromise();
-    }
-  }
 
+    Message = {
+      business_list: (user_id: string) => {
+        return this.http.get(Config.baseUrl + "api/business_owners/list/" + user_id ).map(response => {
+          return response.json();
+        }).toPromise();
+      },
+      room_list: (shop_id: string) => {
+        return this.http.get(Config.baseUrl + "api/business_owners/rooms/" + shop_id, {}).map(response => {
+          return response.json();
+        }).toPromise();
+      },
+      members_room: (members: any) => {
+        return this.http.post(Config.ChatBaseUrl + "api/rooms/list", {data : members}).map(response => {
+          return response.json();
+        }).toPromise();
+      },
+      update_read: (room_id: string, message_by: string) => {
+        return this.http.post(Config.ChatBaseUrl + "api/chats/update_read/" + room_id + "/" + message_by, {}).map(response => {
+          return response.json();
+        }).toPromise();
+      },
+      fetch_chats: (room_id: string) => {
+        return this.http.get(Config.ChatBaseUrl + "api/inbox/members/" + room_id ).map(response => {
+          return response.json();
+        }).toPromise();
+      },
+      fetch_last_chat: (room_id: string) => {
+        return this.http.get(Config.ChatBaseUrl + "api/inbox_last_chat/members/").map(response => {
+          return response.json();
+        }).toPromise();
+      }
+    }
 
 }

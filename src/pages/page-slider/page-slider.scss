@@ -25,12 +25,12 @@ page-slider {
   }
 
   .subtitle {
-    margin: .5vh 0;
+    margin: 0.1vh 0;
 
     font-family: "Raleway Medium";
     // font-size: 2.05vh;
-    font-size: 2.08vh;
-    line-height: 1.5;
+    font-size: 2.5vh;
+    line-height: 1.4;
     color: #818181;
 
     br {
@@ -42,9 +42,37 @@ page-slider {
     height: 80vh;
 
     ion-slide {
+      position: relative;
+
+      .slide-nav {
+        position: absolute;
+        top: 40%;
+
+        color: #999;
+
+        cursor: pointer;
+
+        .fa {
+          font-size: 2.5em;
+
+          @media (min-width: 576px) {
+            font-size: 4em;
+          }
+        }
+
+        &.prev {
+          left: 0;
+        }
+
+        &.next {
+          right: 0;
+        }
+      }
+
       .main-image {
+        margin-top: 8vh;
         margin-bottom: 40px;
-        max-width: 77%;
+        max-width: 80%;
         height: auto;
       }
 
@@ -62,7 +90,7 @@ page-slider {
       &:nth-child(5) {
         .slider-img {
           // margin: 14vh 0 6.2vh;
-          margin: 8vh 0 4.8vh;
+          margin: 8vh 0 3.8vh;
           height: 42.8vh;
         }
 
@@ -75,7 +103,7 @@ page-slider {
   }
 
   .slider-img {
-    margin-top: 10vh;
+    margin-top: 12vh;
     max-width: 63%;
     height: 44.838vh;
   }
@@ -85,7 +113,8 @@ page-slider {
   }
 
   .swiper-pagination-bullet {
-    background-color: #c6c5c5;
+    background-color: #8c8c8c;
+    opacity: 1;
 
     &.swiper-pagination-bullet-active {
       width: 9px;

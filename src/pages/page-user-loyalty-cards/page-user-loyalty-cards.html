@@ -1,30 +1,31 @@
 <ion-header>
   <ion-navbar>
-    <img class="header-logo" src="assets/images/logo-min.png" alt="">
-    <div class="holder-menu" (click)="showMenu()">Menu</div>
-    <a class="inbox"><img src="assets/images/icon-mail.png" alt="" /></a>
+    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>
+    <span class="page-title">Loyalty Cards</span>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
-  <div class="title-holder">
-    <p class="title">
-      Loyalty Cards
-    </p>
-  </div>
-
   <div class="business-cards-holder" *ngIf="hasData">
-    <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">
-      <div class="img-holder">
-        <img [src]="loyalty.deals_id[0].photo.url" alt="">
+    <div *ngIf="loyalties.length !== 0; then hasLoyalties else noLoyalties"></div>
+    <ng-template #hasLoyalties>
+      <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">
+        <div class="img-holder">
+          <img [src]="loyalty.deals_id[0].photo.url" alt="">
+        </div>
+        <div class="text-holder">
+          <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>
+          <span class="card-location-text">{{loyalty.business_id[0].country}}</span>
+          <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>
+          <i class="fa fa-chevron-right fa-2x"></i>
+        </div>
       </div>
-      <div class="text-holder">
-        <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>
-        <span class="card-location-text">{{loyalty.business_id[0].country}}</span>
-        <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>
-        <i class="fa fa-chevron-right fa-2x"></i>
-      </div>
-    </div>
+    </ng-template>
+
+    <ng-template #noLoyalties>
+      <h3>No data to display.</h3>
+    </ng-template>
+
   </div>
 
 </ion-content>

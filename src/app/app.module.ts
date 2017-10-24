@@ -8,6 +8,8 @@ import { GooglePlus } from '@ionic-native/google-plus';
 
 import { SliderPage } from '../pages/page-slider/page-slider';
 import { LoginPage } from '../pages/page-login/page-login';
+import { DashboardPage } from '../pages/page-dashboard/page-dashboard';
+import { SettingsPage } from '../pages/page-settings/page-settings';
 import { ResetPassPage } from '../pages/page-reset-pass/page-reset-pass';
 import { ResetPassSuccessPage } from '../pages/page-reset-pass-success/page-reset-pass-success';
 import { SignupPage } from '../pages/page-signup/page-signup';
@@ -36,6 +38,7 @@ import { PaginationService } from '../directives/pagination/index.pagination';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { NgxQRCodeModule } from 'ngx-qrcode2';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
@@ -53,6 +56,8 @@ import {Keyboard} from "@ionic-native/keyboard";
     MyApp,
     SliderPage,
     LoginPage,
+    DashboardPage,
+    SettingsPage,
     ResetPassPage,
     ResetPassSuccessPage,
     SignupPage,
@@ -91,6 +96,8 @@ import {Keyboard} from "@ionic-native/keyboard";
     MyApp,
     SliderPage,
     LoginPage,
+    DashboardPage,
+    SettingsPage,
     ResetPassPage,
     ResetPassSuccessPage,
     SignupPage,
@@ -129,7 +136,8 @@ import {Keyboard} from "@ionic-native/keyboard";
     DatabaseService,
     SocketService,
     UtilService,
-    PaginationService
+    PaginationService,
+    Geolocation
   ]
 })
 export class AppModule {}

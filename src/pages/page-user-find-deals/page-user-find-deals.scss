@@ -1,5 +1,104 @@
+.pac-container {
+  &:nth-of-type(even) {
+    margin-top: 46px !important;
+    border-radius: 0;
+    border-top: none;
+    color: #000;
+    box-shadow: 0px 0px 0px 1px #eee !important;
+    .pac-item {
+      padding: 10px 15px;
+      height: 41px;
+      width: 100%;
+      border: none;
+    }
+    .pac-item-query {
+      font-size: 14px;
+      color: #000;
+    }
+  }
+  &:nth-of-type(odd) {
+    border-radius: 0;
+    border-top: none;
+    color: #000;
+    box-shadow: 0px 0px 0px 1px #eee !important;
+    .pac-item {
+      padding: 10px 15px;
+      height: 41px;
+      border: none;
+    }
+    .pac-item-query {
+      font-size: 14px;
+      color: #000;
+    }
+  }
+  &::after {
+    display: none;
+  }
+}
+
 page-user-find-deals {
+  ion-header {
+    ion-navbar {
+      .toolbar {
+        &.statusbar-padding {
+          &:first-child {
+            padding-top: 35px !important;
+          }
+        }
+      }
+
+      .back-button {
+        display: none !important;
+      }
+
+      i.fa {
+        position: absolute;
+        top: 20px;
+        font-size: 30px;
+        color: #b1b1b1 !important;
+
+        cursor: pointer;
+      }
+
+      .page-title {
+        display: flex;
+        justify-content: center;
+        margin-top: -5px;
+
+        font-family: "Raleway SemiBold";
+        font-size: 18px;
+        color: #757575;
+      }
+
+      &.toolbar-ios {
+        .toolbar-content-ios {
+          i {
+            top: 24px;
+          }
+        }
+      }
+    }
+  }
   .content {
+    $infinite-scroll-loading-text-margin:    4px 32px 0 32px !default;
+    ion-infinite-scroll-content {
+     .infinite-loading-text {
+        margin: $infinite-scroll-loading-text-margin;
+        color: #a4c73a;
+      }
+
+      .infinite-loading-spinner .spinner-ios line,
+      .infinite-loading-spinner .spinner-ios-small line,
+      .infinite-loading-spinner .spinner-crescent circle {
+        stroke: #a4c73a;
+      }
+
+      .infinite-loading-spinner .spinner-bubbles circle,
+      .infinite-loading-spinner .spinner-circles circle,
+      .infinite-loading-spinner .spinner-dots circle {
+        fill: #a4c73a;
+      }
+    }
     .scroll-content {
       padding-top: 0 !important;
       background-color: #fff !important;
@@ -79,6 +178,43 @@ page-user-find-deals {
           background-color: #a4c73a;
           border: none;
           cursor: pointer;
+        }
+      }
+    }
+    .locations-holder {
+      visibility: hidden;
+      position: relative;
+      .location-holder {
+        z-index: 9999999;
+        height: 41px;
+        width: 255px;
+        background-color: #fff;
+        color: #888;
+        position: absolute;
+        left: 3px;
+        top: -32px;
+        font-size: 17px;
+        box-shadow: 0px 0px 0px 1px #eee;
+        ul {
+          margin: 10px 15px;
+          padding: 0;
+          list-style: none;
+          li {
+            a {
+              color: #888;
+              cursor: pointer;
+              transition: ease 0.3s ease-in-out;
+              .fa.fa-compass {
+                left: 15px;
+                margin-right: 9px;
+                color: #888;
+                transition: ease 0.3s ease-in-out;
+              }
+            }
+          }
+        }
+        &:hover {
+          background-color: #fafafa;
         }
       }
     }
@@ -215,6 +351,13 @@ page-user-find-deals {
             justify-content: space-between;
             padding: 15px 0;
             border-bottom: 1px solid #d3d3d3;
+
+            .hasdeal-template {
+              display: flex;
+              justify-content: space-between;
+              width: 100%;
+            }
+
             &.toggled {
               display: block;
               .deal-thumbnail {
@@ -225,8 +368,16 @@ page-user-find-deals {
               .media-body {
                 display: block;
                 flex: 1;
-                margin-top: 0;
+                margin-top: 3vh;
               }
+
+              .hasdeal-template {
+                display: block;
+                .media-body {
+                  margin-top: 0;
+                }
+              }
+
               .col-xs-8 {
                 display: flex;
               }

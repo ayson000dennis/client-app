@@ -23,6 +23,15 @@ page-user-chat {
     }
   }
 
+  .show-back-button {
+     display: none !important;
+  }
+  .back-btn-new {
+    background-color: transparent;
+     float: left;
+     margin-left: 15px;
+     font-size: 32px;
+   }
   ion-header + ion-content > div.scroll-content {
     background-color: transparent !important;
   }

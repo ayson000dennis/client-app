@@ -1,14 +1,13 @@
 <ion-header>
   <ion-navbar>
-    <img class="header-logo" src="assets/images/logo-min.png" alt="">
-    <div class="holder-menu" (click)="showMenu()">Menu</div>
-    <a class="inbox" (click)="viewInbox()"><img src="assets/images/icon-mail.png" alt="" /></a>
+    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>
+    <span class="page-title">Membership Card</span>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <div class="holder-qrcode" *ngIf="hasData" >
-    <!-- <p class="member-name">{{user.first_name}} {{user.last_name}}</p> -->
+    <p class="member-name">{{user.first_name}}</p>
     <ion-card *ngIf="createdCode">
     <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>
     </ion-card>

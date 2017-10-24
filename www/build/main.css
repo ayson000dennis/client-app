@@ -25231,9 +25231,13 @@ body ion-nav > * {
   font-family: "Raleway Semibold";
 }
 
+body ion-nav ion-header.header-md::after {
+  background-image: none;
+}
+
 body ion-nav ion-header + ion-content > .scroll-content {
   padding: 3vh 16px 0 !important;
-  background-color: #ebebeb;
+  background-color: #fff !important;
 }
 
 body ion-nav ion-navbar.toolbar {
@@ -25242,8 +25246,13 @@ body ion-nav ion-navbar.toolbar {
   border-bottom: 1px solid #f9f9f9;
 }
 
-body ion-nav ion-navbar.toolbar .toolbar-background-ios {
+body ion-nav ion-navbar.toolbar .toolbar-background-ios,
+body ion-nav ion-navbar.toolbar .toolbar-background-md {
   background-color: #fff;
+  border: none;
+  border-width: 0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
 body ion-nav ion-navbar.toolbar .header-logo {
@@ -25596,6 +25605,14 @@ body form input.has-error ~ .text-validate {
   max-height: 16px;
 }
 
+body form input[type="email"], body form input[type="text"], body form input[type="password"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  -webkit-focus-ring-color: none;
+  outline: none;
+}
+
 body form input[type="email"], body form input[type="text"] {
   font-family: "Raleway Medium";
 }
@@ -25814,6 +25831,125 @@ elastic-textarea ion-textarea {
   padding-top: 3px;
   margin-top: 4px;
   color: grey;
+}
+
+page-dashboard ion-header + ion-content > div.scroll-content {
+  padding-top: 15px !important;
+}
+
+page-dashboard ion-header ion-navbar .name {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  top: 0;
+  float: right;
+  margin-right: 13px;
+  font-family: "Raleway SemiBold";
+  font-size: 17px;
+  color: #444;
+  text-transform: capitalize;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack .fa-square {
+  font-size: 25px;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack .fa-stack-1x {
+  font-family: 'Arial';
+  font-size: 13px;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack.has-notif .fa-square {
+  color: #f59120;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack.has-notif .fa-stack-1x {
+  color: #fff;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack.no-notif .fa-square {
+  color: #e0e0e0;
+}
+
+page-dashboard ion-header ion-navbar .name .fa-stack.no-notif .fa-stack {
+  color: #444;
+}
+
+page-dashboard ion-header ion-navbar.toolbar-ios .toolbar-content-ios .business-icon {
+  top: 30px;
+}
+
+page-dashboard ion-header ion-navbar.toolbar-md .toolbar-content-md .business-icon {
+  top: 22px;
+}
+
+page-dashboard ion-header .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-dashboard .dashboard-menu .col {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 50%;
+}
+
+page-dashboard .dashboard-menu .col ion-card.card-md, page-dashboard .dashboard-menu .col ion-card.card-ios {
+  margin: 5px;
+  width: 100%;
+  background-color: #fbfdfd;
+  border: 1px solid #dbdbdb;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  -moz-webkit-box-shadow: none;
+  cursor: pointer;
+}
+
+page-dashboard .dashboard-menu .col ion-card.card-md img, page-dashboard .dashboard-menu .col ion-card.card-ios img {
+  margin: 25px auto;
+  height: 50px;
+  width: auto;
+}
+
+page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios {
+  padding: 5px;
+  background-color: #a4c73a;
+}
+
+page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios ion-card-title.card-title-md {
+  font-size: 1.7rem;
+  color: #fff;
+  text-align: center;
+}
+
+@media screen and (max-width: 400px) {
+  page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios ion-card-title.card-title-md {
+    font-size: 1.4rem;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-md ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-md ion-card-content.card-content-ios ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-md ion-card-title.card-title-md, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios ion-card-title.card-title-ios, page-dashboard .dashboard-menu .col ion-card.card-ios ion-card-content.card-content-ios ion-card-title.card-title-md {
+    font-size: 1.25rem;
+  }
 }
 
 page-login form {
@@ -26037,6 +26173,53 @@ page-reset-pass-success .btn-green {
   margin-top: 50px;
 }
 
+page-settings ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-settings ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-settings ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-settings ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-settings ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
+}
+
+page-settings ion-header + ion-content > div.scroll-content {
+  padding-top: 30px !important;
+  overflow: hidden;
+}
+
+page-settings .settings-menu a {
+  font-family: "Raleway SemiBold";
+  font-size: 20px;
+  color: #757575;
+  text-decoration: none;
+}
+
 page-signup .btn-green ~ .btn-green .fa {
   vertical-align: bottom;
   font-size: 27px;
@@ -26227,10 +26410,10 @@ page-slider .main-title {
 }
 
 page-slider .subtitle {
-  margin: .5vh 0;
+  margin: 0.1vh 0;
   font-family: "Raleway Medium";
-  font-size: 2.08vh;
-  line-height: 1.5;
+  font-size: 2.5vh;
+  line-height: 1.4;
   color: #818181;
 }
 
@@ -26242,9 +26425,39 @@ page-slider ion-slides {
   height: 80vh;
 }
 
+page-slider ion-slides ion-slide {
+  position: relative;
+}
+
+page-slider ion-slides ion-slide .slide-nav {
+  position: absolute;
+  top: 40%;
+  color: #999;
+  cursor: pointer;
+}
+
+page-slider ion-slides ion-slide .slide-nav .fa {
+  font-size: 2.5em;
+}
+
+@media (min-width: 576px) {
+  page-slider ion-slides ion-slide .slide-nav .fa {
+    font-size: 4em;
+  }
+}
+
+page-slider ion-slides ion-slide .slide-nav.prev {
+  left: 0;
+}
+
+page-slider ion-slides ion-slide .slide-nav.next {
+  right: 0;
+}
+
 page-slider ion-slides ion-slide .main-image {
+  margin-top: 8vh;
   margin-bottom: 40px;
-  max-width: 77%;
+  max-width: 80%;
   height: auto;
 }
 
@@ -26253,12 +26466,12 @@ page-slider ion-slides ion-slide:first-child .main-title:last-child {
 }
 
 page-slider ion-slides ion-slide:nth-child(2) .slider-img, page-slider ion-slides ion-slide:nth-child(3) .slider-img, page-slider ion-slides ion-slide:nth-child(4) .slider-img, page-slider ion-slides ion-slide:nth-child(5) .slider-img {
-  margin: 8vh 0 4.8vh;
+  margin: 8vh 0 3.8vh;
   height: 42.8vh;
 }
 
 page-slider .slider-img {
-  margin-top: 10vh;
+  margin-top: 12vh;
   max-width: 63%;
   height: 44.838vh;
 }
@@ -26268,7 +26481,8 @@ page-slider .swiper-slide:last-child {
 }
 
 page-slider .swiper-pagination-bullet {
-  background-color: #c6c5c5;
+  background-color: #8c8c8c;
+  opacity: 1;
 }
 
 page-slider .swiper-pagination-bullet.swiper-pagination-bullet-active {
@@ -26311,6 +26525,17 @@ page-user-chat ion-navbar .title {
 page-user-chat ion-navbar .toolbar-content {
   text-align: center;
   margin-right: 25px;
+}
+
+page-user-chat .show-back-button {
+  display: none !important;
+}
+
+page-user-chat .back-btn-new {
+  background-color: transparent;
+  float: left;
+  margin-left: 15px;
+  font-size: 32px;
 }
 
 page-user-chat ion-header + ion-content > div.scroll-content {
@@ -26599,6 +26824,41 @@ page-user-deals .content .scroll-content .row .about-business .social-links li i
   color: #aaa;
 }
 
+page-user-favorites ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-user-favorites ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-favorites ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-favorites ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-user-favorites ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
+}
+
 page-user-favorites .scroll-content {
   background: #fff !important;
 }
@@ -26758,6 +27018,102 @@ ion-alert .alert-wrapper .alert-button .button-inner {
   color: #141414 !important;
 }
 
+.pac-container:nth-of-type(even) {
+  margin-top: 46px !important;
+  border-radius: 0;
+  border-top: none;
+  color: #000;
+  -webkit-box-shadow: 0px 0px 0px 1px #eee !important;
+  box-shadow: 0px 0px 0px 1px #eee !important;
+}
+
+.pac-container:nth-of-type(even) .pac-item {
+  padding: 10px 15px;
+  height: 41px;
+  width: 100%;
+  border: none;
+}
+
+.pac-container:nth-of-type(even) .pac-item-query {
+  font-size: 14px;
+  color: #000;
+}
+
+.pac-container:nth-of-type(odd) {
+  border-radius: 0;
+  border-top: none;
+  color: #000;
+  -webkit-box-shadow: 0px 0px 0px 1px #eee !important;
+  box-shadow: 0px 0px 0px 1px #eee !important;
+}
+
+.pac-container:nth-of-type(odd) .pac-item {
+  padding: 10px 15px;
+  height: 41px;
+  border: none;
+}
+
+.pac-container:nth-of-type(odd) .pac-item-query {
+  font-size: 14px;
+  color: #000;
+}
+
+.pac-container::after {
+  display: none;
+}
+
+page-user-find-deals ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-user-find-deals ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-find-deals ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-find-deals ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-user-find-deals ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
+}
+
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-text {
+  margin: 4px 32px 0 32px;
+  color: #a4c73a;
+}
+
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-spinner .spinner-ios line,
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-spinner .spinner-ios-small line,
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-spinner .spinner-crescent circle {
+  stroke: #a4c73a;
+}
+
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-spinner .spinner-bubbles circle,
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-spinner .spinner-circles circle,
+page-user-find-deals .content ion-infinite-scroll-content .infinite-loading-spinner .spinner-dots circle {
+  fill: #a4c73a;
+}
+
 page-user-find-deals .content .scroll-content {
   padding-top: 0 !important;
   background-color: #fff !important;
@@ -26859,6 +27215,50 @@ page-user-find-deals .content .search-banner .form-search-deals .btn-search-deal
   background-color: #a4c73a;
   border: none;
   cursor: pointer;
+}
+
+page-user-find-deals .content .locations-holder {
+  visibility: hidden;
+  position: relative;
+}
+
+page-user-find-deals .content .locations-holder .location-holder {
+  z-index: 9999999;
+  height: 41px;
+  width: 255px;
+  background-color: #fff;
+  color: #888;
+  position: absolute;
+  left: 3px;
+  top: -32px;
+  font-size: 17px;
+  -webkit-box-shadow: 0px 0px 0px 1px #eee;
+  box-shadow: 0px 0px 0px 1px #eee;
+}
+
+page-user-find-deals .content .locations-holder .location-holder ul {
+  margin: 10px 15px;
+  padding: 0;
+  list-style: none;
+}
+
+page-user-find-deals .content .locations-holder .location-holder ul li a {
+  color: #888;
+  cursor: pointer;
+  -webkit-transition: ease 0.3s ease-in-out;
+  transition: ease 0.3s ease-in-out;
+}
+
+page-user-find-deals .content .locations-holder .location-holder ul li a .fa.fa-compass {
+  left: 15px;
+  margin-right: 9px;
+  color: #888;
+  -webkit-transition: ease 0.3s ease-in-out;
+  transition: ease 0.3s ease-in-out;
+}
+
+page-user-find-deals .content .locations-holder .location-holder:hover {
+  background-color: #fafafa;
 }
 
 page-user-find-deals .content #filter-sort-map {
@@ -27026,6 +27426,18 @@ page-user-find-deals .content .categories-main .holder-categories-result1 .categ
   border-bottom: 1px solid #d3d3d3;
 }
 
+page-user-find-deals .content .categories-main .holder-categories-result1 .categories-result .deal .hasdeal-template {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  width: 100%;
+}
+
 page-user-find-deals .content .categories-main .holder-categories-result1 .categories-result .deal.toggled {
   display: block;
 }
@@ -27040,6 +27452,14 @@ page-user-find-deals .content .categories-main .holder-categories-result1 .categ
   -webkit-flex: 1;
   -ms-flex: 1;
   flex: 1;
+  margin-top: 3vh;
+}
+
+page-user-find-deals .content .categories-main .holder-categories-result1 .categories-result .deal.toggled .hasdeal-template {
+  display: block;
+}
+
+page-user-find-deals .content .categories-main .holder-categories-result1 .categories-result .deal.toggled .hasdeal-template .media-body {
   margin-top: 0;
 }
 
@@ -27252,6 +27672,85 @@ page-user-find-deals .content .holder-pagination .pagination .page-item .page-li
   border-radius: 0;
 }
 
+.pac-container:nth-of-type(even) {
+  margin-top: 46px !important;
+  border-radius: 0;
+  border-top: none;
+  color: #000;
+  -webkit-box-shadow: 0px 0px 0px 1px #eee !important;
+  box-shadow: 0px 0px 0px 1px #eee !important;
+}
+
+.pac-container:nth-of-type(even) .pac-item {
+  padding: 10px 15px;
+  height: 41px;
+  width: 100%;
+  border: none;
+}
+
+.pac-container:nth-of-type(even) .pac-item-query {
+  font-size: 14px;
+  color: #000;
+}
+
+.pac-container:nth-of-type(odd) {
+  border-radius: 0;
+  border-top: none;
+  color: #000;
+  -webkit-box-shadow: 0px 0px 0px 1px #eee !important;
+  box-shadow: 0px 0px 0px 1px #eee !important;
+}
+
+.pac-container:nth-of-type(odd) .pac-item {
+  padding: 10px 15px;
+  height: 41px;
+  border: none;
+}
+
+.pac-container:nth-of-type(odd) .pac-item-query {
+  font-size: 14px;
+  color: #000;
+}
+
+.pac-container::after {
+  display: none;
+}
+
+page-user-find-deals-map ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-user-find-deals-map ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-find-deals-map ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-find-deals-map ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-user-find-deals-map ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
+}
+
 page-user-find-deals-map .content .scroll-content {
   padding-top: 0 !important;
   background-color: #fff !important;
@@ -27353,6 +27852,50 @@ page-user-find-deals-map .content .search-banner .form-search-deals .btn-search-
   background-color: #a4c73a;
   border: none;
   cursor: pointer;
+}
+
+page-user-find-deals-map .content .locations-holder {
+  visibility: hidden;
+  position: relative;
+}
+
+page-user-find-deals-map .content .locations-holder .location-holder {
+  z-index: 9999999;
+  height: 41px;
+  width: 255px;
+  background-color: #fff;
+  color: #888;
+  position: absolute;
+  left: 11px;
+  top: -32px;
+  font-size: 17px;
+  -webkit-box-shadow: 0px 0px 0px 1px #eee;
+  box-shadow: 0px 0px 0px 1px #eee;
+}
+
+page-user-find-deals-map .content .locations-holder .location-holder ul {
+  margin: 10px 15px;
+  padding: 0;
+  list-style: none;
+}
+
+page-user-find-deals-map .content .locations-holder .location-holder ul li a {
+  color: #888;
+  cursor: pointer;
+  -webkit-transition: ease 0.3s ease-in-out;
+  transition: ease 0.3s ease-in-out;
+}
+
+page-user-find-deals-map .content .locations-holder .location-holder ul li a .fa.fa-compass {
+  left: 15px;
+  margin-right: 9px;
+  color: #888;
+  -webkit-transition: ease 0.3s ease-in-out;
+  transition: ease 0.3s ease-in-out;
+}
+
+page-user-find-deals-map .content .locations-holder .location-holder:hover {
+  background-color: #fafafa;
 }
 
 page-user-find-deals-map .content #filter-sort-map {
@@ -27485,21 +28028,61 @@ page-user-find-deals-map .content #mapView .info-window .img-holder {
 }
 
 page-user-find-deals-map .content #mapView .info-window .img-holder img {
-  width: 120px;
-  height: 120px;
+  width: 50px;
+  height: 50px;
 }
 
 page-user-find-deals-map .content #mapView .info-window .info-holder h3 {
-  font-size: 20px;
+  font-size: 16px;
 }
 
 page-user-find-deals-map .content #mapView .info-window .info-holder p {
-  font-size: 14px;
+  margin: 5px;
+  font-size: 12px;
+}
+
+page-user-inbox ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-user-inbox ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-inbox ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-inbox ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-user-inbox ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
 }
 
 page-user-inbox ion-header + ion-content > div.scroll-content {
   padding: 0px !important;
   background-color: transparent !important;
+}
+
+page-user-inbox .show-back-button {
+  display: none !important;
 }
 
 page-user-inbox .hidden {
@@ -27557,7 +28140,8 @@ page-user-inbox #inbox-list p {
 
 page-user-inbox #inbox-list .date-time {
   font-size: 10px;
-  right: 13px;
+  right: 15px;
+  top: -40px;
   float: right;
   color: grey;
 }
@@ -27568,21 +28152,12 @@ page-user-inbox #inbox-list .name {
   color: grey;
 }
 
-page-user-inbox #inbox-list .date-time-new {
-  font-size: 10px;
-  right: 13px;
+page-user-inbox #inbox-list .message {
+  font-size: 12px;
   color: grey;
-  float: right;
-  color: black;
 }
 
-page-user-inbox #inbox-list .name-new {
-  font-size: 15px;
-  text-transform: capitalize;
-  color: black;
-}
-
-page-user-inbox #inbox-list .message-new {
+page-user-inbox #inbox-list .new {
   color: black;
 }
 
@@ -27695,6 +28270,41 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .fa-c
   right: 0;
   color: #b1b1b1 !important;
   cursor: pointer;
+}
+
+page-user-loyalty-cards ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-user-loyalty-cards ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-loyalty-cards ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-loyalty-cards ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-user-loyalty-cards ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
 }
 
 page-user-loyalty-cards ion-navbar i.fa-chevron-left {
@@ -27845,6 +28455,41 @@ page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp span {
   page-user-loyalty-stamp-card .stamps-window .holder-stamps .stamp:last-child {
     font-size: 5vw;
   }
+}
+
+page-user-membership-card ion-header ion-navbar .toolbar.statusbar-padding:first-child {
+  padding-top: 35px !important;
+}
+
+page-user-membership-card ion-header ion-navbar .back-button {
+  display: none !important;
+}
+
+page-user-membership-card ion-header ion-navbar i.fa {
+  position: absolute;
+  top: 20px;
+  font-size: 30px;
+  color: #b1b1b1 !important;
+  cursor: pointer;
+}
+
+page-user-membership-card ion-header ion-navbar .page-title {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-top: -5px;
+  font-family: "Raleway SemiBold";
+  font-size: 18px;
+  color: #757575;
+}
+
+page-user-membership-card ion-header ion-navbar.toolbar-ios .toolbar-content-ios i {
+  top: 24px;
 }
 
 page-user-membership-card .scroll-content {

@@ -107,7 +107,7 @@ export class SignupMobilePage {
   signMeUp() {
     var getMobile = $('.form-signup').find('input[name="number"]'),
       getMobileVal = this.posts.number,
-      mobileRegex = /^[0-9]{5,14}$/;
+      mobileRegex = /^[0-9]{10}$/;
 
     if (getMobileVal) {
       getMobile.removeClass('has-error').next('.text-validate').text('');
@@ -129,12 +129,16 @@ export class SignupMobilePage {
           console.log(err);
         }).done(function(res) {
           $('.form-signup .btn-green[type="submit"]').find('.fa-spinner').remove();
-          var thisCode = res.number.code;
-          console.log(thisCode);
-          $('.form1').fadeOut('fast');
-          setTimeout(function() {
-            $('.form2').fadeIn('slow');
-          },250);
+          if (res.status == 400) {
+            getMobile.addClass('has-error').next('.text-validate').text('Mobile number does not exist.');
+          } else {
+            var thisCode = res.number.code;
+            console.log(thisCode);
+            $('.form1').fadeOut('fast');
+            setTimeout(function() {
+              $('.form2').fadeIn('slow');
+            },250);
+          }
         });
       } else {
         getMobile.addClass('has-error').next('.text-validate').text('Mobile number is invalid.');
