@@ -58,35 +58,20 @@ export class UserFavoritesPage {
   getFavorites() {
     this.storage.get("user").then(user => {
       this.api.Favorites.favorite_list(user._id).then(favorites => {
+        console.log(favorites)
         this.favorites = favorites;
       });
     });
   }
 
   getBusiness(business) {
-    const alert = this.alertCtrl.create({
-      title: 'Coming Soon',
-      subTitle: 'This feature is under construction right now. Check back soon!',
-      buttons: ['Dismiss']
+    this.api.Business.business_view(business.business_id[0]._id).then(business => {
+      console.log(business)
+      this.navCtrl.push(UserDealsPage, {business: business}, {
+        animate: true,
+        direction: 'forward'
+      });
     });
-    alert.present();
-    // console.log(business)
-    // var template;
-    // if(business.business_id[0].deal_id.length !== 0) {
-    //   var temp = business.business_id[0].deal_id[0].template;
-    //   var b_template = temp.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
-    //   template = b_template;
-    // } else {
-    //   var name = business.business_id[0].company_name;
-    //   var b_name = name.replace(/\s+/g, '-').toLowerCase();
-    //   var city = business.business_id[0].city;
-    //   var b_city = city.toLowerCase();
-    //   template = b_name + '&' + b_city;
-    // }
-    // this.navCtrl.push(UserDealsPage, {template: template}, {
-    //   animate: true,
-    //   direction: 'forward'
-    // });
   }
 
   removeFavorite(id, index) {

@@ -27,6 +27,7 @@ chat-bubble {
     word-wrap: break-word;
     white-space: pre-wrap;
     font-size: 10px;
+    text-transform: normal;
   }
 
   .message-detail {
@@ -45,6 +46,7 @@ chat-bubble {
     padding: 8px;
     margin: -10px 12px;
     max-width: 50%;
+    margin-bottom: 0px;
   }
 
   .chat-bubble:before {

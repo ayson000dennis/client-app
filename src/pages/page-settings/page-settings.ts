@@ -37,6 +37,7 @@ export class SettingsPage {
   }
 
   logOut() {
+    this.storage.remove('user');
     this.navCtrl.push(LoginPage, {}, {
       animate: true,
       direction: 'back'

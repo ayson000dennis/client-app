@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Events, NavController } from 'ionic-angular';
 import { Http }  from '@angular/http';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
@@ -29,6 +29,7 @@ export class LoginPage {
   }
 
   constructor(
+    private events: Events,
     public navCtrl: NavController,
     public http : Http,
     private fb: Facebook,
@@ -125,6 +126,7 @@ export class LoginPage {
   }
   getUser(token){
    this.api.Users.user(token.user_id).then(user =>{
+      this.events.publish('user:login', user);
       this.storage.set('user', user);
        this.navCtrl.setRoot(DashboardPage, {}, {
             animate: true,

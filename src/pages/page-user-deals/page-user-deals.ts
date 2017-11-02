@@ -1,9 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController,NavParams,Slides } from 'ionic-angular';
-
+import { Platform, NavController, NavParams, AlertController, Slides } from 'ionic-angular';
+import { InAppBrowser, InAppBrowserOptions } from "@ionic-native/in-app-browser";
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
 import { UserFindDealsPage } from '../page-user-find-deals/page-user-find-deals';
+import { UserFavoritesPage } from '../page-user-favorites/page-user-favorites';
+import { UserChatPage } from '../page-user-chat/page-user-chat';
 import { ApiService } from '../../service/api.service.component';
 import { Storage } from '@ionic/storage'
 import moment from 'moment';
@@ -20,26 +22,74 @@ declare var google: any;
 
 export class UserDealsPage {
   pages: Array<{title: string, component: any}>;
-  business : string[];
+  business : any;
+  business_type: any;
   business_imgs : any[];
   business_address : string;
   deals : string[];
   hasData :boolean = false;
+  user : any[];
   operations  : string[];
   template : any;
-  days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+  operatingHours = [];
+  currentDay = [];
   map: any;
   lat: any;
   lng: any;
+  room_id: string;
+
+  //place.icon
+  googleMarker = {
+    url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
+    size: new google.maps.Size(50, 50),
+    origin: new google.maps.Point(0, 0),
+    scaledSize: new google.maps.Size(48, 50)
+  };
+
+  memberMarker = {
+    url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
+    size: new google.maps.Size(50, 50),
+    origin: new google.maps.Point(0, 0),
+    scaledSize: new google.maps.Size(48, 50)
+  };
+
+  premiumMemberMarker = {
+    url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
+    size: new google.maps.Size(50, 50),
+    origin: new google.maps.Point(0, 0),
+    scaledSize: new google.maps.Size(48, 50)
+  };
+
+  //in app browser option
+  private iabOptions: InAppBrowserOptions = {
+    location : 'yes',//Or 'no'
+    clearcache : 'yes',
+    clearsessioncache : 'yes',
+    zoom : 'yes',//Android only ,shows browser zoom controls
+    hardwareback : 'yes',
+    mediaPlaybackRequiresUserAction : 'no',
+    shouldPauseOnSuspend : 'no', //Android only
+    closebuttoncaption : 'Close', //iOS only
+    disallowoverscroll : 'no', //iOS only
+    toolbar : 'yes', //iOS only
+    enableViewportScale : 'no', //iOS only
+    allowInlineMediaPlayback : 'no',//iOS only
+    presentationstyle : 'pagesheet',//iOS only
+    toolbarposition: 'top',
+    fullscreen : 'yes'//Windows only
+  };
+
   swiper:any;
   @ViewChild('slider') slider: Slides;
   slidesOptions = { initialSlide: 0 }
 
   constructor(
+    private iab: InAppBrowser,
     public navCtrl: NavController,
     public platform: Platform,
     public navParams : NavParams,
     private api : ApiService,
+    public alertCtrl: AlertController,
     private storage : Storage){
   }
 
@@ -51,78 +101,106 @@ export class UserDealsPage {
     this.slider.slidePrev();
   }
 
-  ionViewWillEnter(){
-    var self = this;
-    var template = this.navParams.get('template');
+  getUser() {
+    this.storage.get('user').then(user =>{
+      this.user = user;
+    });
+  }
 
-    if(template.match("&")) {
-      this.api.Business.business(template).then(business => {
-        console.log(business)
-        this.business = business;
-        this.hasData = true;
-      }).catch(error => {
-        this.hasData = false;
-      });
+  ionViewWillEnter(){
+    this.business = this.navParams.get('business');
+    var days = this.business.operations;
+    if (this.business.operations[0] === '0') {
+      console.log(this.business.operations)
+    } else if (this.business.operations[0] === '2') {
+      console.log(this.business.operations)
+    } else if (this.business.operations[0] === '1') {
+      console.log(this.business.operations)
     } else {
-      this.api.Business.business_deal(template).then(business => {
-        this.business = business.business.business_id[0];
-        this.business_imgs = business.business.business_id[0].files;
-        console.log(this.business_imgs)
-        this.hasData = true;
-      }).catch(error => {
-        this.hasData = false;
+      days.forEach((day, i) => {
+        var d = Object.keys(day)[0];
+
+        var work = {
+          dayCount: i+1,
+          day: d,
+          start: eval("day." + d + ".start"),
+          end: eval("day." + d + ".end"),
+          isClosed: eval("day." + d + ".isChecked")
+        }
+        this.operatingHours.push(work);
       });
+
+      this.operatingHours.forEach(operations => {
+        var today = new Date().getDay();
+        if(operations.dayCount === today) {
+          this.currentDay.push(operations);
+        }
+      });
+      console.log(this.business.operations)
     }
 
+    if (this.business !== null) {
+      this.hasData = true;
+    }
+  }
 
+  addToFavorites(business) {
+    let selectedButton = document.getElementById('addToFavorite1');
+    selectedButton.style.display = "none";
 
-    // this.initMap(businessHolder.business_id[0].lat, businessHolder.business_id[0].lng);
+    let addedToFavBtn = document.getElementById('addedToFavorite2');
+    addedToFavBtn.style.display = "block";
 
-    // this.business_address = businessHolder.country + " " + businessHolder.state + " " + businessHolder.zip_postal;
-    // this.business_address = this.business_address.replace(/^[, ]+|[, ]+$|[, ]+/g, "+").trim();
+    this.storage.get('user').then(user =>{
+      var deal_id = [];
 
-    // console.log(this.business);
-    // if(this.business.operations[0] !== '2' && this.business.operations.length !== 0 && this.hasData == true){
-    //
-    //
-    //   // this.business.operations.forEach(function(val,key){
-    //   //     console.log(val);
-    //   //
-    //   //   // self.operations[this.days[key]] = val;
-    //   //
-    //   //   // console.log(self.operations);
-    //   //
-    //   // })
-    //     // this.business.push({sample_data:{}});
-    //     this.business['sample_data'] = {};
-    //
-    //     var sample_data = '';
-    //     var length = this.business.operations.length;
-    //
-    //     // this.business.operations.splice(4,1);
-    //
-    //     for(var index_days = 0 ;index_days < this.business.operations.length; index_days++){
-    //       for( var x = 0; x < this.days.length; x++){
-    //         if(Object.keys(this.business.operations[index_days]) == this.days[x]){
-    //           // console.log(this.days[x]);
-    //           this.business.sample_data[this.days[x]] = this.business.operations[index_days][this.days[x]];
-    //         }
-    //       }
-    //     }
-    //
-    //     console.log(this.business);
-    //   // console.log(this.business.operations);
+      if (business.deal_id.length !== 0) {
+        console.log('with deal')
+        business.deal_id.forEach(id => {
+          deal_id.push(id)
+        });
+      } else {
+        console.log('business only')
+        deal_id = [];
+      }
+
+      let deal_body = {
+        deals_id : deal_id,
+        business_id : business._id,
+        customer_id : user._id
+      };
+
+      this.api.Favorites.add_to_favorite(deal_body).then(favorite => {
+        console.log(JSON.stringify(favorite.message));
+      })
+      .catch(error => {
+        console.log(error._body);
+      });
+    });
+
+  }
+
+  goToFavorites() {
+      this.navCtrl.setRoot(UserFavoritesPage, {
+        animate: true,
+        direction: 'back'
+      });
+  }
+
+  viewMap(address, state, zip) {
+    var map_url = 'https://www.google.com/maps/place/';
+    // if (shop_url !== "") {
+    //   this.iab.create(shop_url, '_blank', this.iabOptions);
+    // } else {
+      this.iab.create(map_url + address + ',' + state + ',' + zip, '_blank', this.iabOptions);
     // }
-    // this.operations = this.business;
-    // this.initMap();
   }
 
   ionViewDidLoad() {
-    // this.initMap();
-    // var self = this;
-    // setTimeout(function(){
-    //   self.initMap();
-    // }, 650);
+  }
+
+  ionViewWillLeave() {
+    $('#mapView').remove();
   }
 
   goHome() {
@@ -146,10 +224,6 @@ export class UserDealsPage {
     });
   }
 
-  goPrevious() {
-    this.navCtrl.pop();
-  }
-
   showHours() {
     if($(".operations-list").hasClass("open")) {
       $(".operations-list").removeClass("open");
@@ -161,20 +235,25 @@ export class UserDealsPage {
     }
   }
 
-  initMap(lat, lng) {
-    var center = new google.maps.LatLng(lat, lng);
-    // var center = {lat: business2.lat, lng: business2.lng};
-    // console.log(center.lat(), center.lng())
-    var map = new google.maps.Map(document.getElementById('mapView'), {
-      center: center,
-      zoom: 9
+  sendMessage() {
+    this.storage.get('user').then(user =>{
+
+      this.navCtrl.setRoot(UserChatPage, {
+        businessDetail: this.business,
+        previousPage: 'deals',
+        userDetail: user
+      },{
+        animate: true,
+        direction: ' forward'
+      });
+
     });
 
-    var marker = new google.maps.Marker({
-      position: center,
-      map: map,
-    });
+  }
 
+
+  goPrevious() {
+    this.navCtrl.pop();
   }
 
 }

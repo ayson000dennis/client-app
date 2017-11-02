@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, AlertController } from 'ionic-angular';
+import { Platform, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation'
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
@@ -23,8 +23,13 @@ declare var google: any;
 
 export class UserFindDealsMapPage {
   deals : string[];
+  business_deals: any[];
+  searched_business_deals: any[];
+  selected_location: any[];
 
-
+  //default location
+  default_lat: any = 34.0522;
+  default_lng: any = -118.24369999999999;
   //google map
   lat: any;
   lng: any;
@@ -36,7 +41,9 @@ export class UserFindDealsMapPage {
   markers = [];
   tempMarkers = [];
   mapResults = [];
-  selectedMapCenter: any;
+  selectedMapCenter: {address: any, location: any} = {
+    address: '', location: ''
+  };
 
   //place.icon
   googleMarker = {
@@ -68,63 +75,121 @@ export class UserFindDealsMapPage {
 
   constructor(
     public navCtrl: NavController,
+    public navParams: NavParams,
     public platform: Platform,
     private api : ApiService,
     private storage : Storage,
-
     public alertCtrl: AlertController,
     private geolocation: Geolocation,){
 
   }
 
   ionViewWillEnter(){
+
+    if($('#mapView').length == 0) {
+      var map_template = '<div #mapView id="mapView"></div>';
+      $(map_template).appendTo($('.scroll-content'));
+      this.initMap();
+    }
+
     var self = this;
+    this.selectedMapCenter.address = this.navParams.get('map_address');
+    this.business_deals = this.navParams.get('business_deals');
+
     $('#deal-location2').on('click', function() {
-      $('.locations-holder').css('visibility', 'visible');
+      $(this).select();
+      // $('.locations-holder').css('visibility', 'visible');
     });
 
-    $('.locations-holder').on('mousedown', function() {
-      self.getLocation();
+    // $('.locations-holder').on('mousedown', function() {
+    //   self.getLocation();
+    // });
+    //
+    // $('#deal-location2').on('blur', function() {
+    //   // self.selectFirstResult();
+    //   $('.locations-holder').css('visibility', 'hidden');
+    // });
+
+    $('#deal-location2').contextmenu(function() {
+      return false;
     });
 
-    $('#deal-location2').on('blur', function() {
-      $('.locations-holder').css('visibility', 'hidden');
-    });
-
-    self.selectedMapCenter = 'Los Angeles, CA'
   }
 
   ionViewDidLoad() {
-    this.initMap();
+    // this.initMap();
     var self = this;
     setTimeout(function(){
       self.initMap();
+      console.log('map initializing')
+      $("#searchBtn2").click();
     }, 650);
+    // this.initMap();
+  }
+
+  ionViewWillLeave() {
+    $('#mapView').remove();
   }
 
   initMap() {
 
     var self = this;
+    var map_center = this.navParams.get('map_center');
+    if(map_center !== '') {
+      console.log('map center not null')
+      var map_center = this.navParams.get('map_center');
+      var search_input = this.navParams.get('search_input');
 
-    this.storage.get('user_position').then(position => {
-      this.lat = position.lat;
-      this.lng = position.lng;
-      console.log(self.lat, self.lng)
-      this.storage.get('user_address').then(address => {
-        this.address = address
-        if(self.lat != null && self.lng != null) {
-          this.default_location = new google.maps.LatLng(34.0522, -118.2437);
-          $('#deal-location2').val(self.address);
-        } else {
-          this.default_location = new google.maps.LatLng(self.lat, self.lng);
-          $('#deal-location2').val('Los Angeles, CA');
-        }
+      this.default_location = map_center;
+      $('#deal-name2').val(search_input);
+      $('#deal-location2').val(this.selectedMapCenter.address);
+
+      if (search_input !== '') {
+        console.log('creating searched input')
+        var business_deals = this.navParams.get('business_deals');
+        setTimeout(function() {
+          self.createMarker(business_deals);
+        }, 1200);
+
+      } else {
+        console.log('creating all')
+        this.storage.get('all_business_deals').then(all_business_deals => {
+          setTimeout(() => {
+            this.createMarker(all_business_deals);
+          });
+        });
+      }
+    } else {
+      console.log('map center null')
+      this.storage.get('user_selected_latlng').then(position => {
+        this.lat = position.lat;
+        this.lng = position.lng;
+        this.storage.get('user_short_location').then(address => {
+          this.address = address
+          if(self.lat != null && self.lng != null) {
+            this.default_location = new google.maps.LatLng(self.lat, self.lng);
+            this.selectedMapCenter.address = self.address;
+            $('#deal-location2').val(self.address);
+          } else {
+            this.default_location = new google.maps.LatLng(34.0522, -118.2437);
+            $('#deal-location2').val('Los Angeles, CA');
+          }
+        });
       });
-    });
+      this.storage.get('all_business_deals').then(all_business_deals => {
+        setTimeout(() => {
+          this.createMarker(all_business_deals);
+        });
+      });
+      // var business_deals = this.navParams.get('business_deals');
+      // setTimeout(function() {
+      //   self.createMarker(business_deals);
+      // }, 1200)
+    }
 
     this.map = new google.maps.Map(document.getElementById('mapView'), {
       center: this.default_location,
-      zoom: 9
+      zoom: 10
     });
 
     this.geocoder = new google.maps.Geocoder;
@@ -140,8 +205,8 @@ export class UserFindDealsMapPage {
     var autocomplete = new google.maps.places.Autocomplete(location, options);
     autocomplete.bindTo('bounds', self.map);
 
-    var searchBox = new google.maps.places.SearchBox(deal);
-    searchBox.bindTo('bounds', self.map);
+    // var searchBox = new google.maps.places.SearchBox(deal);
+    // searchBox.bindTo('bounds', self.map);
 
     var marker = new google.maps.Marker({
       map: self.map,
@@ -150,119 +215,155 @@ export class UserFindDealsMapPage {
 
     autocomplete.addListener('place_changed', function() {
 
-      self.removeMarkers();
       var place = autocomplete.getPlace();
-      self.selectedMapCenter = place.formatted_address;
+      var city, state, country;
+      place.address_components.forEach(result => {
+        if(result.types[0]=="locality") {
+          city = result.long_name;
+        }
+        if(result.types[0]=="administrative_area_level_1") {
+          state = result.short_name;
+        }
+        if(result.types[0]=="country") {
+          country = result.long_name;
+        }
+      });
+      var location = city + ', ' + state + ', ' + country;
+
+      self.selectedMapCenter.address = location;
+      self.selectedMapCenter.location = place.geometry.location;
+
+      var selected_lat = place.geometry.location.lat();
+      var selected_lng = place.geometry.location.lng();
+      var user_selected_latlng = {lat: selected_lat, lng: selected_lng};
+
+      self.storage.set('user_selected_latlng', user_selected_latlng)
+      self.storage.set('user_short_location', location);
 
       if (!place.geometry) return;
 
       if (place.geometry.viewport) {
         self.map.setCenter(place.geometry.location);
         self.map.fitBounds(place.geometry.viewport);
-        self.map.setZoom(9);
+        self.map.setZoom(10);
       } else {
         self.map.setCenter(place.geometry.location);
       }
 
     });
 
-    searchBox.addListener('places_changed', function() {
-      self.mapResults = [];
-      var places = searchBox.getPlaces();
-      console.log(places)
-      if (places.length == 0) {
-       return;
-     }
-     // Clear out the old markers.
-     self.markers.forEach(marker => {
-       marker.setMap(null);
-     });
-     self.markers = [];
-
-     // For each place, get the icon, name and location.
-     var bounds = new google.maps.LatLngBounds();
-
-     var count = 1;
-     places.forEach(function(place, i) {
-       if (!place.geometry) {
-         console.log("Returned place contains no geometry");
-         return;
-       }
-
-       places[i].count =  count;
-       count++;
-       var photo = place.photos[i].getUrl({
-           'maxWidth' : 120,
-           'maxHeight' : 120
-       });
-
-       self.mapResults.push({
-         title: place.name,
-         address: place.formatted_address,
-         lat: place.geometry.location.lat(),
-         lng: place.geometry.location.lng(),
-         photo: photo,
-         type: 3
-       });
-
-       if (place.geometry.viewport) {
-         // Only geocodes have viewport.
-         bounds.union(place.geometry.viewport);
-       } else {
-         bounds.extend(place.geometry.location);
-       }
-     });
-     self.map.fitBounds(self.map);
-   });
+  //   searchBox.addListener('places_changed', function() {
+  //     self.mapResults = [];
+  //     var places = searchBox.getPlaces();
+  //     console.log(places)
+  //     if (places.length == 0) {
+  //      return;
+  //    }
+  //    // Clear out the old markers.
+  //    self.markers.forEach(marker => {
+  //      marker.setMap(null);
+  //    });
+  //    self.markers = [];
+   //
+  //    // For each place, get the icon, name and location.
+  //    var bounds = new google.maps.LatLngBounds();
+   //
+  //    var count = 1;
+  //    places.forEach(function(place, i) {
+  //      if (!place.geometry) {
+  //        console.log("Returned place contains no geometry");
+  //        return;
+  //      }
+   //
+  //      places[i].count =  count;
+  //      count++;
+  //      var photo = place.photos[i].getUrl({
+  //          'maxWidth' : 120,
+  //          'maxHeight' : 120
+  //      });
+   //
+  //      self.mapResults.push({
+  //        title: place.name,
+  //        address: place.formatted_address,
+  //        lat: place.geometry.location.lat(),
+  //        lng: place.geometry.location.lng(),
+  //        photo: photo,
+  //        type: 3
+  //      });
+   //
+  //      if (place.geometry.viewport) {
+  //        // Only geocodes have viewport.
+  //        bounds.union(place.geometry.viewport);
+  //      } else {
+  //        bounds.extend(place.geometry.location);
+  //      }
+  //    });
+  //    self.map.fitBounds(self.map);
+  //  });
 
   }
 
   createMarker(data) {
+
     var infowindow = new google.maps.InfoWindow();
     data.forEach(d => {
-      var position = new google.maps.LatLng(d.lat, d.lng);
-      var inBounds = this.map.getBounds().contains(position);
-      if (inBounds == true) {
-        if (d.business_type === '1') {
-          var icon = this.premiumMemberMarker;
-        }
-        else if (d.business_type === '2' || d.business_type === '0') {
-          var icon = this.memberMarker;
-        }
-        else {
-          var icon = this.googleMarker;
-        }
-        var marker = new google.maps.Marker({
-          map: this.map,
-          position: position,
-          icon: icon,
-          optimized: false
-        });
-        this.markers.push(marker);
+        var position = new google.maps.LatLng(d.lat, d.lng);
+        // var inBounds = this.map.getBounds().contains(position);
+        // if (inBounds == true) {
+          if (d.business_type === '1') {
+            var icon = this.premiumMemberMarker;
+          }
+          else if (d.business_type === '2' || d.business_type === '0') {
+            var icon = this.memberMarker;
+          }
+          else {
+            var icon = this.googleMarker;
+          }
+          var marker = new google.maps.Marker({
+            map: this.map,
+            position: position,
+            icon: icon,
+            optimized: false
+          });
 
-        if (d.photo !== undefined) {
-          this.thumb = d.photo;
-        } else {
-          this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
-        }
-        var address = d.city + ', ' + d.state + ', ' + d.country;
-        var template = d.company_name.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
+          this.markers.push(marker);
 
-        var content = '<div class="d-flex info-window"><div class="img-holder"><img src="'+this.thumb+'"/></div>' +
-                      '<div class="info-holder">' +
-                        '<div tappable (click)="getBusiness('+template+')"><h3>'+d.company_name+'</h3></div>' +
-                        '<p class="address-holder"><i class="fa fa-map-marker">'+address+'</p>' +
-                        '<p class="phone-holder><i class="fa fa-phone"></i>'+d.phone_number+'</p>'+
-                        '<p class="web-holder><i class="fa fa-globe"></i>'+d.company_website+'</p>'+
-                      '</div></div>';
-        marker.addListener('click', () => {
-          infowindow.close();
-          infowindow.setZIndex(9999);
-          infowindow.setContent(content);
-          infowindow.open(this.map, marker);
-        });
-      }
+          if (d.photo !== undefined) {
+            this.thumb = d.photo;
+          } else {
+            this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+          }
+          var self = this;
+          var address = d.city + ', ' + d.state + ', ' + d.country;
+          var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
+
+          var content = '<div class="d-flex info-window"><div class="img-holder"><img src="'+this.thumb+'"/></div>' +
+                        '<div class="info-holder">' +
+                          '<div tappable id="businessInfo"><h3>'+d.company_name+'</h3></div>' +
+                          '<p class="address-holder"><i class="fa fa-map-marker">'+d.address+'</p>' +
+                          '<p class="phone-holder><i class="fa fa-phone"></i>'+ d.phone_number+'</p>'+
+                          '<p class="web-holder><i class="fa fa-globe"></i>'+ d.company_website+'</p>'+
+                        '</div></div>';
+          marker.addListener('click', () => {
+            infowindow.close();
+            infowindow.setZIndex(9999);
+            infowindow.setContent(content);
+            infowindow.open(this.map, marker);
+
+            $('#businessInfo').on('click', function() {
+              self.getBusiness(template);
+            });
+
+          });
+
+        // }
     });
+
+    this.storage.get('user_selected_latlng').then(user_selected_latlng => {
+      var position = new google.maps.LatLng(user_selected_latlng.lat, user_selected_latlng.lng);
+      // this.map.setCenter(position);
+      this.map.panTo(position);
+    })
 
   }
 
@@ -279,9 +380,6 @@ export class UserFindDealsMapPage {
   removeMarkers() {
     this.setMapOnAll(null);
     this.markers = [];
-
-      console.log(this.markers)
-      console.log(this.map.center.lat(), this.map.center.lng())
   }
 
   getLocation() {
@@ -293,7 +391,7 @@ export class UserFindDealsMapPage {
 
       this.user_lat_lng = position;
 
-      this.storage.set('user_position', position);
+      this.storage.set('user_selected_latlng', position);
       this.geocodeLatLng();
 
     }).catch((error) => {
@@ -308,14 +406,65 @@ export class UserFindDealsMapPage {
       if (status === 'OK') {
         if (results[0]) {
           var address = results[0].formatted_address;
-          $('#deal-location').val(address);
-          self.storage.set('user_address', address);
+          var city, state, country;
+
+          results[0].address_components.forEach(result => {
+            if(result.types[0]=="locality") {
+              city = result.long_name;
+            }
+            if(result.types[0]=="administrative_area_level_1") {
+              state = result.short_name;
+            }
+            if(result.types[0]=="country") {
+              country = result.long_name;
+            }
+          });
+          var location = city + ', ' + state + ', ' + country;
+          $('#deal-location').val(location);
+          self.storage.set('user_short_location', location);
+          self.storage.set('user_long_location', address);
         } else {
           // window.alert('No results found');
         }
       } else {
         // window.alert('Geocoder failed due to: ' + status);
       }
+    });
+  }
+
+  selectFirstResult() {
+    var self = this;
+    var firstResult = $(".pac-container .pac-item:first").text();
+    this.geocoder.geocode({"address": firstResult}, function(results, status) {
+        if (status === 'OK') {
+          var address = results[0].formatted_address;
+          var city, state, country;
+          console.log(results[0])
+          results[0].address_components.forEach(result => {
+            if(result.types[0]=="locality") {
+              city = result.long_name;
+            }
+            if(result.types[0]=="administrative_area_level_1") {
+              state = result.short_name;
+            }
+            if(result.types[0]=="country") {
+              country = result.long_name;
+            }
+          });
+
+          var location = city + ', ' + state + ', ' + country;
+          var user_selected_latlng = {lat: results[0].geometry.location.lat(),  lng: results[0].geometry.location.lng()}
+
+          self.selectedMapCenter.address = location;
+          self.selectedMapCenter.location = results[0].geometry.location;
+
+          self.storage.set('user_short_location', location);
+          self.storage.set('user_long_location', address);
+          self.storage.set('user_selected_latlng', user_selected_latlng);
+
+          self.map.setCenter(results[0].geometry.location);
+          $('#deal-location2').val(location);
+        }
     });
   }
 
@@ -330,9 +479,20 @@ export class UserFindDealsMapPage {
         $('.alert-holder').fadeOut();
       }, 3000);
     } else {
-      $('#deal-location2').val(this.selectedMapCenter);
-      var user_input = $('#deal-name').val();
+      this.selectFirstResult();
 
+      var spinner = '<i class="fa fa-spinner fa-spin"></i>';
+
+      $('.btn-search-deals').prop('disabled', true);
+      // $('.fa.fa-search').hide();
+      // $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
+
+      var loader = '<div id="mapLoader"><div class="icon-holder"><i class="fa fa-spinner fa-spin"></i></div></div>';
+      $(loader).appendTo('#mapView');
+      $('#mapView div').first().css('opacity', 0.3);
+
+      $('#deal-location2').val(this.selectedMapCenter.address);
+      var user_input = $('#deal-name2').val();
       if (user_input !== '') {
         var businessApi = this.api.Business.business_deals_search(user_input);
         console.log(user_input);
@@ -342,30 +502,35 @@ export class UserFindDealsMapPage {
       }
 
       businessApi.then(business => {
-        console.log(business.hits.hits)
+
+        this.searched_business_deals = business.hits.hits;
+
         var businessHolder = business.hits.hits;
-        console.log(businessHolder)
+
         businessHolder.forEach(bus => {
           this.mapResults.push(bus._source)
         });
+
         this.createMarker(this.mapResults);
         console.log(this.mapResults);
+
+        $('.btn-search-deals').prop('disabled', false);
+        // $('.fa.fa-search').show();
+        // $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+
+        $('#mapLoader').remove();
+        $('#mapView div:first-of-type').css('opacity', 1);
+
       });
     }
   }
 
   getBusiness(template) {
-      const alert = this.alertCtrl.create({
-        title: 'Coming Soon',
-        subTitle: 'This feature is under construction right now. Check back soon!',
-        buttons: ['Dismiss']
-      });
-      alert.present();
-    // console.log(template)
-    // this.navCtrl.push(UserDealsPage, {template: template}, {
-    //   animate: true,
-    //   direction: 'forward'
-    // });
+    console.log(template)
+    this.navCtrl.push(UserDealsPage, {template: template}, {
+      animate: true,
+      direction: 'forward'
+    });
   }
 
   goHome() {
@@ -404,9 +569,17 @@ export class UserFindDealsMapPage {
   }
 
   goListView() {
-    this.navCtrl.setRoot(UserFindDealsPage, {}, {
-      animate: true,
-      direction: 'back'
-    });
+    this.search.input = $('#deal-name2').val();
+    this.navCtrl.setRoot(UserFindDealsPage,
+      {
+        'business_deals': this.business_deals,
+        'searched_business_deals': this.searched_business_deals,
+        'search_input': this.search.input
+      },
+      {
+        animate: true,
+        direction: 'back'
+        }
+    );
   }
 }

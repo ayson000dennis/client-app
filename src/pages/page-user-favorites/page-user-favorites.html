@@ -12,8 +12,14 @@
       <div class="favorites media" *ngFor="let favorite of favorites; let i = index">
         <div class="col-xs-8">
           <div class="img-holder" tappable (click)="getBusiness(favorite)">
-            <!-- <img class="d-flex mr-3" [src]="favorite.photo.url" alt=""> -->
-            <img class="d-flex mr-3" src="https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww" alt="">
+            <div *ngIf="favorite.business_id[0].files?.length !== 0; then hasPhoto else noPhoto"></div>
+            <ng-template #hasPhoto>
+              <img class="d-flex mr-3" [src]="favorite.business_id[0].files[0]?.url" alt="">
+            </ng-template>
+            <ng-template #noPhoto>
+              <img class="d-flex mr-3" src="https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww" alt="">
+            </ng-template>
+            <!-- <img class="d-flex mr-3" [src]="[favorite.business_id[0].files.length !== 0 ? "{{favorite.business_id[0].files[0].url}}" : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww']" alt=""> -->
           </div>
           <div class="text-holder media-body" tappable (click)="getBusiness(favorite)">
             <h3 class="title-text">{{favorite.business_id[0].company_name}}</h3>
@@ -34,7 +40,7 @@
 
     <ng-template #noFavorites>
       <div class="no-favorites-holder">
-        <h3>No data to display.</h3>
+        <h4>Once you favorite a business, it will show up here!</h4>
       </div>
     </ng-template>
 

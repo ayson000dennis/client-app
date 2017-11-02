@@ -9,22 +9,23 @@
 
   <div class="jumbotron search-banner">
     <form class="form-inline form-search-deals text-center">
-      <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals">
+      <input type="text" class="form-control" id="deal-name2" placeholder="Search GoPage Deals">
       <label>
         <span class="fa fa-map-marker"></span>
         <input type="text" class="form-control" id="deal-location2" placeholder="Los Angeles, CA">
+        <div class="locations-holder">
+          <div class="location-holder" id="getLocation">
+            <ul>
+              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>
+            </ul>
+          </div>
+        </div>
       </label>
       <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>
-      <button class="fa fa-search btn-search-deals" type="submit" (click)="searchBusinessDeals()"></button>
+      <button class="btn-search-deals" type="submit" id="searchBtn2" (click)="searchBusinessDeals()">
+        <i class="fa fa-search"></i>
+      </button>
     </form>
-  </div>
-
-  <div class="locations-holder">
-    <div class="location-holder" id="getLocation">
-      <ul>
-        <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>
-      </ul>
-    </div>
   </div>
 
   <nav id="filter-sort-map" class="navbar navbar-light">

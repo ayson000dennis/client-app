@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Http }  from '@angular/http';
+import { Headers, URLSearchParams, Http }  from '@angular/http';
 import Config from '../app/config';
 import "rxjs/Rx";
 import * as $ from "jquery";
@@ -9,13 +9,27 @@ export class ApiService {
     private http :Http
     ) { }
 
-  private username = "gopage";
-  private password = "gopage321";
-  private userAuth = btoa(this.username + ":" + this.password);
+  private userAuth = btoa(Config.elasticUsername + ":" + Config.elasticPassword);
 
   getHeaders() {
     return new Headers({'Authorization': 'Basic ' + this.userAuth});
   }
+
+  categoryQuery(data) {
+  let category = {
+                  "sort" : [
+                      { "business_type.keyword" : "desc"},
+                      "_score"
+                  ],
+                  "query" : {
+                      "match_phrase": {
+                        "business_category" : data
+                      }
+                  }
+                };
+
+  return category;
+}
 
   Users = {
 		user: (userId: string) => {
@@ -28,17 +42,31 @@ export class ApiService {
   Business = {
 
     business_deals_search: (input) => {
-          return this.http.get(Config.ElasticSearch + "business/_search?size=300&q=" + input, {
+          return this.http.get(Config.ElasticSearch + "business/list/_search?size=1000&q=" + input, {
             headers : this.getHeaders()}).map(response => {
             return response.json();
           }).toPromise();
     },
 
     business_deals_list: () => {
-          return this.http.get(Config.ElasticSearch + "business/_search?size=300", {
+          return this.http.get(Config.ElasticSearch + "business/list/_search?size=1000", {
             headers : this.getHeaders()}).map(response => {
               return response.json();
           }).toPromise();
+    },
+
+    business_deals_category: (input, category) => {
+      let url;
+      if (input !== '') {
+        url = "business/list/_search?size=1000&q=" + input;
+      } else {
+        url = "business/list/_search?size=1000";
+      }
+      return this.http.post(Config.ElasticSearch + url , JSON.stringify(this.categoryQuery(category)), {
+        headers : this.getHeaders()
+      }).map(response => {
+        return response.json();
+      }).toPromise();
     },
 
     business_deal: (template) => {
@@ -49,6 +77,12 @@ export class ApiService {
 
     business: (business_name) => {
       return this.http.get(Config.baseUrl + "api/deals/business/" + business_name).map(response =>{
+          return response.json();
+      }).toPromise();
+    },
+
+    business_view: (id) => {
+      return this.http.get(Config.baseUrl + "api/business/view/" + id).map(response =>{
           return response.json();
       }).toPromise();
     },
@@ -136,37 +170,27 @@ export class ApiService {
   }
 
 
-    Message = {
-      business_list: (user_id: string) => {
-        return this.http.get(Config.baseUrl + "api/business_owners/list/" + user_id ).map(response => {
-          return response.json();
-        }).toPromise();
-      },
-      room_list: (shop_id: string) => {
-        return this.http.get(Config.baseUrl + "api/business_owners/rooms/" + shop_id, {}).map(response => {
-          return response.json();
-        }).toPromise();
-      },
-      members_room: (members: any) => {
-        return this.http.post(Config.ChatBaseUrl + "api/rooms/list", {data : members}).map(response => {
-          return response.json();
-        }).toPromise();
-      },
-      update_read: (room_id: string, message_by: string) => {
-        return this.http.post(Config.ChatBaseUrl + "api/chats/update_read/" + room_id + "/" + message_by, {}).map(response => {
-          return response.json();
-        }).toPromise();
-      },
-      fetch_chats: (room_id: string) => {
-        return this.http.get(Config.ChatBaseUrl + "api/inbox/members/" + room_id ).map(response => {
-          return response.json();
-        }).toPromise();
-      },
-      fetch_last_chat: (room_id: string) => {
-        return this.http.get(Config.ChatBaseUrl + "api/inbox_last_chat/members/").map(response => {
-          return response.json();
-        }).toPromise();
-      }
+  Message = {
+    business_list: (user_id: string) => {
+      return this.http.get(Config.baseUrl + "api/business_owners/list/" + user_id ).map(response => {
+        return response.json();
+      }).toPromise();
+    },
+    room_list: (user_id: string) => {
+      return this.http.get(Config.baseUrl + "api/business_owners/rooms/" + user_id, {}).map(response => {
+        return response.json();
+      }).toPromise();
+    },
+    update_read: (room_id: string, message_by: string) => {
+      return this.http.post(Config.ChatBaseUrl + "api/chats/update_read/" + room_id + "/" + message_by, {}).map(response => {
+        return response.json();
+      }).toPromise();
+    },
+    fetch_chats: (room_id: string) => {
+      return this.http.get(Config.ChatBaseUrl + "api/chats/list/" + room_id ).map(response => {
+        return response.json();
+      }).toPromise();
     }
+  }
 
 }

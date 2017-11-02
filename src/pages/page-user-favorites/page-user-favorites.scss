@@ -48,6 +48,15 @@ page-user-favorites {
     .favorites-holder {
       margin-top: -20px;
 
+      .no-favorites-holder {
+        h4 {
+          font-family: "Raleway Regular";
+          line-height: 1.5;
+          color: #b7b7b7;
+          text-align: center;
+        }
+      }
+
       .page-title {
         color: #555;
         font-size: 25px;
@@ -104,7 +113,7 @@ page-user-favorites {
             margin: 5px auto;
           }
 
-          .fa-chevron-right {
+          .fa {
             position: absolute;
             top: 30px;
             right: 5px;
@@ -112,6 +121,10 @@ page-user-favorites {
             color: #b1b1b1 !important;
 
             cursor: pointer;
+
+            @media screen and (max-width: 380px) {
+              top: 45px;
+            }
           }
         }
 

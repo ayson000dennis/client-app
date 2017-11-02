@@ -1,25 +1,31 @@
 page-user-inbox {
-  ion-header {
-    ion-navbar {
-      .toolbar {
-        &.statusbar-padding {
-          &:first-child {
-            padding-top: 35px !important;
-          }
-        }
-      }
 
-      .back-button {
-        display: none !important;
-      }
+  .loader {
+    position: absolute;
+    top: 30%;
+    left: 45vw;
 
-      i.fa {
-        position: absolute;
-        top: 20px;
-        font-size: 30px;
-        color: #b1b1b1 !important;
+    font-size: 11vw;
+    color: #a4c73a;
+  }
 
-        cursor: pointer;
+  .show-back-button {
+    display: none !important;
+  }
+
+  ion-header + ion-content > div.scroll-content {
+    padding: 0px !important;
+
+    background-color: transparent !important;
+  }
+
+  ion-navbar {
+      .back-btn-new {
+        background-color: transparent;
+        float: left;
+        margin-left: 15px;
+        font-size: 32px;
+        color: #c8c7cc;
       }
 
       .page-title {
@@ -32,42 +38,27 @@ page-user-inbox {
         color: #757575;
       }
 
-      &.toolbar-ios {
-        .toolbar-content-ios {
-          i {
-            top: 24px;
-          }
-        }
+      i.fa {
+        position: absolute;
+        top: 20px;
+        font-size: 30px;
+        color: #b1b1b1 !important;
+
+        cursor: pointer;
       }
+  }
+
+  ion-content {
+    h5 {
+      color: #757575;
+      line-height: 1.5;
+      color: #b7b7b7;
+      text-align: center;
+      font-family: "Raleway Regular";
+      font-size: 25px;
     }
   }
 
-  ion-header + ion-content > div.scroll-content {
-    padding: 0px !important;
-
-    background-color: transparent !important;
-  }
-
-  .show-back-button {
-    display: none !important;
-  }
-
-  .hidden {
-    display: none;
-  }
-
-  .visible {
-    display: block;
-  }
-
-  .loader {
-    position: absolute;
-    top: 30%;
-    left: 45vw;
-
-    font-size: 11vw;
-    color: #a4c73a;
-  }
 
   #inbox-list {
 
@@ -103,7 +94,7 @@ page-user-inbox {
       width: 200px;
       overflow: hidden;
       font-size: 13px;
-      text-transform: capitalize;
+      text-transform: none;
       margin-top: 10px;
       color: grey;
     }
@@ -120,6 +111,9 @@ page-user-inbox {
       font-size: 15px;
       text-transform: capitalize;
       color: grey;
+      width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .message {

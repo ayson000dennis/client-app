@@ -49,13 +49,12 @@ export class UserLoyaltyCardsPage {
 
   ionViewWillEnter() {
     this.storage.get('user').then(user => {
-      console.log(user._id)
+      // console.log(user)
        this.api.Loyalties.business(user._id).then(loyalty => {
         //  console.log(loyalty)
         this.loyalties = loyalty;
         this.hasData = true
-
-        console.log(this.loyalties.length);
+        // console.log(loyalty[0].busines)
       });
     });
   }

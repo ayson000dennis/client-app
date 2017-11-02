@@ -2,6 +2,7 @@ import { NavController,NavParams } from 'ionic-angular';
 import { LoginPage } from '../page-login/page-login';
 import { MenuPage } from '../page-menu/page-menu';
 import { UserInboxPage } from '../page-user-inbox/page-user-inbox';
+import { UserDealsPage } from '../page-user-deals/page-user-deals';
 
 import { Storage } from '@ionic/storage';
 
@@ -28,15 +29,18 @@ export class UserChatPage {
   chatBox: string;
   room_id: string;
   btnEmitter: EventEmitter<string>;
-  user: string[];
+  // user: string[];
+
+  hasData : boolean = false;
+  hasLeave : boolean = false;
+  isRefetch : boolean = false;
+  message_by : string;
+
+  pages: Array<{title: string, component: any}>;
 
   private businessDetail;
   private userDetail;
-  hasData : boolean = false;
-  hasLeave : boolean = false;
-  hasNewMsg : boolean = false;
-
-  pages: Array<{title: string, component: any}>;
+  private previousPage;
 
   constructor(
     public navCtrl: NavController,
@@ -49,52 +53,70 @@ export class UserChatPage {
 
     this.businessDetail = this.navParams.get("businessDetail");
     this.userDetail = this.navParams.get("userDetail");
+    this.previousPage = this.navParams.get("previousPage");
 
     this.btnEmitter = new EventEmitter<string>();
     this.messages = [];
     this.chatBox = "";
-    this.room_id = this.userDetail._id + this.businessDetail._id
+    this.room_id = this.userDetail._id + this.businessDetail._id;
     this.init();
-
-    // console.log(this.businessDetail);
-    // console.log(this.userDetail);
   }
 
   ionViewWillEnter() {
+
     this.socketService.connect();
     this.socketService.joinRoom(this.room_id);
+
+    this.fetchChats();
+    this.updateRead();
   }
 
   ionViewDidLoad(){
-    this.fetchChats();
-     this.updateRead();
+
   }
 
   ionViewWillLeave() {
     this.socketService.disconnect();
     this.hasLeave = true;
+    this.hasData = false;
   }
 
  fetchChats(){
 
-   // GET MESSAGES FROM DATABASE
+  //  GET MESSAGES FROM DATABASE
    this.api.Message.fetch_chats(this.room_id).then(chats => {
+     console.log('fetching chats...');
+
      if(this.hasLeave){
        return;
      }
 
-     if(this.hasNewMsg && !this.hasData){
-       this.hasNewMsg = false;
-       console.log('load again')
-       return this.fetchChats();
-     }
+    //  if(this.message_by === 'business' && !this.hasData) {
+    //    this.message_by = '';
+    //    console.log('load again');
+    //    return this.fetchChats();
+    //  }
 
-     this.messages = chats;
-     this.hasData = true;
-     console.log('Chats loaded')
+    if(!this.isRefetch) {
 
-    $('body').find('.fa.loader').remove();
-    this.scrollToBottom();
+      this.isRefetch = true;
+
+      console.log('Refetching inbox data...');
+
+      return this.fetchChats();
+    } else {
+
+      this.messages = chats;
+
+      this.hasData = true;
+
+      this.scrollToBottom();
+
+      $('body').find('.fa.loader').remove();
+
+      console.log('Inbox data loaded');
+    }
+
    }).catch((error) => {
        console.log(error);
    });
@@ -110,13 +132,19 @@ export class UserChatPage {
   init() {
     // Get real time message response
     this.socketService.messages.subscribe((chatMessage: ChatMessage) => {
+
+      this.message_by = chatMessage.message_by;
+
       this._zone.run(() => {
+
+        // this.fetchChats();
+
         this.messages.push(chatMessage);
+        this.scrollToBottom();
+        this.updateRead();
+
       });
 
-      this.hasNewMsg = true;
-
-     this.scrollToBottom();
     });
   }
 
@@ -156,9 +184,9 @@ export class UserChatPage {
   }
 
   goToInbox() {
-    this.navCtrl.push(UserInboxPage, {
+    this.navCtrl.setRoot(UserInboxPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'back'
     });
   }
 

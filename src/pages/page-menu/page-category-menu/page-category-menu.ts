@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 //database service
 import { ApiService } from '../../../service/api.service.component';
 import { UserFindDealsPage } from '../../page-user-find-deals/page-user-find-deals';
@@ -20,29 +20,42 @@ export class CategoryMenuPage {
     hasData :boolean = false;
     private first_word = [];
 
+    filtered_business_deals: any[];
+
   constructor(
     public navCtrl: NavController,
-    private api: ApiService
+    private api: ApiService,
+    public navParams: NavParams,
     ) {
   }
 
   ionViewWillEnter(){
-      this.api.BusinessCategory.business_category().then(business_category =>{
+    console.log('asdasdasdasdasd')
+      this.api.BusinessCategory.business_category().then(business_category => {
+        business_category.forEach(business => {
+          console.log(business)
+          let category = business.name;
+          let cat = category.split(/[ ,]+/);
+          this.first_word.push(cat[0].toLowerCase());
+        });
         this.business_category = business_category;
         this.hasData = true;
-        business_category.forEach(business => {
-          let category = business.name;
-          let chena = category.split(/[ ,]+/);
-          this.first_word.push(chena[0].toLowerCase());
-        });
-        console.log(this.first_word);
-        this.first_word.forEach(first_word => {
-          console.log(first_word);
-          this.business_category.push(first_word);
-          console.log(business_category);
-        });
+
+        // business_category.forEach(business => {
+        //   let category = business.name;
+        //   let cat = category;
+        //   this.category.push(cat);
+        // });
+        // this.category.forEach(cat => {
+        //   this.business_category.push(cat);
+        // });
+
+        // this.first_word.forEach(first_word => {
+        //   this.business_category.push(first_word);
+        // });
 
       });
+
   }
 
   seeAll() {
@@ -52,25 +65,15 @@ export class CategoryMenuPage {
     });
   }
 
-  goFilterBusiness(business_name){
-    // console.log(business_category);
-    var business_category =  {
-        'category': business_name,
-        'sort' : '1'
-    };
-    var filtered = [];
-    this.api.BusinessCategoryFilter.business_category_filter(business_category).then(business_filter =>{
-          this.business_filter_data = business_filter;
-          business_filter.forEach(filter =>{
-              if(filter.business_id.length !==0){
-                  filtered.push(filter)
-              }
-          });
+  goFilterBusiness(business_cat){
+    var input = this.navParams.get('user_input');
 
-          this.navCtrl.setRoot(UserFindDealsPage, { business_category: filtered }, {
-            animate: true,
-            direction: 'back'
-          });
+    this.api.Business.business_deals_category(input, business_cat).then(businesses => {
+      console.log(businesses)
+      this.navCtrl.setRoot(UserFindDealsPage, { user_input: input, filtered_business_deals: businesses.hits.hits, business_cat: business_cat }, {
+        animate: true,
+        direction: 'back'
+      });
     });
 
   }

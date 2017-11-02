@@ -4,16 +4,17 @@ import { NavController } from 'ionic-angular';
 import { Platform, MenuController, Nav } from 'ionic-angular';
 
 import { SliderPage } from '../pages/page-slider/page-slider';
+import { DashboardPage } from '../pages/page-dashboard/page-dashboard';
 import { UserFindDealsPage } from '../pages/page-user-find-deals/page-user-find-deals';
 import { UserMembershipCardPage } from '../pages/page-user-membership-card/page-user-membership-card';
 import { SignupMobilePage } from '../pages/page-signup-mobile/page-signup-mobile';
 import { UserLoyaltyCardDealsPage } from '../pages/page-user-loyalty-card-deals/page-user-loyalty-card-deals';
-import { UserLoyaltyCardsPage } from '../pages/page-user-loyalty-cards/page-user-loyalty-cards';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
+import { Storage } from '@ionic/storage';
 import {Keyboard} from "@ionic-native/keyboard";
 import {DatabaseService} from '../providers/database.service';
 import {Sql} from '../providers/sql';
@@ -30,7 +31,7 @@ export class MyApp {
   @ViewChild('nav') nav: NavController;
 
   // make SliderPage the root (or first) page
-   public rootPage: any = SliderPage;
+   public rootPage: any;
   //public rootPage: any = UserFindDealsPage;
   pages: Array<{title: string, component: any}>;
 
@@ -40,15 +41,27 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public screenOrientation: ScreenOrientation,
-    public keyboard:Keyboard
+    public keyboard:Keyboard,
+    public storage: Storage
   ) {
     platform.ready().then(() => {
       if ($(window).width() <= 768) {
-        this.screenOrientation.lock(screenOrientation.ORIENTATIONS.PORTRAIT);
+        this.screenOrientation.lock(screenOrientation.ORIENTATIONS.PORTRAIT).catch(err => {
+          console.log(err)
+        });
       }
     });
 
     this.initializeApp();
+
+    this.storage.get("user").then(user => {
+      if(user !== null) {
+        this.rootPage = DashboardPage;
+      } else {
+        this.rootPage = SliderPage;
+      }
+    });
+
 
     // set our app's pages
     // this.pages = [

@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import {InAppBrowser} from "@ionic-native/in-app-browser";
 import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
@@ -125,6 +126,7 @@ import {Keyboard} from "@ionic-native/keyboard";
   ],
   providers: [
     StatusBar,
+    InAppBrowser,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ScreenOrientation,

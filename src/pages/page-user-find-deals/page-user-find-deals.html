@@ -10,22 +10,23 @@
   <div class="jumbotron search-banner">
     <form class="form-inline form-search-deals text-center">
       <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">
-      <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;">
+      <!-- <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;"> -->
       <label>
         <span class="fa fa-map-marker"></span>
         <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">
+        <div class="locations-holder">
+          <div class="location-holder" id="getLocation">
+            <ul>
+              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>
+            </ul>
+          </div>
+        </div>
       </label>
       <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>
-      <button class="fa fa-search btn-search-deals" type="submit" (click)="searchBusinessDeals()"></button>
+      <button class="btn-search-deals" type="submit" id="searchBtn" (click)="searchBusinessDeals()">
+        <i class="fa fa-search"></i>
+      </button>
     </form>
-  </div>
-
-  <div class="locations-holder">
-    <div class="location-holder" id="getLocation">
-      <ul>
-        <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>
-      </ul>
-    </div>
   </div>
 
   <nav id="filter-sort-map" class="navbar navbar-light">
@@ -45,8 +46,8 @@
   <div class="categories-header">
     <div class="row">
       <div class="col">
-        <p class="deals-counter" style="visibility: hidden;">
-          <span class="deals-found"></span> out of <span class="deals-total"></span> deals
+        <p class="deals-category">
+          <span id="selected-category"></span>
         </p>
         <ion-item>
           <ion-label> Show Image</ion-label>
@@ -63,7 +64,7 @@
         <div class="row">
           <div class="col categories-result" *ngIf="hasData">
 
-            <div *ngIf="business_deals.length === 0; then noData else hasData"></div>
+            <div *ngIf="business_deals?.length === 0; then noData else hasData"></div>
             <ng-template #noData>
               <div class="no-data-holder">
                 <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">
@@ -77,7 +78,7 @@
                 <ng-template #hasDeal>
                   <!-- <span class="hasdeal-holder" *ngFor="let deal of business.deal_id"> -->
                     <div class="hasdeal-template">
-                      <div class="col-xs-8" tappable (click)="getBusiness(business.deal_id[0].template)">
+                      <div class="col-xs-8" tappable (click)="getBusiness(business)">
                         <a class="deal-thumbnail" *ngIf="toggleImage">
                           <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{business.deal_id[0].template}}">
                         </a>
@@ -96,7 +97,7 @@
                           <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>
                           <ng-template #notFavorite>
                             <div class="claim-btn-holder">
-                              <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business.u_id)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                              <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
                               <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
                             </div>
                           </ng-template>
@@ -116,7 +117,7 @@
                     </a>
                     <div class="media-body align-self-center">
                       <a class="business-link">{{business.company_name}}</a>
-                      <p class="business-address">{{business.country}}, {{business.state}}</p>
+                      <p class="business-address">{{business.address}}</p>
                     </div>
                   </div>
 
@@ -125,7 +126,7 @@
                       <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>
                       <ng-template #notFavorite>
                         <div class="claim-btn-holder">
-                          <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business.u_id)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                          <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
                           <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
                         </div>
                       </ng-template>
