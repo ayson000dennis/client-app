@@ -71,13 +71,32 @@
               </div>
             </ng-template>
             <ng-template #hasData>
-              <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let business of business_deals | slice:0:slice; let i=index">
+              <div class="deal media {{toggleImage ? 'toggled' : ''}}" *ngFor="let business of business_deals | slice:0:slice; let i = index">
                 <span *ngIf="business.deal_id.length !== 0; then hasDeal else noDeal "></span>
 
                 <!-- has deal -->
                 <ng-template #hasDeal>
-                  <!-- <span class="hasdeal-holder" *ngFor="let deal of business.deal_id"> -->
-                    <div class="hasdeal-template">
+                  <div class="hasdeal-template">
+                    <div *ngIf="business.featured_deal !== undefined; then hasFeatured else noFeatured"></div>
+
+                    <ng-template #hasFeatured>
+                      <div class="col-xs-8" tappable (click)="getBusiness(business)">
+                        <a class="deal-thumbnail" *ngIf="toggleImage">
+                          <img class="d-flex mr-3" src="{{business.featured_deal.photo.url !== unknown ? business.featured_deal.photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{business.featured_deal.template}}">
+                        </a>
+                        <div class="media-body align-self-center">
+                          <a class="business-link">{{business.company_name}}</a>
+                          <p class="business-address">{{business.country}}, {{business.state}}</p>
+                          <a class="deal-title">
+                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.featured_deal.template}}</h6>
+                          </a>
+                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.featured_deal.end_date | date: 'MM/dd/yyyy'}}</p>
+                        </div>
+
+                      </div>
+                    </ng-template>
+
+                    <ng-template #noFeatured>
                       <div class="col-xs-8" tappable (click)="getBusiness(business)">
                         <a class="deal-thumbnail" *ngIf="toggleImage">
                           <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{business.deal_id[0].template}}">
@@ -90,23 +109,39 @@
                           </a>
                           <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: 'MM/dd/yyyy'}}</p>
                         </div>
+
+                      </div>
+                    </ng-template>
+
+                    <!-- <div class="col-xs-8" tappable (click)="getBusiness(business)">
+                      <a class="deal-thumbnail" *ngIf="toggleImage">
+                        <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww'}}" alt="{{business.deal_id[0].template}}">
+                      </a>
+                      <div class="media-body align-self-center">
+                        <a class="business-link">{{business.company_name}}</a>
+                        <p class="business-address">{{business.country}}, {{business.state}}</p>
+                        <a class="deal-title">
+                          <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>
+                        </a>
+                        <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: 'MM/dd/yyyy'}}</p>
                       </div>
 
-                      <div class="col-xs-4">
-                        <div class="deals-button">
-                          <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>
-                          <ng-template #notFavorite>
-                            <div class="claim-btn-holder">
-                              <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
-                              <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
-                            </div>
-                          </ng-template>
-                          <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>
-                          <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>
-                        </div>
+                    </div> -->
+
+                    <div class="col-xs-4">
+                      <div class="deals-button">
+                        <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>
+                        <ng-template #notFavorite>
+                          <div class="claim-btn-holder">
+                            <a class="btn btn-claim" [attr.id]="'addToFavorite'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>
+                            <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>
+                          </div>
+                        </ng-template>
+                        <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>
+                        <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>
                       </div>
                     </div>
-                  <!-- </span> -->
+                  </div>
                 </ng-template>
 
                 <!-- no deal -->

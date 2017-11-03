@@ -10,6 +10,8 @@
 
     <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null || business.operations.length === 0;"></div>
 
+    <!-- <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null"></div> -->
+
     <div class="slider-holder" [hidden]="!business.deal_id.length || !business.files.length">
       <div *ngIf="business?.files.length === 1; then oneImg else manyImgs"></div>
       <ng-template #manyImgs>
@@ -40,9 +42,9 @@
 
       <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>
       <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>
-    </div> -->
+    </div>
 
-    <!-- <nav id="business-actions" class="navbar navbar-light">
+     <nav id="business-actions" class="navbar navbar-light">
       <ul class="nav nav-tabs">
         <li class="nav-item">
           <a class="nav-link"><i class="fa fa-map-o"></i> Directions</a>

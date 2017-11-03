@@ -29,6 +29,7 @@ export class UserDealsPage {
   deals : string[];
   hasData :boolean = false;
   user : any[];
+  favorites : any;
   operations  : string[];
   template : any;
   operatingHours = [];
@@ -39,26 +40,26 @@ export class UserDealsPage {
   room_id: string;
 
   //place.icon
-  googleMarker = {
-    url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
-    size: new google.maps.Size(50, 50),
-    origin: new google.maps.Point(0, 0),
-    scaledSize: new google.maps.Size(48, 50)
-  };
-
-  memberMarker = {
-    url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
-    size: new google.maps.Size(50, 50),
-    origin: new google.maps.Point(0, 0),
-    scaledSize: new google.maps.Size(48, 50)
-  };
-
-  premiumMemberMarker = {
-    url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
-    size: new google.maps.Size(50, 50),
-    origin: new google.maps.Point(0, 0),
-    scaledSize: new google.maps.Size(48, 50)
-  };
+  // googleMarker = {
+  //   url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
+  //   size: new google.maps.Size(50, 50),
+  //   origin: new google.maps.Point(0, 0),
+  //   scaledSize: new google.maps.Size(48, 50)
+  // };
+  //
+  // memberMarker = {
+  //   url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
+  //   size: new google.maps.Size(50, 50),
+  //   origin: new google.maps.Point(0, 0),
+  //   scaledSize: new google.maps.Size(48, 50)
+  // };
+  //
+  // premiumMemberMarker = {
+  //   url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
+  //   size: new google.maps.Size(50, 50),
+  //   origin: new google.maps.Point(0, 0),
+  //   scaledSize: new google.maps.Size(48, 50)
+  // };
 
   //in app browser option
   private iabOptions: InAppBrowserOptions = {
@@ -101,47 +102,62 @@ export class UserDealsPage {
     this.slider.slidePrev();
   }
 
-  getUser() {
-    this.storage.get('user').then(user =>{
-      this.user = user;
-    });
-  }
-
   ionViewWillEnter(){
     this.business = this.navParams.get('business');
-    var days = this.business.operations;
-    if (this.business.operations[0] === '0') {
-      console.log(this.business.operations)
-    } else if (this.business.operations[0] === '2') {
-      console.log(this.business.operations)
-    } else if (this.business.operations[0] === '1') {
-      console.log(this.business.operations)
-    } else {
-      days.forEach((day, i) => {
-        var d = Object.keys(day)[0];
+    if(this.business.operations){
 
-        var work = {
-          dayCount: i+1,
-          day: d,
-          start: eval("day." + d + ".start"),
-          end: eval("day." + d + ".end"),
-          isClosed: eval("day." + d + ".isChecked")
-        }
-        this.operatingHours.push(work);
-      });
+      var days = this.business.operations;
+      if (this.business.operations[0] === '0') {
+        //Do something
+      } else if (this.business.operations[0] === '2') {
+        //Do something
+      } else if (this.business.operations[0] === '1') {
+        //Do something
+      } else {
+        days.forEach((day, i) => {
+          var d = Object.keys(day)[0];
 
-      this.operatingHours.forEach(operations => {
-        var today = new Date().getDay();
-        if(operations.dayCount === today) {
-          this.currentDay.push(operations);
-        }
-      });
-      console.log(this.business.operations)
+          var work = {
+            dayCount: i+1,
+            day: d,
+            start: eval("day." + d + ".start"),
+            end: eval("day." + d + ".end"),
+            isClosed: eval("day." + d + ".isChecked")
+          }
+          this.operatingHours.push(work);
+        });
+
+        this.operatingHours.forEach(operations => {
+          var today = new Date().getDay();
+          if(operations.dayCount === today) {
+            this.currentDay.push(operations);
+          }
+        });
+        console.log(this.business.operations)
+      }
     }
 
     if (this.business !== null) {
       this.hasData = true;
     }
+    this.getFavorites();
+  }
+
+  getFavorites() {
+    this.storage.get('user').then(user =>{
+      this.api.Favorites.favorite_list(user._id).then(favorites => {
+        this.favorites = favorites;
+        if(this.hasData) {
+          this.favorites.forEach(favorite => {
+            // this.business.forEach((business, i) => {
+              if(this.business._id === favorite.business_id[0]._id){
+                this.business.is_favorite = true;
+              }
+            // });
+          });
+        }
+      });
+    });
   }
 
   addToFavorites(business) {
@@ -189,31 +205,16 @@ export class UserDealsPage {
 
   viewMap(address, state, zip) {
     var map_url = 'https://www.google.com/maps/place/';
-    // if (shop_url !== "") {
-    //   this.iab.create(shop_url, '_blank', this.iabOptions);
-    // } else {
-      this.iab.create(map_url + address + ',' + state + ',' + zip, '_blank', this.iabOptions);
-    // }
+    this.iab.create(map_url + address + ',' + state + ',' + zip, '_blank', this.iabOptions);
   }
 
   ionViewDidLoad() {
-  }
-
-  ionViewWillLeave() {
-    $('#mapView').remove();
   }
 
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
       direction: 'back'
-    });
-  }
-
-  showMenu() {
-    this.navCtrl.push(MenuPage, {
-      animate: true,
-      direction: 'forward'
     });
   }
 
@@ -250,7 +251,6 @@ export class UserDealsPage {
     });
 
   }
-
 
   goPrevious() {
     this.navCtrl.pop();

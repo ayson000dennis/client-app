@@ -75,18 +75,26 @@ export class UserFindDealsPage {
         } else {
           return false;
         }
-      })
+      });
+
+      $(document).on({
+            'DOMNodeInserted': function() {
+                $('.pac-item, .pac-item span', this).addClass('needsclick');
+            }
+        }, '.pac-container');
     }
 
 
   ionViewWillEnter(){
     this.getUser();
     var self = this;
+    this.setMapDataStorage();
     this.dataDisplay();
 
     //jQuery Get current location
     $('#deal-location').on('click', function() {
-      $(this).select();
+      // $(this).select();
+      $(this).get(0).setSelectionRange(0,9999);
       // $('.locations-holder').css('visibility', 'visible');
     });
 
@@ -112,8 +120,20 @@ export class UserFindDealsPage {
     }
   }
 
-  ionViewWillLeave() {
-    $('#mapView').remove();
+  // ionViewWillLeave() {
+  //   $('#mapView').remove();
+  // }
+
+  setMapDataStorage() {
+    this.storage.get('user_short_location').then(user_short_location => {
+      // console.log(user_short_location)
+      this.selectedMapCenter.address = user_short_location;
+      // $('#deal-location').val(user_short_location);
+      this.storage.get('user_selected_latlng').then(user_selected_latlng => {
+        // console.log(user_selected_latlng)
+        this.selectedMapCenter.location = user_selected_latlng;
+      });
+    });
   }
 
   dataDisplay() {
@@ -136,8 +156,8 @@ export class UserFindDealsPage {
 
           if(searched_business_deals !== undefined) {
 
-            console.log('searched deals from map');
-            console.log(searched_business_deals);
+            // console.log('searched deals from map');
+            // console.log(searched_business_deals);
             var search_input = this.navParams.get('search_input');
             $('#deal-name').val(search_input);
             var filtered_searched_business_deals = this.getDealsWithinBound(searched_business_deals);
@@ -145,7 +165,7 @@ export class UserFindDealsPage {
               this.business_deals = [];
               this.sortData(filtered_searched_business_deals);
             } else {
-              console.log('empty searched')
+              // console.log('empty searched')
               this.business_deals = [];
             }
           } else {
@@ -153,8 +173,8 @@ export class UserFindDealsPage {
 
             if(business_deals !== undefined) {
 
-              console.log('deals from find deals to map to find deals')
-              console.log(business_deals);
+              // console.log('deals from find deals to map to find deals')
+              // console.log(business_deals);
               this.business_deals = business_deals;
               this.hasData = true;
             } else {
@@ -183,30 +203,30 @@ export class UserFindDealsPage {
                     this.getBusinessDeals();
                   }
                 });
-                console.log('data from non filtered')
+                // console.log('data from non filtered')
               } else {
                 this.getFilteredDealsAndFavorites();
-                console.log('data from filtered')
+                // console.log('data from filtered')
               }
               ////////////////
             }
           }
-          console.log(this.selectedMapCenter);
+          // console.log(this.selectedMapCenter);
         } else {
 
           this.storage.get('user_selected_latlng').then(user_selected_latlng => {
             this.storage.get('user_short_location').then(user_short_location => {
-              console.log('first enter find deals')
+              // console.log('first enter find deals')
               if (user_short_location !== null) {
 
-                console.log('first enter find deals')
-                console.log(user_selected_latlng.lat, user_selected_latlng.lng)
+                // console.log('first enter find deals')
+                // console.log(user_selected_latlng.lat, user_selected_latlng.lng)
                 this.default_location = new google.maps.LatLng(user_selected_latlng.lat, user_selected_latlng.lng);
                 this.map.setCenter(this.default_location);
                 $('#deal-location').val(user_short_location);
               } else {
 
-                console.log('ask permission')
+                // console.log('ask permission')
                 this.getBusinessDeals();
                 this.getLocation();
                 this.geocodeLatLng();
@@ -286,8 +306,13 @@ export class UserFindDealsPage {
    });
 
    var sorted_business_deals = data.concat(filtered_business_deals);
-   sorted_business_deals.forEach(all => {
-       all_data.push(all._source);
+   sorted_business_deals.forEach(business => {
+     business._source.deal_id.forEach(deal =>{
+       if(deal.is_featured){
+         business._source.featured_deal = deal;
+       }
+     });
+    all_data.push(business._source);
    });
 
    this.api.Favorites.favorite_list(this.user._id).then(favorites => {
@@ -302,7 +327,6 @@ export class UserFindDealsPage {
        });
      }
    });
-
    this.business_deals = all_data;
    this.hasData = true;
  }
@@ -328,7 +352,7 @@ export class UserFindDealsPage {
      all_business_deals.forEach(all => {
          all_data.push(all._source)
      });
-     console.log(all_data);
+    //  console.log(all_data);
      this.storage.set('all_business_deals', all_data);
    }).catch(error => {
      console.log(error);
@@ -386,7 +410,6 @@ export class UserFindDealsPage {
         deal_id.push(id)
       });
     } else {
-      console.log('business only')
       deal_id = [];
     }
 
@@ -406,24 +429,22 @@ export class UserFindDealsPage {
 
   }
 
-
   goToFavorites() {
       this.navCtrl.setRoot(UserFavoritesPage, {
         animate: true,
-        direction: 'back'
+        direction: 'forward'
       });
   }
 
   getBusiness(business) {
     this.api.Business.business_view(business.u_id).then(business => {
-      console.log(business)
+      // console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
         direction: 'forward'
       });
     });
   }
-
 
   searchBusinessDeals() {
     if($('#deal-location').val() === '') {
@@ -436,11 +457,11 @@ export class UserFindDealsPage {
     } else {
       var comma = $('#deal-location').val().split(",").length - 1;
       if (comma !== 2) {
-        console.log('no comma')
+        // console.log('no comma')
         this.selectFirstResult();
         this.searchApi();
       } else {
-        console.log('2 comma')
+        // console.log('2 comma')
         this.searchApi();
       }
     }
@@ -452,15 +473,15 @@ export class UserFindDealsPage {
     $('.fa.fa-search').hide();
     $('.btn-search-deals').attr('disabled', true);
     $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
-    this.storage.get('user_short_location').then(user_short_location => {
-      console.log(user_short_location)
-      this.selectedMapCenter.address = user_short_location;
-      // $('#deal-location').val(user_short_location);
-      this.storage.get('user_selected_latlng').then(user_selected_latlng => {
-        console.log(user_selected_latlng)
-        this.selectedMapCenter.location = user_selected_latlng;
-      });
-    });
+    // this.storage.get('user_short_location').then(user_short_location => {
+    //   console.log(user_short_location)
+    //   this.selectedMapCenter.address = user_short_location;
+    //   // $('#deal-location').val(user_short_location);
+    //   this.storage.get('user_selected_latlng').then(user_selected_latlng => {
+    //     console.log(user_selected_latlng)
+    //     this.selectedMapCenter.location = user_selected_latlng;
+    //   });
+    // });
 
     if (this.search.input !== '') {
       var businessApi = this.api.Business.business_deals_search(this.search.input);
@@ -495,35 +516,6 @@ export class UserFindDealsPage {
 
   initMap() {
     var self = this
-
-    // this.storage.get('user_selected_latlng').then(position => {
-    //   this.lat = position.lat;
-    //   this.lng = position.lng;
-    //
-    //   this.storage.get('user_short_location').then(address => {
-    //     this.address = address
-    //     if (self.address !== null) {
-    //       // if(self.lat != null && self.lng != null) {
-    //         this.default_location = new google.maps.LatLng(self.lat, self.lng);
-    //         $('#deal-location').val(self.address);
-    //       // } else {
-    //       //   this.default_location = new google.maps.LatLng(34.0522, -118.2437);
-    //       //   $('#deal-location').val('Los Angeles, CA');
-    //       // }
-    //     } else {
-    //       this.storage.get('user_short_location').then(user_short_location => {
-    //         if(user_short_location !== null) {
-    //           $('#deal-location').val(user_short_location);
-    //         } else {
-    //           this.getLocation();
-    //           this.geocodeLatLng();
-    //         }
-    //       });
-    //     }
-    //   });
-    // }).catch(error => {
-    //   console.log(error)
-    // });
 
     this.map = new google.maps.Map(document.getElementById('mapView'), {
       center: self.default_location,
@@ -583,10 +575,8 @@ export class UserFindDealsPage {
       self.storage.set('user_short_location', location);
       self.storage.set('user_long_location', place.formatted_address);
 
-      console.log(user_selected_latlng)
-      console.log(location)
-
       $('#deal-location').val(location);
+      $("#searchBtn").click();
 
       if (!place.geometry) return;
 
@@ -594,13 +584,21 @@ export class UserFindDealsPage {
         self.map.setCenter(place.geometry.location);
         self.map.fitBounds(place.geometry.viewport);
         self.map.setZoom(9);
-        $("#searchBtn").click();
       } else {
         self.map.setCenter(place.geometry.location);
-        $("#searchBtn").click();
       }
 
     });
+
+    // need to stop prop of the touchend event (for ios devices)
+    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+        setTimeout(function() {
+            var container = document.getElementsByClassName('pac-container')[0];
+            container.addEventListener('touchend', function(e) {
+                e.stopImmediatePropagation();
+            });
+        }, 500);
+    }
 
   }
 
@@ -613,7 +611,7 @@ export class UserFindDealsPage {
       if (inBounds == true) {
         filtered_data.push(d);
       } else {
-        console.log('out of bounds')
+        // console.log('out of bounds')
       }
 
     });
@@ -638,7 +636,7 @@ export class UserFindDealsPage {
       this.storage.set('user_selected_latlng', position);
       this.default_location = new google.maps.LatLng(34.0522, -118.2437);
       $('#deal-location').val('Los Angeles, CA');
-      console.log('Error getting location', error);
+      // console.log('Error getting location', error);
     });
   }
 
@@ -701,8 +699,8 @@ export class UserFindDealsPage {
 
           self.selectedMapCenter.address = location;
           self.selectedMapCenter.location = results[0].geometry.location;
-          console.log(location)
-          console.log(user_selected_latlng)
+          // console.log(location)
+          // console.log(user_selected_latlng)
           self.storage.set('user_short_location', location);
           self.storage.set('user_long_location', address);
           self.storage.set('user_selected_latlng', user_selected_latlng);

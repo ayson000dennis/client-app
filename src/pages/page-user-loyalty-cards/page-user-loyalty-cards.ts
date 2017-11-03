@@ -51,10 +51,22 @@ export class UserLoyaltyCardsPage {
     this.storage.get('user').then(user => {
       // console.log(user)
        this.api.Loyalties.business(user._id).then(loyalty => {
-        //  console.log(loyalty)
+
+      //  var biz_id = [];
+       //
+      //  for (var x = 0; x < loyalty.length; x++) {
+      //    if ($.inArray(loyalty[x].business_id[0]._id, biz_id[x]) == -1) {
+      //      console.log(biz_id);
+      //      biz_id.push(loyalty[x].business_id[0]._id);
+      //    }
+      //  }
+       //
+      //  console.log(biz_id)
+
         this.loyalties = loyalty;
         this.hasData = true
-        // console.log(loyalty[0].busines)
+
+        console.log(loyalty)
       });
     });
   }

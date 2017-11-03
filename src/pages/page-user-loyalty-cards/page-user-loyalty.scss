@@ -49,7 +49,9 @@ page-user-loyalty-cards {
       cursor: pointer;
     }
   }
-  .scroll-content {
+  ion-content.content .scroll-content {
+    padding-top: 0 !important;
+
     background: #fff !important;
 
     .title {
@@ -61,13 +63,20 @@ page-user-loyalty-cards {
     .business-cards-holder {
       .business-cards {
         position: relative;
-        display: flex;
+
+        display: table;
+        padding: 10px 0;
+        width: 100%;
+
         border-bottom: 1px solid #e4e4e4;
 
         .img-holder {
-          margin: 0 15px 15px 0;
+          display: table-cell;
+          margin-right: 15px;
           width: 80px;
+          min-width: 80px;
           height: 80px;
+          vertical-align: middle;
 
           img {
             width: 100%;
@@ -77,9 +86,13 @@ page-user-loyalty-cards {
         }
 
         .text-holder {
+          padding-left: 15px;
+
           color: #555;
+
           .card-title-text {
             margin-top: 5px;
+
             font-size: 18px;
           }
 
@@ -94,8 +107,12 @@ page-user-loyalty-cards {
 
         i.fa-chevron-right {
           position: absolute;
-          top: 27%;
+          top: 0;
           right: 0;
+          bottom: 0;
+          
+          margin: auto;
+          height: 26px;
 
           color: #b1b1b1 !important;
 

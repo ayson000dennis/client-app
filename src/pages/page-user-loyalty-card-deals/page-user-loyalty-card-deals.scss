@@ -47,14 +47,20 @@ page-user-loyalty-card-deals {
       margin-top: -20px;
       .card-deal {
         position: relative;
-        display: flex;
-        margin-top: 15px;
+
+        display: table;
+        padding: 10px 0;
+        width: 100%;
+
         border-bottom: 1px solid #e4e4e4;
 
         .img-holder {
-          margin: 0 15px 15px 0;
+          display: table-cell;
+          margin-right: 15px;
           width: 80px;
+          min-width: 80px;
           height: 80px;
+          vertical-align: middle;
 
           img {
             width: 100%;
@@ -64,11 +70,14 @@ page-user-loyalty-card-deals {
         }
 
         .text-holder {
+          padding-left: 15px;
+
           color: #555;
 
           .deal-title-text {
             margin-top: 5px;
-            font-size: 16px;
+
+            font-size: 18px;
           }
 
           .card-stamp-text { color: #f5a14e; }

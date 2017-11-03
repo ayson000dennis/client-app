@@ -11,7 +11,7 @@
     <ng-template #hasLoyalties>
       <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">
         <div class="img-holder">
-          <img [src]="loyalty.deals_id[0].photo.url" alt="">
+          <img src="{{loyalty.business_id[0].files[0].url !== null ? loyalty.business_id[0].files[0].url : assets/images/placeholder.jpg}}" alt="">
         </div>
         <div class="text-holder">
           <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>

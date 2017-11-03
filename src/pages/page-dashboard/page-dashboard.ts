@@ -29,7 +29,7 @@ export class DashboardPage {
   hasData : boolean = false;
   hasNotify : boolean = false;
   firstname : string;
-  notifCount = 0;
+  notifCountTotal = 0;
 
   constructor(
     public navCtrl: NavController,
@@ -44,6 +44,7 @@ export class DashboardPage {
   ionViewWillEnter() {
 
     this.socketService.connect();
+    this.getNotificationCount();
 
     this.storage.get('user').then(user => {
       this.user = user;
@@ -52,18 +53,49 @@ export class DashboardPage {
     });
   }
 
+  getNotificationCount() {
+
+    this.storage.get('user').then(user =>{
+      this.user = user;
+
+      if(user._id) {
+        this.api.Message.room_list(user._id).then(members => {
+
+          if(members.length) {
+            var withChats = [];
+
+            for (var x = 0; x < members.length; x++) {
+              if (members[x].last_chat.length >  0 && members[x].last_chat[0].is_read == false && members[x].last_chat[0].message_by !== 'member') {
+                withChats.push(members[x]);
+              }
+            }
+
+            this.notifCountTotal = withChats.length;
+
+          }
+
+        }).catch((error) => {
+            console.log(error);
+        });
+      } else {
+        console.log('User ID not found');
+      }
+
+    });
+  }
+
   initInboxNotification() {
     // Get real time message notification
     this.socketService.notify.subscribe((chatNotification) => {
-      console.log('Notif from business');
-
 
       this._zone.run(() => {
         this.storage.get('user').then(user =>{
 
           if(chatNotification.user_id == user._id) {
+            console.log('Notification from business | Dashboard Page');
             this.hasNotify = true;
-            this.notifCount++;
+            // this.notifCount++;
+            this.getNotificationCount();
           }
 
         }).catch((error) => {

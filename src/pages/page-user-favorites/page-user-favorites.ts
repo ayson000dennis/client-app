@@ -44,13 +44,6 @@ export class UserFavoritesPage {
     });
   }
 
-  showMenu() {
-    this.navCtrl.push(MenuPage, {
-      animate: true,
-      direction: 'forward'
-    });
-  }
-
   ionViewWillEnter() {
     this.getFavorites();
   }

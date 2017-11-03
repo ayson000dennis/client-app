@@ -27314,6 +27314,7 @@ ion-alert .alert-wrapper .alert-button .button-inner {
 }
 
 .pac-container {
+  cursor: pointer;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -27359,6 +27360,10 @@ ion-alert .alert-wrapper .alert-button .button-inner {
 
 .pac-container::after {
   display: none;
+}
+
+page-user-find-deals {
+  cursor: pointer;
 }
 
 page-user-find-deals ion-header ion-navbar .toolbar.statusbar-padding:first-child {
@@ -28007,6 +28012,7 @@ page-user-find-deals .content .holder-pagination .pagination .page-item .page-li
 }
 
 .pac-container {
+  cursor: pointer;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
@@ -28052,6 +28058,10 @@ page-user-find-deals .content .holder-pagination .pagination .page-item .page-li
 
 .pac-container::after {
   display: none;
+}
+
+page-user-find-deals-map {
+  cursor: pointer;
 }
 
 page-user-find-deals-map ion-header ion-navbar .toolbar.statusbar-padding:first-child {
@@ -28626,18 +28636,19 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder {
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal {
   position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  margin-top: 15px;
+  display: table;
+  padding: 10px 0;
+  width: 100%;
   border-bottom: 1px solid #e4e4e4;
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .img-holder {
-  margin: 0 15px 15px 0;
+  display: table-cell;
+  margin-right: 15px;
   width: 80px;
+  min-width: 80px;
   height: 80px;
+  vertical-align: middle;
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .img-holder img {
@@ -28648,12 +28659,13 @@ page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .img-
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text-holder {
+  padding-left: 15px;
   color: #555;
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text-holder .deal-title-text {
   margin-top: 5px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 page-user-loyalty-card-deals .scroll-content .card-deals-holder .card-deal .text-holder .card-stamp-text {
@@ -28713,66 +28725,73 @@ page-user-loyalty-cards ion-navbar i.fa-chevron-left {
   cursor: pointer;
 }
 
-page-user-loyalty-cards .scroll-content {
+page-user-loyalty-cards ion-content.content .scroll-content {
+  padding-top: 0 !important;
   background: #fff !important;
 }
 
-page-user-loyalty-cards .scroll-content .title {
+page-user-loyalty-cards ion-content.content .scroll-content .title {
   color: #555;
   font-size: 25px;
   text-align: left;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards {
   position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  display: table;
+  padding: 10px 0;
+  width: 100%;
   border-bottom: 1px solid #e4e4e4;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .img-holder {
-  margin: 0 15px 15px 0;
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards .img-holder {
+  display: table-cell;
+  margin-right: 15px;
   width: 80px;
+  min-width: 80px;
   height: 80px;
+  vertical-align: middle;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .img-holder img {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards .img-holder img {
   width: 100%;
   height: 100%;
   -o-object-fit: cover;
   object-fit: cover;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .text-holder {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards .text-holder {
+  padding-left: 15px;
   color: #555;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .text-holder .card-title-text {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards .text-holder .card-title-text {
   margin-top: 5px;
   font-size: 18px;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .text-holder .card-location-text {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards .text-holder .card-location-text {
   font-weight: 100;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards .text-holder .card-count-text {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards .text-holder .card-count-text {
   display: block;
   margin: 5px auto;
   color: #f5a14e;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .business-cards i.fa-chevron-right {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .business-cards i.fa-chevron-right {
   position: absolute;
-  top: 27%;
+  top: 0;
   right: 0;
+  bottom: 0;
+  margin: auto;
+  height: 26px;
   color: #b1b1b1 !important;
   cursor: pointer;
 }
 
-page-user-loyalty-cards .scroll-content .business-cards-holder .no-loyalty-holder h4 {
+page-user-loyalty-cards ion-content.content .scroll-content .business-cards-holder .no-loyalty-holder h4 {
   font-family: "Raleway Regular";
   line-height: 1.5;
   color: #b7b7b7;

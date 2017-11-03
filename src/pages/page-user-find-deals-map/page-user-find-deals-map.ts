@@ -86,12 +86,6 @@ export class UserFindDealsMapPage {
 
   ionViewWillEnter(){
 
-    if($('#mapView').length == 0) {
-      var map_template = '<div #mapView id="mapView"></div>';
-      $(map_template).appendTo($('.scroll-content'));
-      this.initMap();
-    }
-
     var self = this;
     this.selectedMapCenter.address = this.navParams.get('map_address');
     this.business_deals = this.navParams.get('business_deals');
@@ -104,9 +98,8 @@ export class UserFindDealsMapPage {
     // $('.locations-holder').on('mousedown', function() {
     //   self.getLocation();
     // });
-    //
+
     // $('#deal-location2').on('blur', function() {
-    //   // self.selectFirstResult();
     //   $('.locations-holder').css('visibility', 'hidden');
     // });
 
@@ -117,18 +110,12 @@ export class UserFindDealsMapPage {
   }
 
   ionViewDidLoad() {
-    // this.initMap();
     var self = this;
     setTimeout(function(){
       self.initMap();
       console.log('map initializing')
-      $("#searchBtn2").click();
+      $('#searchBtn2').click();
     }, 650);
-    // this.initMap();
-  }
-
-  ionViewWillLeave() {
-    $('#mapView').remove();
   }
 
   initMap() {
@@ -252,6 +239,16 @@ export class UserFindDealsMapPage {
 
     });
 
+    // need to stop prop of the touchend event (for ios devices)
+    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+        setTimeout(function() {
+            var container = document.getElementsByClassName('pac-container')[0];
+            container.addEventListener('touchend', function(e) {
+                e.stopImmediatePropagation();
+            });
+        }, 500);
+    }
+
   //   searchBox.addListener('places_changed', function() {
   //     self.mapResults = [];
   //     var places = searchBox.getPlaces();
@@ -351,7 +348,7 @@ export class UserFindDealsMapPage {
             infowindow.open(this.map, marker);
 
             $('#businessInfo').on('click', function() {
-              self.getBusiness(template);
+              self.getBusiness(d);
             });
 
           });
@@ -398,7 +395,6 @@ export class UserFindDealsMapPage {
       console.log('Error getting location', error);
     });
   }
-
 
   geocodeLatLng() {
     var self = this;
@@ -479,57 +475,67 @@ export class UserFindDealsMapPage {
         $('.alert-holder').fadeOut();
       }, 3000);
     } else {
-      this.selectFirstResult();
-
-      var spinner = '<i class="fa fa-spinner fa-spin"></i>';
-
-      $('.btn-search-deals').prop('disabled', true);
-      // $('.fa.fa-search').hide();
-      // $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
-
-      var loader = '<div id="mapLoader"><div class="icon-holder"><i class="fa fa-spinner fa-spin"></i></div></div>';
-      $(loader).appendTo('#mapView');
-      $('#mapView div').first().css('opacity', 0.3);
-
-      $('#deal-location2').val(this.selectedMapCenter.address);
-      var user_input = $('#deal-name2').val();
-      if (user_input !== '') {
-        var businessApi = this.api.Business.business_deals_search(user_input);
-        console.log(user_input);
+      var comma = $('#deal-location2').val().split(",").length - 1;
+      if (comma !== 2) {
+        this.selectFirstResult();
+        this.searchApi();
       } else {
-        console.log('empty deal name');
-        var businessApi = this.api.Business.business_deals_list();
+        this.searchApi();
       }
-
-      businessApi.then(business => {
-
-        this.searched_business_deals = business.hits.hits;
-
-        var businessHolder = business.hits.hits;
-
-        businessHolder.forEach(bus => {
-          this.mapResults.push(bus._source)
-        });
-
-        this.createMarker(this.mapResults);
-        console.log(this.mapResults);
-
-        $('.btn-search-deals').prop('disabled', false);
-        // $('.fa.fa-search').show();
-        // $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
-
-        $('#mapLoader').remove();
-        $('#mapView div:first-of-type').css('opacity', 1);
-
-      });
     }
   }
 
-  getBusiness(template) {
-    console.log(template)
-    this.navCtrl.push(UserDealsPage, {template: template}, {
-      animate: true,
-      direction: 'forward'
+  searchApi() {
+    var spinner = '<i class="fa fa-spinner fa-spin"></i>';
+
+    $('.btn-search-deals').prop('disabled', true);
+    // $('.fa.fa-search').hide();
+    // $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
+
+    var loader = '<div id="mapLoader"><div class="icon-holder"><i class="fa fa-spinner fa-spin"></i></div></div>';
+    $(loader).appendTo('#mapView');
+    $('#mapView div').first().css('opacity', 0.3);
+
+    $('#deal-location2').val(this.selectedMapCenter.address);
+    var user_input = $('#deal-name2').val();
+    if (user_input !== '') {
+      var businessApi = this.api.Business.business_deals_search(user_input);
+      console.log(user_input);
+    } else {
+      console.log('empty deal name');
+      var businessApi = this.api.Business.business_deals_list();
+    }
+
+    businessApi.then(business => {
+
+      this.searched_business_deals = business.hits.hits;
+
+      var businessHolder = business.hits.hits;
+
+      businessHolder.forEach(bus => {
+        this.mapResults.push(bus._source)
+      });
+
+      this.createMarker(this.mapResults);
+      console.log(this.mapResults);
+
+      $('.btn-search-deals').prop('disabled', false);
+      // $('.fa.fa-search').show();
+      // $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+
+      $('#mapLoader').remove();
+      $('#mapView div:first-of-type').css('opacity', 1);
+
+    });
+  }
+
+  getBusiness(business) {
+    this.api.Business.business_view(business.u_id).then(business => {
+      console.log(business)
+      this.navCtrl.push(UserDealsPage, {business: business}, {
+        animate: true,
+        direction: 'forward'
+      });
     });
   }
 

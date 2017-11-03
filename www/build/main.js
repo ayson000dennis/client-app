@@ -9,14 +9,13 @@ webpackJsonp([1],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_in_app_browser__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_chat_page_user_chat__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_favorites_page_user_favorites__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_user_chat_page_user_chat__ = __webpack_require__(163);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -26,7 +25,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -50,24 +48,26 @@ var UserDealsPage = (function () {
         this.operatingHours = [];
         this.currentDay = [];
         //place.icon
-        this.googleMarker = {
-            url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
-            size: new google.maps.Size(50, 50),
-            origin: new google.maps.Point(0, 0),
-            scaledSize: new google.maps.Size(48, 50)
-        };
-        this.memberMarker = {
-            url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
-            size: new google.maps.Size(50, 50),
-            origin: new google.maps.Point(0, 0),
-            scaledSize: new google.maps.Size(48, 50)
-        };
-        this.premiumMemberMarker = {
-            url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
-            size: new google.maps.Size(50, 50),
-            origin: new google.maps.Point(0, 0),
-            scaledSize: new google.maps.Size(48, 50)
-        };
+        // googleMarker = {
+        //   url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
+        //   size: new google.maps.Size(50, 50),
+        //   origin: new google.maps.Point(0, 0),
+        //   scaledSize: new google.maps.Size(48, 50)
+        // };
+        //
+        // memberMarker = {
+        //   url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
+        //   size: new google.maps.Size(50, 50),
+        //   origin: new google.maps.Point(0, 0),
+        //   scaledSize: new google.maps.Size(48, 50)
+        // };
+        //
+        // premiumMemberMarker = {
+        //   url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
+        //   size: new google.maps.Size(50, 50),
+        //   origin: new google.maps.Point(0, 0),
+        //   scaledSize: new google.maps.Size(48, 50)
+        // };
         //in app browser option
         this.iabOptions = {
             location: 'yes',
@@ -94,48 +94,62 @@ var UserDealsPage = (function () {
     UserDealsPage.prototype.slidePrev = function () {
         this.slider.slidePrev();
     };
-    UserDealsPage.prototype.getUser = function () {
-        var _this = this;
-        this.storage.get('user').then(function (user) {
-            _this.user = user;
-        });
-    };
     UserDealsPage.prototype.ionViewWillEnter = function () {
         var _this = this;
         this.business = this.navParams.get('business');
-        var days = this.business.operations;
-        if (this.business.operations[0] === '0') {
-            console.log(this.business.operations);
-        }
-        else if (this.business.operations[0] === '2') {
-            console.log(this.business.operations);
-        }
-        else if (this.business.operations[0] === '1') {
-            console.log(this.business.operations);
-        }
-        else {
-            days.forEach(function (day, i) {
-                var d = Object.keys(day)[0];
-                var work = {
-                    dayCount: i + 1,
-                    day: d,
-                    start: eval("day." + d + ".start"),
-                    end: eval("day." + d + ".end"),
-                    isClosed: eval("day." + d + ".isChecked")
-                };
-                _this.operatingHours.push(work);
-            });
-            this.operatingHours.forEach(function (operations) {
-                var today = new Date().getDay();
-                if (operations.dayCount === today) {
-                    _this.currentDay.push(operations);
-                }
-            });
-            console.log(this.business.operations);
+        if (this.business.operations) {
+            var days = this.business.operations;
+            if (this.business.operations[0] === '0') {
+                //Do something
+            }
+            else if (this.business.operations[0] === '2') {
+                //Do something
+            }
+            else if (this.business.operations[0] === '1') {
+                //Do something
+            }
+            else {
+                days.forEach(function (day, i) {
+                    var d = Object.keys(day)[0];
+                    var work = {
+                        dayCount: i + 1,
+                        day: d,
+                        start: eval("day." + d + ".start"),
+                        end: eval("day." + d + ".end"),
+                        isClosed: eval("day." + d + ".isChecked")
+                    };
+                    _this.operatingHours.push(work);
+                });
+                this.operatingHours.forEach(function (operations) {
+                    var today = new Date().getDay();
+                    if (operations.dayCount === today) {
+                        _this.currentDay.push(operations);
+                    }
+                });
+                console.log(this.business.operations);
+            }
         }
         if (this.business !== null) {
             this.hasData = true;
         }
+        this.getFavorites();
+    };
+    UserDealsPage.prototype.getFavorites = function () {
+        var _this = this;
+        this.storage.get('user').then(function (user) {
+            _this.api.Favorites.favorite_list(user._id).then(function (favorites) {
+                _this.favorites = favorites;
+                if (_this.hasData) {
+                    _this.favorites.forEach(function (favorite) {
+                        // this.business.forEach((business, i) => {
+                        if (_this.business._id === favorite.business_id[0]._id) {
+                            _this.business.is_favorite = true;
+                        }
+                        // });
+                    });
+                }
+            });
+        });
     };
     UserDealsPage.prototype.addToFavorites = function (business) {
         var _this = this;
@@ -169,23 +183,16 @@ var UserDealsPage = (function () {
         });
     };
     UserDealsPage.prototype.goToFavorites = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */], {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */], {
             animate: true,
             direction: 'back'
         });
     };
     UserDealsPage.prototype.viewMap = function (address, state, zip) {
         var map_url = 'https://www.google.com/maps/place/';
-        // if (shop_url !== "") {
-        //   this.iab.create(shop_url, '_blank', this.iabOptions);
-        // } else {
         this.iab.create(map_url + address + ',' + state + ',' + zip, '_blank', this.iabOptions);
-        // }
     };
     UserDealsPage.prototype.ionViewDidLoad = function () {
-    };
-    UserDealsPage.prototype.ionViewWillLeave = function () {
-        __WEBPACK_IMPORTED_MODULE_10_jquery__('#mapView').remove();
     };
     UserDealsPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_login_page_login__["a" /* LoginPage */], {}, {
@@ -193,32 +200,26 @@ var UserDealsPage = (function () {
             direction: 'back'
         });
     };
-    UserDealsPage.prototype.showMenu = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__["a" /* MenuPage */], {
-            animate: true,
-            direction: 'forward'
-        });
-    };
     UserDealsPage.prototype.goListView = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {}, {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {}, {
             animate: true,
             direction: 'back'
         });
     };
     UserDealsPage.prototype.showHours = function () {
-        if (__WEBPACK_IMPORTED_MODULE_10_jquery__(".operations-list").hasClass("open")) {
-            __WEBPACK_IMPORTED_MODULE_10_jquery__(".operations-list").removeClass("open");
-            __WEBPACK_IMPORTED_MODULE_10_jquery__(".toggle-collapse").text("(show more)");
+        if (__WEBPACK_IMPORTED_MODULE_9_jquery__(".operations-list").hasClass("open")) {
+            __WEBPACK_IMPORTED_MODULE_9_jquery__(".operations-list").removeClass("open");
+            __WEBPACK_IMPORTED_MODULE_9_jquery__(".toggle-collapse").text("(show more)");
         }
         else {
-            __WEBPACK_IMPORTED_MODULE_10_jquery__(".operations-list").addClass("open");
-            __WEBPACK_IMPORTED_MODULE_10_jquery__(".toggle-collapse").text("(show less)");
+            __WEBPACK_IMPORTED_MODULE_9_jquery__(".operations-list").addClass("open");
+            __WEBPACK_IMPORTED_MODULE_9_jquery__(".toggle-collapse").text("(show less)");
         }
     };
     UserDealsPage.prototype.sendMessage = function () {
         var _this = this;
         this.storage.get('user').then(function (user) {
-            _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__page_user_chat_page_user_chat__["a" /* UserChatPage */], {
+            _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__page_user_chat_page_user_chat__["a" /* UserChatPage */], {
                 businessDetail: _this.business,
                 previousPage: 'deals',
                 userDetail: user
@@ -239,15 +240,15 @@ __decorate([
 ], UserDealsPage.prototype, "slider", void 0);
 UserDealsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-deals\page-user-deals.html"*/'<ion-header>\n\n  <ion-navbar *ngIf="hasData">\n\n    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>\n\n    <span class="business-title">{{business.company_name}}</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding class="deals-page">\n\n  <div *ngIf="hasData">\n\n\n\n    <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null || business.operations.length === 0;"></div>\n\n\n\n    <div class="slider-holder" [hidden]="!business.deal_id.length || !business.files.length">\n\n      <div *ngIf="business?.files.length === 1; then oneImg else manyImgs"></div>\n\n      <ng-template #manyImgs>\n\n        <ion-slides #slider loop="true">\n\n          <ion-slide *ngFor="let img of business.files; let i = index;">\n\n            <img src="{{img.length !== 0 ? img.url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n\n          </ion-slide>\n\n\n\n        </ion-slides>\n\n        <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n\n        <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n\n      </ng-template>\n\n\n\n      <ng-template #oneImg>\n\n        <div class="img-banner">\n\n          <img src="{{business.files.length !== 0 ? business.files[0].url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n\n        </div>\n\n      </ng-template>\n\n\n\n    </div>\n\n\n\n    <!-- <div class="slider-holder">\n\n      <ion-slides #slider loop="true">\n\n        <ion-slide >\n\n          <img src="http://psdwizard.net/preview/gopage/assets/images/slider-img01.jpg" alt="Deals photo">\n\n        </ion-slide>\n\n      </ion-slides>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n\n    </div> -->\n\n\n\n    <!-- <nav id="business-actions" class="navbar navbar-light">\n\n      <ul class="nav nav-tabs">\n\n        <li class="nav-item">\n\n          <a class="nav-link"><i class="fa fa-map-o"></i> Directions</a>\n\n        </li>\n\n        <li class="nav-item">\n\n          <a class="nav-link" tappable (click)="getBusiness()"><i class="fa fa-star-o"></i> Add to Favorites</a>\n\n        </li>\n\n        <li class="nav-item">\n\n          <a class="nav-link" tappable (click)="sendMessage()"><i class="fa fa-comment-o"></i> Send Message</a>\n\n        </li>\n\n      </ul>\n\n    </nav> -->\n\n\n\n    <div class="row">\n\n      <div class="col-12 about-business">\n\n        <div class="about-description">\n\n            <p class="business-name">{{business.company_name}}</p>\n\n            <p class="short-description" [hidden]="!business.description"> {{business.description}}</p>\n\n        </div>\n\n        <!-- <p class="about-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo ligula</p> -->\n\n        <div *ngIf="business.business_type != \'0\' ; then isClickable else isNotClickable"></div>\n\n\n\n        <ng-template #isClickable>\n\n          <ul class="social-links list-unstyled">\n\n            <li class="address-link">\n\n              <i class="fa fa-map-marker fa-2x"></i>\n\n              <a class="clickable-link" (click)="viewMap(business.address, business.state, business.zip_postal)" target="_blank">\n\n                <span class="info-text"> {{business.address}}, {{business.state}}, {{business.zip_postal}} </span>\n\n              </a>\n\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n\n            <ng-template #hasOperations>\n\n              <li *ngIf="business.operations[0] === \'0\'"></li>\n\n\n\n              <li *ngIf="business.operations[0] === \'1\'"></li>\n\n\n\n              <li *ngIf="business.operations[0] === \'2\'">\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours\n\n                </a>\n\n              </li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n\n                <i class="fa fa-clock-o fa-2x"></i>&nbsp;\n\n                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>\n\n                <ng-template #isOpen>\n\n                  Open Today {{currentDay[0].start}} - {{currentDay[0].end}}\n\n                 </ng-template>\n\n                <ng-template #isClosed>\n\n                  Closed Today\n\n                </ng-template>\n\n                <a class="clickable-link" (click)="showHours()">(show more)</a>\n\n                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n\n                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n\n                </ul>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <li class="info-link" [hidden]="!business.phone_number">\n\n              <i class="fa fa-phone fa-2x"></i>\n\n              <a class="clickable-link" href="tel:{{business.phone_number}}">\n\n                <span class="info-text"> {{business.phone_number}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link">\n\n              <i class="fa fa-comment fa-2x"></i>\n\n              <a class="clickable-link" tappable (click)="sendMessage()">\n\n                <span class="info-text"> Send Message</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" >\n\n              <i class="fa fa-tag fa-2x"></i>\n\n              <a class="clickable-link">\n\n                <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n              </a>\n\n            </li>\n\n            <!-- <li *ngIf="!business.deal_id.length; then hasDeal else noDeal"></li>\n\n            <ng-template #hasDeal>\n\n              <li class="info-link" >\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-tag fa-2x"></i>\n\n                  <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n                </a>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <ng-template #noDeal>\n\n              <li class="info-link" >\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-tag fa-2x"></i>\n\n                  <span class="info-text"> 0 active deals</span>\n\n                </a>\n\n              </li>\n\n            </ng-template> -->\n\n\n\n            <li class="info-link" [hidden]="!business.company_website">\n\n              <i class="fa fa-globe fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.company_website}}" target="_blank">\n\n                <span class="info-text"> {{business.company_website}}</span>\n\n              </a>\n\n            </li>\n\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n\n              <a class="clickable-link" href="mailto:{{business.business_email}}">\n\n                <i class="fa fa-envelope fa-2x"></i>\n\n                <span class="info-text"> {{business.business_email}}</span>\n\n              </a>\n\n            </li> -->\n\n            <li class="info-link" [hidden]="!business.facebook_url">\n\n              <i class="fa fa-facebook fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.facebook_url}}" target="_blank">\n\n                <span class="info-text"> {{business.facebook_url}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.twitter_url">\n\n              <i class="fa fa-twitter fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.twitter_url}}" target="_blank">\n\n                <span class="info-text"> {{business.twitter_url}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.instagram_url">\n\n              <i class="fa fa-instagram fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.instagram_url}}" target="_blank">\n\n                <span class="info-text"> {{business.instagram_url}}</span>\n\n              </a>\n\n            </li>\n\n          </ul>\n\n        </ng-template>\n\n\n\n        <ng-template #isNotClickable>\n\n          <ul class="social-links list-unstyled">\n\n            <li class="address-link">\n\n              <i class="fa fa-map-marker fa-2x"></i>\n\n              <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>\n\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n\n            <ng-template #hasOperations>\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'0\'"></li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'1\'"></li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'2\'">\n\n                <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours\n\n              </li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n\n                <i class="fa fa-clock-o fa-2x"></i> &nbsp;\n\n                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>\n\n                <ng-template #isOpen>Open Today </ng-template>\n\n                <ng-template #isClosed>\n\n                  Closed Today\n\n                  <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>\n\n                </ng-template>\n\n                <a class="toggle-collapse" (click)="showHours()">(show more)</a>\n\n                <span *ngIf="operatingHours.length === 0; then h"></span>\n\n                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n\n                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n\n                </ul>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <li class="info-link" [hidden]="!business.phone_number">\n\n              <i class="fa fa-phone fa-2x"></i>\n\n              <span class="info-text"> {{business.phone_number}}</span>\n\n            </li>\n\n            <li class="info-link" tappable (click)="sendMessage()">\n\n              <i class="fa fa-comment fa-2x" ></i>\n\n              <span class="info-text"> Send Message</span>\n\n            </li>\n\n            <li class="info-link">\n\n              <i class="fa fa-tag fa-2x"></i>\n\n              <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.company_website">\n\n              <i class="fa fa-globe fa-2x"></i>\n\n              <span class="info-text"> {{business.company_website}}</span>\n\n            </li>\n\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n\n              <a><i class="fa fa-envelope fa-2x"></i>\n\n                <span class="info-text"> {{business.business_email}}</span>\n\n              </a>\n\n            </li> -->\n\n            <li class="info-link" [hidden]="!business.facebook_url">\n\n              <i class="fa fa-facebook fa-2x"></i>\n\n              <span class="info-text"> {{business.facebook_url}}</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.twitter_url">\n\n              <i class="fa fa-twitter fa-2x"></i>\n\n              <span class="info-text"> {{business.twitter_url}}</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.instagram_url">\n\n              <i class="fa fa-instagram fa-2x"></i>\n\n              <span class="info-text"> {{business.instagram_url}}</span>\n\n            </li>\n\n          </ul>\n\n        </ng-template>\n\n      </div>\n\n\n\n      <div class="col-12 page-divider">\n\n        <h4>Deals</h4>\n\n      </div>\n\n\n\n      <div class="col-12 deals-list">\n\n        <div *ngIf="business.deal_id != 0 ; then hasDeal else noDeal"></div>\n\n\n\n        <ng-template #hasDeal>\n\n          <div class="media" *ngFor="let deal of business.deal_id">\n\n            <img class="d-flex align-self-center mr-3" [src]="deal.photo.url">\n\n            <div class="media-body align-self-center">\n\n              <a href="#"><h5 class="mt-0">{{deal.template}}</h5></a>\n\n            </div>\n\n          </div>\n\n        </ng-template>\n\n\n\n        <ng-template #noDeal>\n\n          <h4>No deals available</h4>.\n\n        </ng-template>\n\n\n\n        <!-- <div class="add-favorite"><a class="btn">Add to Favorites <i class="fa fa-chevron-right"></i></a></div> -->\n\n\n\n        <div *ngIf="business.is_favorite; then Favorite else notFavorite"></div>\n\n        <ng-template #Favorite>\n\n          <div class="claim-btn-holder">\n\n            <a class="add-favorite true disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n          </div>\n\n        </ng-template>\n\n        <ng-template #notFavorite>\n\n          <div class="claim-btn-holder">\n\n            <a class="btn add-favorite" id="addToFavorite1" tappable (click)="addToFavorites(business)">Add to Favorites</a>\n\n            <a class="btn add-favorite true" id="addedToFavorite2" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n          </div>\n\n        </ng-template>\n\n      </div>\n\n    </div>\n\n<!--\n\n    <div class="row map-holder">\n\n      <div class="map-view" id="mapView"></div>\n\n    </div> -->\n\n\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-deals\page-user-deals.html"*/
+        selector: 'page-user-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-deals\page-user-deals.html"*/'<ion-header>\n\n  <ion-navbar *ngIf="hasData">\n\n    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>\n\n    <span class="business-title">{{business.company_name}}</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding class="deals-page">\n\n  <div *ngIf="hasData">\n\n\n\n    <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null || business.operations.length === 0;"></div>\n\n\n\n    <!-- <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null"></div> -->\n\n\n\n    <div class="slider-holder" [hidden]="!business.deal_id.length || !business.files.length">\n\n      <div *ngIf="business?.files.length === 1; then oneImg else manyImgs"></div>\n\n      <ng-template #manyImgs>\n\n        <ion-slides #slider loop="true">\n\n          <ion-slide *ngFor="let img of business.files; let i = index;">\n\n            <img src="{{img.length !== 0 ? img.url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n\n          </ion-slide>\n\n\n\n        </ion-slides>\n\n        <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n\n        <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n\n      </ng-template>\n\n\n\n      <ng-template #oneImg>\n\n        <div class="img-banner">\n\n          <img src="{{business.files.length !== 0 ? business.files[0].url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n\n        </div>\n\n      </ng-template>\n\n\n\n    </div>\n\n\n\n    <!-- <div class="slider-holder">\n\n      <ion-slides #slider loop="true">\n\n        <ion-slide >\n\n          <img src="http://psdwizard.net/preview/gopage/assets/images/slider-img01.jpg" alt="Deals photo">\n\n        </ion-slide>\n\n      </ion-slides>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n\n    </div>\n\n\n\n     <nav id="business-actions" class="navbar navbar-light">\n\n      <ul class="nav nav-tabs">\n\n        <li class="nav-item">\n\n          <a class="nav-link"><i class="fa fa-map-o"></i> Directions</a>\n\n        </li>\n\n        <li class="nav-item">\n\n          <a class="nav-link" tappable (click)="getBusiness()"><i class="fa fa-star-o"></i> Add to Favorites</a>\n\n        </li>\n\n        <li class="nav-item">\n\n          <a class="nav-link" tappable (click)="sendMessage()"><i class="fa fa-comment-o"></i> Send Message</a>\n\n        </li>\n\n      </ul>\n\n    </nav> -->\n\n\n\n    <div class="row">\n\n      <div class="col-12 about-business">\n\n        <div class="about-description">\n\n            <p class="business-name">{{business.company_name}}</p>\n\n            <p class="short-description" [hidden]="!business.description"> {{business.description}}</p>\n\n        </div>\n\n        <!-- <p class="about-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo ligula</p> -->\n\n        <div *ngIf="business.business_type != \'0\' ; then isClickable else isNotClickable"></div>\n\n\n\n        <ng-template #isClickable>\n\n          <ul class="social-links list-unstyled">\n\n            <li class="address-link">\n\n              <i class="fa fa-map-marker fa-2x"></i>\n\n              <a class="clickable-link" (click)="viewMap(business.address, business.state, business.zip_postal)" target="_blank">\n\n                <span class="info-text"> {{business.address}}, {{business.state}}, {{business.zip_postal}} </span>\n\n              </a>\n\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n\n            <ng-template #hasOperations>\n\n              <li *ngIf="business.operations[0] === \'0\'"></li>\n\n\n\n              <li *ngIf="business.operations[0] === \'1\'"></li>\n\n\n\n              <li *ngIf="business.operations[0] === \'2\'">\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours\n\n                </a>\n\n              </li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n\n                <i class="fa fa-clock-o fa-2x"></i>&nbsp;\n\n                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>\n\n                <ng-template #isOpen>\n\n                  Open Today {{currentDay[0].start}} - {{currentDay[0].end}}\n\n                 </ng-template>\n\n                <ng-template #isClosed>\n\n                  Closed Today\n\n                </ng-template>\n\n                <a class="clickable-link" (click)="showHours()">(show more)</a>\n\n                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n\n                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n\n                </ul>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <li class="info-link" [hidden]="!business.phone_number">\n\n              <i class="fa fa-phone fa-2x"></i>\n\n              <a class="clickable-link" href="tel:{{business.phone_number}}">\n\n                <span class="info-text"> {{business.phone_number}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link">\n\n              <i class="fa fa-comment fa-2x"></i>\n\n              <a class="clickable-link" tappable (click)="sendMessage()">\n\n                <span class="info-text"> Send Message</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" >\n\n              <i class="fa fa-tag fa-2x"></i>\n\n              <a class="clickable-link">\n\n                <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n              </a>\n\n            </li>\n\n            <!-- <li *ngIf="!business.deal_id.length; then hasDeal else noDeal"></li>\n\n            <ng-template #hasDeal>\n\n              <li class="info-link" >\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-tag fa-2x"></i>\n\n                  <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n                </a>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <ng-template #noDeal>\n\n              <li class="info-link" >\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-tag fa-2x"></i>\n\n                  <span class="info-text"> 0 active deals</span>\n\n                </a>\n\n              </li>\n\n            </ng-template> -->\n\n\n\n            <li class="info-link" [hidden]="!business.company_website">\n\n              <i class="fa fa-globe fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.company_website}}" target="_blank">\n\n                <span class="info-text"> {{business.company_website}}</span>\n\n              </a>\n\n            </li>\n\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n\n              <a class="clickable-link" href="mailto:{{business.business_email}}">\n\n                <i class="fa fa-envelope fa-2x"></i>\n\n                <span class="info-text"> {{business.business_email}}</span>\n\n              </a>\n\n            </li> -->\n\n            <li class="info-link" [hidden]="!business.facebook_url">\n\n              <i class="fa fa-facebook fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.facebook_url}}" target="_blank">\n\n                <span class="info-text"> {{business.facebook_url}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.twitter_url">\n\n              <i class="fa fa-twitter fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.twitter_url}}" target="_blank">\n\n                <span class="info-text"> {{business.twitter_url}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.instagram_url">\n\n              <i class="fa fa-instagram fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.instagram_url}}" target="_blank">\n\n                <span class="info-text"> {{business.instagram_url}}</span>\n\n              </a>\n\n            </li>\n\n          </ul>\n\n        </ng-template>\n\n\n\n        <ng-template #isNotClickable>\n\n          <ul class="social-links list-unstyled">\n\n            <li class="address-link">\n\n              <i class="fa fa-map-marker fa-2x"></i>\n\n              <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>\n\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n\n            <ng-template #hasOperations>\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'0\'"></li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'1\'"></li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'2\'">\n\n                <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours\n\n              </li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n\n                <i class="fa fa-clock-o fa-2x"></i> &nbsp;\n\n                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>\n\n                <ng-template #isOpen>Open Today </ng-template>\n\n                <ng-template #isClosed>\n\n                  Closed Today\n\n                  <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>\n\n                </ng-template>\n\n                <a class="toggle-collapse" (click)="showHours()">(show more)</a>\n\n                <span *ngIf="operatingHours.length === 0; then h"></span>\n\n                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n\n                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n\n                </ul>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <li class="info-link" [hidden]="!business.phone_number">\n\n              <i class="fa fa-phone fa-2x"></i>\n\n              <span class="info-text"> {{business.phone_number}}</span>\n\n            </li>\n\n            <li class="info-link" tappable (click)="sendMessage()">\n\n              <i class="fa fa-comment fa-2x" ></i>\n\n              <span class="info-text"> Send Message</span>\n\n            </li>\n\n            <li class="info-link">\n\n              <i class="fa fa-tag fa-2x"></i>\n\n              <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.company_website">\n\n              <i class="fa fa-globe fa-2x"></i>\n\n              <span class="info-text"> {{business.company_website}}</span>\n\n            </li>\n\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n\n              <a><i class="fa fa-envelope fa-2x"></i>\n\n                <span class="info-text"> {{business.business_email}}</span>\n\n              </a>\n\n            </li> -->\n\n            <li class="info-link" [hidden]="!business.facebook_url">\n\n              <i class="fa fa-facebook fa-2x"></i>\n\n              <span class="info-text"> {{business.facebook_url}}</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.twitter_url">\n\n              <i class="fa fa-twitter fa-2x"></i>\n\n              <span class="info-text"> {{business.twitter_url}}</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.instagram_url">\n\n              <i class="fa fa-instagram fa-2x"></i>\n\n              <span class="info-text"> {{business.instagram_url}}</span>\n\n            </li>\n\n          </ul>\n\n        </ng-template>\n\n      </div>\n\n\n\n      <div class="col-12 page-divider">\n\n        <h4>Deals</h4>\n\n      </div>\n\n\n\n      <div class="col-12 deals-list">\n\n        <div *ngIf="business.deal_id != 0 ; then hasDeal else noDeal"></div>\n\n\n\n        <ng-template #hasDeal>\n\n          <div class="media" *ngFor="let deal of business.deal_id">\n\n            <img class="d-flex align-self-center mr-3" [src]="deal.photo.url">\n\n            <div class="media-body align-self-center">\n\n              <a href="#"><h5 class="mt-0">{{deal.template}}</h5></a>\n\n            </div>\n\n          </div>\n\n        </ng-template>\n\n\n\n        <ng-template #noDeal>\n\n          <h4>No deals available</h4>.\n\n        </ng-template>\n\n\n\n        <!-- <div class="add-favorite"><a class="btn">Add to Favorites <i class="fa fa-chevron-right"></i></a></div> -->\n\n\n\n        <div *ngIf="business.is_favorite; then Favorite else notFavorite"></div>\n\n        <ng-template #Favorite>\n\n          <div class="claim-btn-holder">\n\n            <a class="add-favorite true disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n          </div>\n\n        </ng-template>\n\n        <ng-template #notFavorite>\n\n          <div class="claim-btn-holder">\n\n            <a class="btn add-favorite" id="addToFavorite1" tappable (click)="addToFavorites(business)">Add to Favorites</a>\n\n            <a class="btn add-favorite true" id="addedToFavorite2" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n          </div>\n\n        </ng-template>\n\n      </div>\n\n    </div>\n\n<!--\n\n    <div class="row map-holder">\n\n      <div class="map-view" id="mapView"></div>\n\n    </div> -->\n\n\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-deals\page-user-deals.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__ionic_native_in_app_browser__["a" /* InAppBrowser */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
-        __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */],
+        __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__["a" /* ApiService */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */]])
+        __WEBPACK_IMPORTED_MODULE_8__ionic_storage__["b" /* Storage */]])
 ], UserDealsPage);
 
 //# sourceMappingURL=page-user-deals.js.map
@@ -331,7 +332,7 @@ SliderPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserLoyaltyCardsPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(27);
@@ -376,10 +377,19 @@ var UserLoyaltyCardsPage = (function () {
         this.storage.get('user').then(function (user) {
             // console.log(user)
             _this.api.Loyalties.business(user._id).then(function (loyalty) {
-                //  console.log(loyalty)
+                //  var biz_id = [];
+                //
+                //  for (var x = 0; x < loyalty.length; x++) {
+                //    if ($.inArray(loyalty[x].business_id[0]._id, biz_id[x]) == -1) {
+                //      console.log(biz_id);
+                //      biz_id.push(loyalty[x].business_id[0]._id);
+                //    }
+                //  }
+                //
+                //  console.log(biz_id)
                 _this.loyalties = loyalty;
                 _this.hasData = true;
-                // console.log(loyalty[0].busines)
+                console.log(loyalty);
             });
         });
     };
@@ -394,7 +404,7 @@ var UserLoyaltyCardsPage = (function () {
 }());
 UserLoyaltyCardsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-loyalty-cards',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-loyalty-cards\page-user-loyalty-cards.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Loyalty Cards</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div class="business-cards-holder" *ngIf="hasData">\n\n    <div *ngIf="loyalties.length !== 0; then hasLoyalties else noLoyalties"></div>\n\n    <ng-template #hasLoyalties>\n\n      <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">\n\n        <div class="img-holder">\n\n          <img [src]="loyalty.deals_id[0].photo.url" alt="">\n\n        </div>\n\n        <div class="text-holder">\n\n          <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>\n\n          <span class="card-location-text">{{loyalty.business_id[0].country}}</span>\n\n          <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>\n\n          <i class="fa fa-chevron-right fa-2x"></i>\n\n        </div>\n\n      </div>\n\n    </ng-template>\n\n\n\n    <ng-template #noLoyalties>\n\n      <div class="no-loyalty-holder">\n\n        <h4>Currently you have no loyalty cards, go explore what different loyalty offers GoPage businesses have to offer!</h4>\n\n      </div>\n\n    </ng-template>\n\n\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-loyalty-cards\page-user-loyalty-cards.html"*/
+        selector: 'page-user-loyalty-cards',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-loyalty-cards\page-user-loyalty-cards.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Loyalty Cards</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div class="business-cards-holder" *ngIf="hasData">\n\n    <div *ngIf="loyalties.length !== 0; then hasLoyalties else noLoyalties"></div>\n\n    <ng-template #hasLoyalties>\n\n      <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">\n\n        <div class="img-holder">\n\n          <img src="{{loyalty.business_id[0].files[0].url !== null ? loyalty.business_id[0].files[0].url : assets/images/placeholder.jpg}}" alt="">\n\n        </div>\n\n        <div class="text-holder">\n\n          <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>\n\n          <span class="card-location-text">{{loyalty.business_id[0].country}}</span>\n\n          <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>\n\n          <i class="fa fa-chevron-right fa-2x"></i>\n\n        </div>\n\n      </div>\n\n    </ng-template>\n\n\n\n    <ng-template #noLoyalties>\n\n      <div class="no-loyalty-holder">\n\n        <h4>Currently you have no loyalty cards, go explore what different loyalty offers GoPage businesses have to offer!</h4>\n\n      </div>\n\n    </ng-template>\n\n\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-loyalty-cards\page-user-loyalty-cards.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__["a" /* ApiService */],
@@ -546,7 +556,7 @@ SortMenuPage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserChatPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_user_inbox_page_user_inbox__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_core__ = __webpack_require__(1);
@@ -950,7 +960,7 @@ DatabaseService = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupMobilePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_signup_page_signup__ = __webpack_require__(77);
@@ -960,7 +970,7 @@ DatabaseService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_signup_email_page_signup_email__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1197,10 +1207,10 @@ SignupMobilePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_reset_pass_success_page_reset_pass_success__ = __webpack_require__(430);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1395,7 +1405,7 @@ webpackEmptyAsyncContext.id = 184;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_signup_page_signup__ = __webpack_require__(77);
@@ -1405,7 +1415,7 @@ webpackEmptyAsyncContext.id = 184;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_storage__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1455,7 +1465,7 @@ var LoginPage = (function () {
         var baseUrl = __WEBPACK_IMPORTED_MODULE_12__app_config__["a" /* default */].baseUrl;
         this.fb.login(['email', 'public_profile']).then(function (res) {
             _this.fb.api('me?fields=id,email', []).then(function (profile) {
-                _this.http.post(baseUrl + 'api/users/login', { email: profile['email'], is_social: '1', permission: '4' }).subscribe(function (res) {
+                _this.http.post(baseUrl + 'api/users/login', { email: profile['email'], is_social: '1', permission: '3' }).subscribe(function (res) {
                     _this.getUser(res.json());
                 }, function (err) {
                     console.log(err);
@@ -1539,15 +1549,10 @@ LoginPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'page-login',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-login\page-login.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <ion-card *ngIf="userData">\n\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n\n  </ion-card>\n\n\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goSignup()">\n\n    Welcome Back\n\n  </p>\n\n  <button class="btn login-fb" (click)="fbConnect()"><span class="fa fa-facebook"></span> Continue with Facebook</button>\n\n  <button class="btn login-google" (click)="gpConnect()"><span class="fa fa-google"></span> Continue with Google</button>\n\n  <div class="divider">\n\n    <span>or</span>\n\n  </div>\n\n  <form class="form-login">\n\n    <label><input type="email" name="username" placeholder="Email or Phone" [(ngModel)]="posts.username" /><span class="text-validate">Email address is required.</span></label>\n\n    <label><input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" /><span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span></label>\n\n    <button class="btn-green" type="submit" (click)="logMeIn()">Log In</button>\n\n  </form>\n\n  <a class="description forgot-pass" (click)="goReset()">Forgot your password?</a>\n\n  <hr class="hr" />\n\n  <p class="description">Don\'t have an account? <a href="#" (click)="goSignup()">Sign Up</a></p>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-login\page-login.html"*/
     }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */],
-        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
-        __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],
-        __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */],
-        __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */],
-        __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */],
-        __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */]])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */]) === "function" && _g || Object])
 ], LoginPage);
 
+var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=page-login.js.map
 
 /***/ }),
@@ -1683,7 +1688,7 @@ UserLoyaltyStampCardPage = __decorate([
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ApiService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_config__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__(473);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__);
@@ -1956,7 +1961,7 @@ UtilService = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DashboardPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_loyalty_cards_page_user_loyalty_cards__ = __webpack_require__(159);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
@@ -1966,7 +1971,7 @@ UtilService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers__ = __webpack_require__(80);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__service_api_service_component__ = __webpack_require__(27);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2000,28 +2005,54 @@ var DashboardPage = (function () {
         this.socketService = socketService;
         this.hasData = false;
         this.hasNotify = false;
-        this.notifCount = 0;
+        this.notifCountTotal = 0;
         this.initInboxNotification();
     }
     DashboardPage.prototype.ionViewWillEnter = function () {
         var _this = this;
         this.socketService.connect();
+        this.getNotificationCount();
         this.storage.get('user').then(function (user) {
             _this.user = user;
             _this.firstname = user.first_name;
             _this.hasData = true;
         });
     };
+    DashboardPage.prototype.getNotificationCount = function () {
+        var _this = this;
+        this.storage.get('user').then(function (user) {
+            _this.user = user;
+            if (user._id) {
+                _this.api.Message.room_list(user._id).then(function (members) {
+                    if (members.length) {
+                        var withChats = [];
+                        for (var x = 0; x < members.length; x++) {
+                            if (members[x].last_chat.length > 0 && members[x].last_chat[0].is_read == false && members[x].last_chat[0].message_by !== 'member') {
+                                withChats.push(members[x]);
+                            }
+                        }
+                        _this.notifCountTotal = withChats.length;
+                    }
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            }
+            else {
+                console.log('User ID not found');
+            }
+        });
+    };
     DashboardPage.prototype.initInboxNotification = function () {
         var _this = this;
         // Get real time message notification
         this.socketService.notify.subscribe(function (chatNotification) {
-            console.log('Notif from business');
             _this._zone.run(function () {
                 _this.storage.get('user').then(function (user) {
                     if (chatNotification.user_id == user._id) {
+                        console.log('Notification from business | Dashboard Page');
                         _this.hasNotify = true;
-                        _this.notifCount++;
+                        // this.notifCount++;
+                        _this.getNotificationCount();
                     }
                 }).catch(function (error) {
                     console.log(error);
@@ -2073,7 +2104,7 @@ var DashboardPage = (function () {
 }());
 DashboardPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-dashboard',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-dashboard\page-dashboard.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <img class="header-logo" src="assets/images/logo-min.png" alt="GoPage Logo">\n\n    <span class="name">\n\n      <span class="fa-stack has-notif" (click)="ToInbox()">\n\n        <i class="fa fa-square fa-stack-2x"></i>\n\n        <span class="fa fa-stack-1x" *ngIf="!hasNotify">0</span>\n\n        <span class="fa fa-stack-1x" *ngIf="hasNotify">{{ notifCount }}</span>\n\n      </span>\n\n      Hi, {{firstname}}\n\n    </span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="container dashboard-menu">\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToMembership()">\n\n          <img src="assets/icon/membership-card.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Membership Card\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToLoyalty()">\n\n          <img src="assets/icon/loyalty-card.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Loyalty Card\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToFindDeals()">\n\n          <img src="assets/icon/find-deals.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Find Deals\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToFavorites()">\n\n          <img src="assets/icon/favorites.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Favorites\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToInbox()">\n\n          <img src="assets/icon/inbox.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Inbox\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToSettings()">\n\n          <img src="assets/icon/settings.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Settings\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-dashboard\page-dashboard.html"*/
+        selector: 'page-dashboard',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-dashboard\page-dashboard.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <img class="header-logo" src="assets/images/logo-min.png" alt="GoPage Logo">\n\n    <span class="name">\n\n      <span class="fa-stack has-notif" (click)="ToInbox()">\n\n        <i class="fa fa-square fa-stack-2x"></i>\n\n        <!-- <span class="fa fa-stack-1x" *ngIf="!hasNotify">0</span> -->\n\n        <span class="fa fa-stack-1x">{{ notifCountTotal }}</span>\n\n      </span>\n\n      Hi, {{firstname}}\n\n    </span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="container dashboard-menu">\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToMembership()">\n\n          <img src="assets/icon/membership-card.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Membership Card\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToLoyalty()">\n\n          <img src="assets/icon/loyalty-card.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Loyalty Card\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToFindDeals()">\n\n          <img src="assets/icon/find-deals.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Find Deals\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToFavorites()">\n\n          <img src="assets/icon/favorites.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Favorites\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToInbox()">\n\n          <img src="assets/icon/inbox.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Inbox\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToSettings()">\n\n          <img src="assets/icon/settings.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Settings\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-dashboard\page-dashboard.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],
@@ -2084,78 +2115,6 @@ DashboardPage = __decorate([
 ], DashboardPage);
 
 //# sourceMappingURL=page-dashboard.js.map
-
-/***/ }),
-
-/***/ 41:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MenuPage; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_loyalty_cards_page_user_loyalty_cards__ = __webpack_require__(159);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_inbox_page_user_inbox__ = __webpack_require__(79);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-
-var MenuPage = (function () {
-    function MenuPage(navCtrl) {
-        this.navCtrl = navCtrl;
-        this.pages = [
-            { title: 'membership card', component: __WEBPACK_IMPORTED_MODULE_3__page_user_membership_card_page_user_membership_card__["a" /* UserMembershipCardPage */] },
-            { title: 'loyalty cards', component: __WEBPACK_IMPORTED_MODULE_4__page_user_loyalty_cards_page_user_loyalty_cards__["a" /* UserLoyaltyCardsPage */] },
-            { title: 'find deals', component: __WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */] },
-            { title: 'favorites', component: __WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */] },
-            { title: 'inbox', component: __WEBPACK_IMPORTED_MODULE_7__page_user_inbox_page_user_inbox__["a" /* UserInboxPage */] }
-        ];
-    }
-    MenuPage.prototype.goBack = function () {
-        this.navCtrl.pop({
-            animate: true,
-            direction: 'back'
-        });
-    };
-    MenuPage.prototype.openPage = function (page) {
-        this.navCtrl.setRoot(page.component, {}, {
-            animate: true,
-            direction: 'back'
-        });
-    };
-    MenuPage.prototype.logOut = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__page_login_page_login__["a" /* LoginPage */], {}, {
-            animate: true,
-            direction: 'back'
-        });
-    };
-    return MenuPage;
-}());
-MenuPage = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-menu',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-menu\page-menu.html"*/'<ion-content padding class="content-page-menu">\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n  </p>\n\n\n\n  <ion-list class="menu-list">\n\n    <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n      <span class="label-{{p.title}}">{{p.title}}</span>\n\n    </button>\n\n  </ion-list>\n\n\n\n  <hr class="divider">\n\n  <a class="logout" href="#" (click)="logOut()">Logout</a>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-menu\page-menu.html"*/
-    }),
-    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
-], MenuPage);
-
-//# sourceMappingURL=page-menu.js.map
 
 /***/ }),
 
@@ -2263,7 +2222,7 @@ SocketService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_menu_page_category_menu_page_category_menu__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_menu_page_sort_menu_page_sort_menu__ = __webpack_require__(162);
@@ -2339,11 +2298,6 @@ var UserFindDealsMapPage = (function () {
         };
     }
     UserFindDealsMapPage.prototype.ionViewWillEnter = function () {
-        if (__WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView').length == 0) {
-            var map_template = '<div #mapView id="mapView"></div>';
-            __WEBPACK_IMPORTED_MODULE_11_jquery__(map_template).appendTo(__WEBPACK_IMPORTED_MODULE_11_jquery__('.scroll-content'));
-            this.initMap();
-        }
         var self = this;
         this.selectedMapCenter.address = this.navParams.get('map_address');
         this.business_deals = this.navParams.get('business_deals');
@@ -2354,9 +2308,7 @@ var UserFindDealsMapPage = (function () {
         // $('.locations-holder').on('mousedown', function() {
         //   self.getLocation();
         // });
-        //
         // $('#deal-location2').on('blur', function() {
-        //   // self.selectFirstResult();
         //   $('.locations-holder').css('visibility', 'hidden');
         // });
         __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').contextmenu(function () {
@@ -2364,17 +2316,12 @@ var UserFindDealsMapPage = (function () {
         });
     };
     UserFindDealsMapPage.prototype.ionViewDidLoad = function () {
-        // this.initMap();
         var self = this;
         setTimeout(function () {
             self.initMap();
             console.log('map initializing');
-            __WEBPACK_IMPORTED_MODULE_11_jquery__("#searchBtn2").click();
+            __WEBPACK_IMPORTED_MODULE_11_jquery__('#searchBtn2').click();
         }, 650);
-        // this.initMap();
-    };
-    UserFindDealsMapPage.prototype.ionViewWillLeave = function () {
-        __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView').remove();
     };
     UserFindDealsMapPage.prototype.initMap = function () {
         var _this = this;
@@ -2483,6 +2430,15 @@ var UserFindDealsMapPage = (function () {
                 self.map.setCenter(place.geometry.location);
             }
         });
+        // need to stop prop of the touchend event (for ios devices)
+        if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+            setTimeout(function () {
+                var container = document.getElementsByClassName('pac-container')[0];
+                container.addEventListener('touchend', function (e) {
+                    e.stopImmediatePropagation();
+                });
+            }, 500);
+        }
         //   searchBox.addListener('places_changed', function() {
         //     self.mapResults = [];
         //     var places = searchBox.getPlaces();
@@ -2577,7 +2533,7 @@ var UserFindDealsMapPage = (function () {
                 infowindow.setContent(content);
                 infowindow.open(_this.map, marker);
                 __WEBPACK_IMPORTED_MODULE_11_jquery__('#businessInfo').on('click', function () {
-                    self.getBusiness(template);
+                    self.getBusiness(d);
                 });
             });
             // }
@@ -2678,7 +2634,6 @@ var UserFindDealsMapPage = (function () {
         });
     };
     UserFindDealsMapPage.prototype.searchBusinessDeals = function () {
-        var _this = this;
         this.mapResults = [];
         this.removeMarkers();
         if (__WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val() === '') {
@@ -2690,45 +2645,58 @@ var UserFindDealsMapPage = (function () {
             }, 3000);
         }
         else {
-            this.selectFirstResult();
-            var spinner = '<i class="fa fa-spinner fa-spin"></i>';
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('.btn-search-deals').prop('disabled', true);
-            // $('.fa.fa-search').hide();
-            // $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
-            var loader = '<div id="mapLoader"><div class="icon-holder"><i class="fa fa-spinner fa-spin"></i></div></div>';
-            __WEBPACK_IMPORTED_MODULE_11_jquery__(loader).appendTo('#mapView');
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView div').first().css('opacity', 0.3);
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val(this.selectedMapCenter.address);
-            var user_input = __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-name2').val();
-            if (user_input !== '') {
-                var businessApi = this.api.Business.business_deals_search(user_input);
-                console.log(user_input);
+            var comma = __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val().split(",").length - 1;
+            if (comma !== 2) {
+                this.selectFirstResult();
+                this.searchApi();
             }
             else {
-                console.log('empty deal name');
-                var businessApi = this.api.Business.business_deals_list();
+                this.searchApi();
             }
-            businessApi.then(function (business) {
-                _this.searched_business_deals = business.hits.hits;
-                var businessHolder = business.hits.hits;
-                businessHolder.forEach(function (bus) {
-                    _this.mapResults.push(bus._source);
-                });
-                _this.createMarker(_this.mapResults);
-                console.log(_this.mapResults);
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('.btn-search-deals').prop('disabled', false);
-                // $('.fa.fa-search').show();
-                // $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapLoader').remove();
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView div:first-of-type').css('opacity', 1);
-            });
         }
     };
-    UserFindDealsMapPage.prototype.getBusiness = function (template) {
-        console.log(template);
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { template: template }, {
-            animate: true,
-            direction: 'forward'
+    UserFindDealsMapPage.prototype.searchApi = function () {
+        var _this = this;
+        var spinner = '<i class="fa fa-spinner fa-spin"></i>';
+        __WEBPACK_IMPORTED_MODULE_11_jquery__('.btn-search-deals').prop('disabled', true);
+        // $('.fa.fa-search').hide();
+        // $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
+        var loader = '<div id="mapLoader"><div class="icon-holder"><i class="fa fa-spinner fa-spin"></i></div></div>';
+        __WEBPACK_IMPORTED_MODULE_11_jquery__(loader).appendTo('#mapView');
+        __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView div').first().css('opacity', 0.3);
+        __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val(this.selectedMapCenter.address);
+        var user_input = __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-name2').val();
+        if (user_input !== '') {
+            var businessApi = this.api.Business.business_deals_search(user_input);
+            console.log(user_input);
+        }
+        else {
+            console.log('empty deal name');
+            var businessApi = this.api.Business.business_deals_list();
+        }
+        businessApi.then(function (business) {
+            _this.searched_business_deals = business.hits.hits;
+            var businessHolder = business.hits.hits;
+            businessHolder.forEach(function (bus) {
+                _this.mapResults.push(bus._source);
+            });
+            _this.createMarker(_this.mapResults);
+            console.log(_this.mapResults);
+            __WEBPACK_IMPORTED_MODULE_11_jquery__('.btn-search-deals').prop('disabled', false);
+            // $('.fa.fa-search').show();
+            // $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+            __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapLoader').remove();
+            __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView div:first-of-type').css('opacity', 1);
+        });
+    };
+    UserFindDealsMapPage.prototype.getBusiness = function (business) {
+        var _this = this;
+        this.api.Business.business_view(business.u_id).then(function (business) {
+            console.log(business);
+            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
+                animate: true,
+                direction: 'forward'
+            });
         });
     };
     UserFindDealsMapPage.prototype.goHome = function () {
@@ -3078,10 +3046,10 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_in_app_browser__ = __webpack_require__(185);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_component__ = __webpack_require__(754);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_facebook__ = __webpack_require__(75);
@@ -3097,7 +3065,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__pages_page_signup_mobile_page_signup_mobile__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__pages_page_signup_success_page_signup_success__ = __webpack_require__(428);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__pages_page_signup_mobile_success_page_signup_mobile_success__ = __webpack_require__(429);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__pages_page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__pages_page_menu_page_category_menu_page_category_menu__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__pages_page_menu_page_sort_menu_page_sort_menu__ = __webpack_require__(162);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__pages_item_details_item_details__ = __webpack_require__(434);
@@ -3284,6 +3252,78 @@ AppModule = __decorate([
 
 /***/ }),
 
+/***/ 53:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MenuPage; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_loyalty_cards_page_user_loyalty_cards__ = __webpack_require__(159);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_inbox_page_user_inbox__ = __webpack_require__(79);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+var MenuPage = (function () {
+    function MenuPage(navCtrl) {
+        this.navCtrl = navCtrl;
+        this.pages = [
+            { title: 'membership card', component: __WEBPACK_IMPORTED_MODULE_3__page_user_membership_card_page_user_membership_card__["a" /* UserMembershipCardPage */] },
+            { title: 'loyalty cards', component: __WEBPACK_IMPORTED_MODULE_4__page_user_loyalty_cards_page_user_loyalty_cards__["a" /* UserLoyaltyCardsPage */] },
+            { title: 'find deals', component: __WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */] },
+            { title: 'favorites', component: __WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */] },
+            { title: 'inbox', component: __WEBPACK_IMPORTED_MODULE_7__page_user_inbox_page_user_inbox__["a" /* UserInboxPage */] }
+        ];
+    }
+    MenuPage.prototype.goBack = function () {
+        this.navCtrl.pop({
+            animate: true,
+            direction: 'back'
+        });
+    };
+    MenuPage.prototype.openPage = function (page) {
+        this.navCtrl.setRoot(page.component, {}, {
+            animate: true,
+            direction: 'back'
+        });
+    };
+    MenuPage.prototype.logOut = function () {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__page_login_page_login__["a" /* LoginPage */], {}, {
+            animate: true,
+            direction: 'back'
+        });
+    };
+    return MenuPage;
+}());
+MenuPage = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
+        selector: 'page-menu',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-menu\page-menu.html"*/'<ion-content padding class="content-page-menu">\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n  </p>\n\n\n\n  <ion-list class="menu-list">\n\n    <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n      <span class="label-{{p.title}}">{{p.title}}</span>\n\n    </button>\n\n  </ion-list>\n\n\n\n  <hr class="divider">\n\n  <a class="logout" href="#" (click)="logOut()">Logout</a>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-menu\page-menu.html"*/
+    }),
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
+], MenuPage);
+
+//# sourceMappingURL=page-menu.js.map
+
+/***/ }),
+
 /***/ 57:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -3310,7 +3350,7 @@ var config = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_barcode_scanner__ = __webpack_require__(427);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(25);
@@ -3420,7 +3460,7 @@ UserMembershipCardPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_menu_page_category_menu_page_category_menu__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_menu_page_sort_menu_page_sort_menu__ = __webpack_require__(162);
@@ -3490,14 +3530,21 @@ var UserFindDealsPage = (function () {
                 return false;
             }
         });
+        __WEBPACK_IMPORTED_MODULE_12_jquery__(document).on({
+            'DOMNodeInserted': function () {
+                __WEBPACK_IMPORTED_MODULE_12_jquery__('.pac-item, .pac-item span', this).addClass('needsclick');
+            }
+        }, '.pac-container');
     }
     UserFindDealsPage.prototype.ionViewWillEnter = function () {
         this.getUser();
         var self = this;
+        this.setMapDataStorage();
         this.dataDisplay();
         //jQuery Get current location
         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').on('click', function () {
-            __WEBPACK_IMPORTED_MODULE_12_jquery__(this).select();
+            // $(this).select();
+            __WEBPACK_IMPORTED_MODULE_12_jquery__(this).get(0).setSelectionRange(0, 9999);
             // $('.locations-holder').css('visibility', 'visible');
         });
         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').contextmenu(function () {
@@ -3516,8 +3563,20 @@ var UserFindDealsPage = (function () {
             __WEBPACK_IMPORTED_MODULE_12_jquery__(".hasdeal-holder").css("display", "none");
         }
     };
-    UserFindDealsPage.prototype.ionViewWillLeave = function () {
-        __WEBPACK_IMPORTED_MODULE_12_jquery__('#mapView').remove();
+    // ionViewWillLeave() {
+    //   $('#mapView').remove();
+    // }
+    UserFindDealsPage.prototype.setMapDataStorage = function () {
+        var _this = this;
+        this.storage.get('user_short_location').then(function (user_short_location) {
+            // console.log(user_short_location)
+            _this.selectedMapCenter.address = user_short_location;
+            // $('#deal-location').val(user_short_location);
+            _this.storage.get('user_selected_latlng').then(function (user_selected_latlng) {
+                // console.log(user_selected_latlng)
+                _this.selectedMapCenter.location = user_selected_latlng;
+            });
+        });
     };
     UserFindDealsPage.prototype.dataDisplay = function () {
         var _this = this;
@@ -3534,8 +3593,8 @@ var UserFindDealsPage = (function () {
                     var searched_business_deals = _this.navParams.get('searched_business_deals');
                     var business_deals = _this.navParams.get('business_deals');
                     if (searched_business_deals !== undefined) {
-                        console.log('searched deals from map');
-                        console.log(searched_business_deals);
+                        // console.log('searched deals from map');
+                        // console.log(searched_business_deals);
                         var search_input = _this.navParams.get('search_input');
                         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-name').val(search_input);
                         var filtered_searched_business_deals = _this.getDealsWithinBound(searched_business_deals);
@@ -3544,15 +3603,15 @@ var UserFindDealsPage = (function () {
                             _this.sortData(filtered_searched_business_deals);
                         }
                         else {
-                            console.log('empty searched');
+                            // console.log('empty searched')
                             _this.business_deals = [];
                         }
                     }
                     else {
                         _this.getFilteredDealsAndFavorites();
                         if (business_deals !== undefined) {
-                            console.log('deals from find deals to map to find deals');
-                            console.log(business_deals);
+                            // console.log('deals from find deals to map to find deals')
+                            // console.log(business_deals);
                             _this.business_deals = business_deals;
                             _this.hasData = true;
                         }
@@ -3580,30 +3639,30 @@ var UserFindDealsPage = (function () {
                                         _this.getBusinessDeals();
                                     }
                                 });
-                                console.log('data from non filtered');
+                                // console.log('data from non filtered')
                             }
                             else {
                                 _this.getFilteredDealsAndFavorites();
-                                console.log('data from filtered');
+                                // console.log('data from filtered')
                             }
                             ////////////////
                         }
                     }
-                    console.log(_this.selectedMapCenter);
+                    // console.log(this.selectedMapCenter);
                 }
                 else {
                     _this.storage.get('user_selected_latlng').then(function (user_selected_latlng) {
                         _this.storage.get('user_short_location').then(function (user_short_location) {
-                            console.log('first enter find deals');
+                            // console.log('first enter find deals')
                             if (user_short_location !== null) {
-                                console.log('first enter find deals');
-                                console.log(user_selected_latlng.lat, user_selected_latlng.lng);
+                                // console.log('first enter find deals')
+                                // console.log(user_selected_latlng.lat, user_selected_latlng.lng)
                                 _this.default_location = new google.maps.LatLng(user_selected_latlng.lat, user_selected_latlng.lng);
                                 _this.map.setCenter(_this.default_location);
                                 __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').val(user_short_location);
                             }
                             else {
-                                console.log('ask permission');
+                                // console.log('ask permission')
                                 _this.getBusinessDeals();
                                 _this.getLocation();
                                 _this.geocodeLatLng();
@@ -3673,8 +3732,13 @@ var UserFindDealsPage = (function () {
             }
         });
         var sorted_business_deals = data.concat(filtered_business_deals);
-        sorted_business_deals.forEach(function (all) {
-            all_data.push(all._source);
+        sorted_business_deals.forEach(function (business) {
+            business._source.deal_id.forEach(function (deal) {
+                if (deal.is_featured) {
+                    business._source.featured_deal = deal;
+                }
+            });
+            all_data.push(business._source);
         });
         this.api.Favorites.favorite_list(this.user._id).then(function (favorites) {
             _this.favorites = favorites;
@@ -3713,7 +3777,7 @@ var UserFindDealsPage = (function () {
             all_business_deals.forEach(function (all) {
                 all_data.push(all._source);
             });
-            console.log(all_data);
+            //  console.log(all_data);
             _this.storage.set('all_business_deals', all_data);
         }).catch(function (error) {
             console.log(error);
@@ -3766,7 +3830,6 @@ var UserFindDealsPage = (function () {
             });
         }
         else {
-            console.log('business only');
             deal_id = [];
         }
         var deal_body = {
@@ -3784,13 +3847,13 @@ var UserFindDealsPage = (function () {
     UserFindDealsPage.prototype.goToFavorites = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_11__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */], {
             animate: true,
-            direction: 'back'
+            direction: 'forward'
         });
     };
     UserFindDealsPage.prototype.getBusiness = function (business) {
         var _this = this;
         this.api.Business.business_view(business.u_id).then(function (business) {
-            console.log(business);
+            // console.log(business)
             _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
                 animate: true,
                 direction: 'forward'
@@ -3809,12 +3872,12 @@ var UserFindDealsPage = (function () {
         else {
             var comma = __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').val().split(",").length - 1;
             if (comma !== 2) {
-                console.log('no comma');
+                // console.log('no comma')
                 this.selectFirstResult();
                 this.searchApi();
             }
             else {
-                console.log('2 comma');
+                // console.log('2 comma')
                 this.searchApi();
             }
         }
@@ -3825,15 +3888,15 @@ var UserFindDealsPage = (function () {
         __WEBPACK_IMPORTED_MODULE_12_jquery__('.fa.fa-search').hide();
         __WEBPACK_IMPORTED_MODULE_12_jquery__('.btn-search-deals').attr('disabled', true);
         __WEBPACK_IMPORTED_MODULE_12_jquery__(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
-        this.storage.get('user_short_location').then(function (user_short_location) {
-            console.log(user_short_location);
-            _this.selectedMapCenter.address = user_short_location;
-            // $('#deal-location').val(user_short_location);
-            _this.storage.get('user_selected_latlng').then(function (user_selected_latlng) {
-                console.log(user_selected_latlng);
-                _this.selectedMapCenter.location = user_selected_latlng;
-            });
-        });
+        // this.storage.get('user_short_location').then(user_short_location => {
+        //   console.log(user_short_location)
+        //   this.selectedMapCenter.address = user_short_location;
+        //   // $('#deal-location').val(user_short_location);
+        //   this.storage.get('user_selected_latlng').then(user_selected_latlng => {
+        //     console.log(user_selected_latlng)
+        //     this.selectedMapCenter.location = user_selected_latlng;
+        //   });
+        // });
         if (this.search.input !== '') {
             var businessApi = this.api.Business.business_deals_search(this.search.input);
         }
@@ -3865,34 +3928,6 @@ var UserFindDealsPage = (function () {
     };
     UserFindDealsPage.prototype.initMap = function () {
         var self = this;
-        // this.storage.get('user_selected_latlng').then(position => {
-        //   this.lat = position.lat;
-        //   this.lng = position.lng;
-        //
-        //   this.storage.get('user_short_location').then(address => {
-        //     this.address = address
-        //     if (self.address !== null) {
-        //       // if(self.lat != null && self.lng != null) {
-        //         this.default_location = new google.maps.LatLng(self.lat, self.lng);
-        //         $('#deal-location').val(self.address);
-        //       // } else {
-        //       //   this.default_location = new google.maps.LatLng(34.0522, -118.2437);
-        //       //   $('#deal-location').val('Los Angeles, CA');
-        //       // }
-        //     } else {
-        //       this.storage.get('user_short_location').then(user_short_location => {
-        //         if(user_short_location !== null) {
-        //           $('#deal-location').val(user_short_location);
-        //         } else {
-        //           this.getLocation();
-        //           this.geocodeLatLng();
-        //         }
-        //       });
-        //     }
-        //   });
-        // }).catch(error => {
-        //   console.log(error)
-        // });
         this.map = new google.maps.Map(document.getElementById('mapView'), {
             center: self.default_location,
             zoom: 9
@@ -3937,22 +3972,28 @@ var UserFindDealsPage = (function () {
             self.storage.set('user_selected_latlng', user_selected_latlng);
             self.storage.set('user_short_location', location);
             self.storage.set('user_long_location', place.formatted_address);
-            console.log(user_selected_latlng);
-            console.log(location);
             __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').val(location);
+            __WEBPACK_IMPORTED_MODULE_12_jquery__("#searchBtn").click();
             if (!place.geometry)
                 return;
             if (place.geometry.viewport) {
                 self.map.setCenter(place.geometry.location);
                 self.map.fitBounds(place.geometry.viewport);
                 self.map.setZoom(9);
-                __WEBPACK_IMPORTED_MODULE_12_jquery__("#searchBtn").click();
             }
             else {
                 self.map.setCenter(place.geometry.location);
-                __WEBPACK_IMPORTED_MODULE_12_jquery__("#searchBtn").click();
             }
         });
+        // need to stop prop of the touchend event (for ios devices)
+        if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+            setTimeout(function () {
+                var container = document.getElementsByClassName('pac-container')[0];
+                container.addEventListener('touchend', function (e) {
+                    e.stopImmediatePropagation();
+                });
+            }, 500);
+        }
     };
     UserFindDealsPage.prototype.getDealsWithinBound = function (data) {
         var _this = this;
@@ -3964,7 +4005,7 @@ var UserFindDealsPage = (function () {
                 filtered_data.push(d);
             }
             else {
-                console.log('out of bounds');
+                // console.log('out of bounds')
             }
         });
         return filtered_data;
@@ -3985,7 +4026,7 @@ var UserFindDealsPage = (function () {
             _this.storage.set('user_selected_latlng', position);
             _this.default_location = new google.maps.LatLng(34.0522, -118.2437);
             __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').val('Los Angeles, CA');
-            console.log('Error getting location', error);
+            // console.log('Error getting location', error);
         });
     };
     UserFindDealsPage.prototype.geocodeLatLng = function () {
@@ -4044,8 +4085,8 @@ var UserFindDealsPage = (function () {
                 var user_selected_latlng = { lat: results[0].geometry.location.lat(), lng: results[0].geometry.location.lng() };
                 self.selectedMapCenter.address = location;
                 self.selectedMapCenter.location = results[0].geometry.location;
-                console.log(location);
-                console.log(user_selected_latlng);
+                // console.log(location)
+                // console.log(user_selected_latlng)
                 self.storage.set('user_short_location', location);
                 self.storage.set('user_long_location', address);
                 self.storage.set('user_selected_latlng', user_selected_latlng);
@@ -4062,7 +4103,7 @@ __decorate([
 ], UserFindDealsPage.prototype, "content", void 0);
 UserFindDealsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-find-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-find-deals\page-user-find-deals.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Find Deals</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n  <div class="jumbotron search-banner">\n\n    <form class="form-inline form-search-deals text-center">\n\n      <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">\n\n      <!-- <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;"> -->\n\n      <label>\n\n        <span class="fa fa-map-marker"></span>\n\n        <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">\n\n        <div class="locations-holder">\n\n          <div class="location-holder" id="getLocation">\n\n            <ul>\n\n              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>\n\n            </ul>\n\n          </div>\n\n        </div>\n\n      </label>\n\n      <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>\n\n      <button class="btn-search-deals" type="submit" id="searchBtn" (click)="searchBusinessDeals()">\n\n        <i class="fa fa-search"></i>\n\n      </button>\n\n    </form>\n\n  </div>\n\n\n\n  <nav id="filter-sort-map" class="navbar navbar-light">\n\n    <ul class="nav nav-tabs">\n\n      <li class="nav-item">\n\n        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>\n\n      </li>\n\n      <!-- <li class="nav-item">\n\n        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>\n\n      </li> -->\n\n      <li class="nav-item">\n\n        <a class="nav-link" (click)="goMapView()"><i class="fa fa-map-marker"></i> Map view</a>\n\n      </li>\n\n    </ul>\n\n  </nav>\n\n\n\n  <div class="categories-header">\n\n    <div class="row">\n\n      <div class="col">\n\n        <p class="deals-category">\n\n          <span id="selected-category"></span>\n\n        </p>\n\n        <ion-item>\n\n          <ion-label> Show Image</ion-label>\n\n          <ion-toggle [(ngModel)]="toggleImage"></ion-toggle>\n\n        </ion-item>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <div class="categories-main">\n\n    <div class="map-view" id="mapView"></div>\n\n    <div class="row">\n\n      <div class="col holder-categories-result1">\n\n        <div class="row">\n\n          <div class="col categories-result" *ngIf="hasData">\n\n\n\n            <div *ngIf="business_deals?.length === 0; then noData else hasData"></div>\n\n            <ng-template #noData>\n\n              <div class="no-data-holder">\n\n                <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">\n\n              </div>\n\n            </ng-template>\n\n            <ng-template #hasData>\n\n              <div class="deal media {{toggleImage ? \'toggled\' : \'\'}}" *ngFor="let business of business_deals | slice:0:slice; let i=index">\n\n                <span *ngIf="business.deal_id.length !== 0; then hasDeal else noDeal "></span>\n\n\n\n                <!-- has deal -->\n\n                <ng-template #hasDeal>\n\n                  <!-- <span class="hasdeal-holder" *ngFor="let deal of business.deal_id"> -->\n\n                    <div class="hasdeal-template">\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n                      </div>\n\n\n\n                      <div class="col-xs-4">\n\n                        <div class="deals-button">\n\n                          <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                          <ng-template #notFavorite>\n\n                            <div class="claim-btn-holder">\n\n                              <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                              <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                            </div>\n\n                          </ng-template>\n\n                          <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                          <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                        </div>\n\n                      </div>\n\n                    </div>\n\n                  <!-- </span> -->\n\n                </ng-template>\n\n\n\n                <!-- no deal -->\n\n                <ng-template #noDeal>\n\n                  <div class="col-xs-8">\n\n                    <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                      <img class="d-flex mr-3" src="{{business.files.length !== 0 ? business.files[0].url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.company_name}}">\n\n                    </a>\n\n                    <div class="media-body align-self-center">\n\n                      <a class="business-link">{{business.company_name}}</a>\n\n                      <p class="business-address">{{business.address}}</p>\n\n                    </div>\n\n                  </div>\n\n\n\n                  <div class="col-xs-4">\n\n                    <div class="deals-button">\n\n                      <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                      <ng-template #notFavorite>\n\n                        <div class="claim-btn-holder">\n\n                          <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                          <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                        </div>\n\n                      </ng-template>\n\n                      <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                      <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n              </div>\n\n            </ng-template>\n\n          </div>\n\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">\n\n    <ion-infinite-scroll-content\n\n      loadingSpinner="bubbles">\n\n    </ion-infinite-scroll-content>\n\n  </ion-infinite-scroll>\n\n\n\n  <!-- <div class="row" *ngIf="showPagination">\n\n    <nav class="col-12 holder-pagination">\n\n      <ul class="pagination list-unstyled" *ngIf="pager.pages && pager.pages.length">\n\n        <li class="page-item prev-page">\n\n          <button class="page-link prev-page" [ngClass]="{disabled:pager.currentPage === 1}" (click)="setPagination(pager.currentPage - 1)" ion-button small><i class="fa fa-angle-left"></i>&nbsp;<span class="prev">Prev</span></button>\n\n        </li>\n\n        <li class="page-item" *ngFor="let page of pager.pages">\n\n          <button class="page-link" [ngClass]="{active:pager.currentPage === page}" (click)="setPagination(page)" ion-button small>\n\n            {{page}}\n\n          </button>\n\n        </li>\n\n        <li class="page-item">\n\n          <button class="page-link next-page" [ngClass]="{disabled:pager.currentPage === pager.totalPages}" (click)="setPagination(pager.currentPage + 1)" ion-button small><span class="next">Next</span>&nbsp;<i class="fa fa-angle-right"></i></button>\n\n        </li>\n\n      </ul>\n\n    </nav>\n\n  </div> -->\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-find-deals\page-user-find-deals.html"*/
+        selector: 'page-user-find-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-find-deals\page-user-find-deals.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Find Deals</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n  <div class="jumbotron search-banner">\n\n    <form class="form-inline form-search-deals text-center">\n\n      <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">\n\n      <!-- <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;"> -->\n\n      <label>\n\n        <span class="fa fa-map-marker"></span>\n\n        <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">\n\n        <div class="locations-holder">\n\n          <div class="location-holder" id="getLocation">\n\n            <ul>\n\n              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>\n\n            </ul>\n\n          </div>\n\n        </div>\n\n      </label>\n\n      <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>\n\n      <button class="btn-search-deals" type="submit" id="searchBtn" (click)="searchBusinessDeals()">\n\n        <i class="fa fa-search"></i>\n\n      </button>\n\n    </form>\n\n  </div>\n\n\n\n  <nav id="filter-sort-map" class="navbar navbar-light">\n\n    <ul class="nav nav-tabs">\n\n      <li class="nav-item">\n\n        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>\n\n      </li>\n\n      <!-- <li class="nav-item">\n\n        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>\n\n      </li> -->\n\n      <li class="nav-item">\n\n        <a class="nav-link" (click)="goMapView()"><i class="fa fa-map-marker"></i> Map view</a>\n\n      </li>\n\n    </ul>\n\n  </nav>\n\n\n\n  <div class="categories-header">\n\n    <div class="row">\n\n      <div class="col">\n\n        <p class="deals-category">\n\n          <span id="selected-category"></span>\n\n        </p>\n\n        <ion-item>\n\n          <ion-label> Show Image</ion-label>\n\n          <ion-toggle [(ngModel)]="toggleImage"></ion-toggle>\n\n        </ion-item>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <div class="categories-main">\n\n    <div class="map-view" id="mapView"></div>\n\n    <div class="row">\n\n      <div class="col holder-categories-result1">\n\n        <div class="row">\n\n          <div class="col categories-result" *ngIf="hasData">\n\n\n\n            <div *ngIf="business_deals?.length === 0; then noData else hasData"></div>\n\n            <ng-template #noData>\n\n              <div class="no-data-holder">\n\n                <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">\n\n              </div>\n\n            </ng-template>\n\n            <ng-template #hasData>\n\n              <div class="deal media {{toggleImage ? \'toggled\' : \'\'}}" *ngFor="let business of business_deals | slice:0:slice; let i = index">\n\n                <span *ngIf="business.deal_id.length !== 0; then hasDeal else noDeal "></span>\n\n\n\n                <!-- has deal -->\n\n                <ng-template #hasDeal>\n\n                  <div class="hasdeal-template">\n\n                    <div *ngIf="business.featured_deal !== undefined; then hasFeatured else noFeatured"></div>\n\n\n                    <ng-template #hasFeatured>\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.featured_deal.photo.url !== unknown ? business.featured_deal.photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.featured_deal.template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.featured_deal.template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.featured_deal.end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n\n\n                      </div>\n\n                    </ng-template>\n\n\n                    <ng-template #noFeatured>\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n\n\n                      </div>\n\n                    </ng-template>\n\n\n                    <!-- <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                      <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                        <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                      </a>\n\n                      <div class="media-body align-self-center">\n\n                        <a class="business-link">{{business.company_name}}</a>\n\n                        <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                        <a class="deal-title">\n\n                          <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                        </a>\n\n                        <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                      </div>\n\n\n\n                    </div> -->\n\n\n\n                    <div class="col-xs-4">\n\n                      <div class="deals-button">\n\n                        <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                        <ng-template #notFavorite>\n\n                          <div class="claim-btn-holder">\n\n                            <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                            <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                          </div>\n\n                        </ng-template>\n\n                        <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                        <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                      </div>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n\n\n                <!-- no deal -->\n\n                <ng-template #noDeal>\n\n                  <div class="col-xs-8">\n\n                    <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                      <img class="d-flex mr-3" src="{{business.files.length !== 0 ? business.files[0].url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.company_name}}">\n\n                    </a>\n\n                    <div class="media-body align-self-center">\n\n                      <a class="business-link">{{business.company_name}}</a>\n\n                      <p class="business-address">{{business.address}}</p>\n\n                    </div>\n\n                  </div>\n\n\n\n                  <div class="col-xs-4">\n\n                    <div class="deals-button">\n\n                      <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                      <ng-template #notFavorite>\n\n                        <div class="claim-btn-holder">\n\n                          <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                          <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                        </div>\n\n                      </ng-template>\n\n                      <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                      <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n              </div>\n\n            </ng-template>\n\n          </div>\n\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">\n\n    <ion-infinite-scroll-content\n\n      loadingSpinner="bubbles">\n\n    </ion-infinite-scroll-content>\n\n  </ion-infinite-scroll>\n\n\n\n  <!-- <div class="row" *ngIf="showPagination">\n\n    <nav class="col-12 holder-pagination">\n\n      <ul class="pagination list-unstyled" *ngIf="pager.pages && pager.pages.length">\n\n        <li class="page-item prev-page">\n\n          <button class="page-link prev-page" [ngClass]="{disabled:pager.currentPage === 1}" (click)="setPagination(pager.currentPage - 1)" ion-button small><i class="fa fa-angle-left"></i>&nbsp;<span class="prev">Prev</span></button>\n\n        </li>\n\n        <li class="page-item" *ngFor="let page of pager.pages">\n\n          <button class="page-link" [ngClass]="{active:pager.currentPage === page}" (click)="setPagination(page)" ion-button small>\n\n            {{page}}\n\n          </button>\n\n        </li>\n\n        <li class="page-item">\n\n          <button class="page-link next-page" [ngClass]="{disabled:pager.currentPage === pager.totalPages}" (click)="setPagination(pager.currentPage + 1)" ion-button small><span class="next">Next</span>&nbsp;<i class="fa fa-angle-right"></i></button>\n\n        </li>\n\n      </ul>\n\n    </nav>\n\n  </div> -->\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-find-deals\page-user-find-deals.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -4465,7 +4506,7 @@ webpackContext.id = 756;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_slider_page_slider__ = __webpack_require__(158);
@@ -4473,7 +4514,7 @@ webpackContext.id = 756;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_signup_email_page_signup_email__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_signup_mobile_page_signup_mobile__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -4661,10 +4702,9 @@ var PaginationService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_deals_page_user_deals__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_deals_page_user_deals__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(25);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4674,7 +4714,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -4703,12 +4742,6 @@ var UserFavoritesPage = (function () {
             direction: 'back'
         });
     };
-    UserFavoritesPage.prototype.showMenu = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__["a" /* MenuPage */], {
-            animate: true,
-            direction: 'forward'
-        });
-    };
     UserFavoritesPage.prototype.ionViewWillEnter = function () {
         this.getFavorites();
     };
@@ -4725,7 +4758,7 @@ var UserFavoritesPage = (function () {
         var _this = this;
         this.api.Business.business_view(business.business_id[0]._id).then(function (business) {
             console.log(business);
-            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
+            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
                 animate: true,
                 direction: 'forward'
             });
@@ -4766,8 +4799,8 @@ UserFavoritesPage = __decorate([
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
-        __WEBPACK_IMPORTED_MODULE_6__service_api_service_component__["a" /* ApiService */],
-        __WEBPACK_IMPORTED_MODULE_7__ionic_storage__["b" /* Storage */]])
+        __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__["a" /* ApiService */],
+        __WEBPACK_IMPORTED_MODULE_6__ionic_storage__["b" /* Storage */]])
 ], UserFavoritesPage);
 
 //# sourceMappingURL=page-user-favorites.js.map
@@ -4834,7 +4867,7 @@ ListPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserInboxPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_chat_page_user_chat__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(25);
@@ -5303,7 +5336,7 @@ KeyboardAttachDirective = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SignupEmailPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_signup_page_signup__ = __webpack_require__(77);
@@ -5313,7 +5346,7 @@ KeyboardAttachDirective = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_signup_mobile_page_signup_mobile__ = __webpack_require__(170);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
