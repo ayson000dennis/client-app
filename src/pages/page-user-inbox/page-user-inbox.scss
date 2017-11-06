@@ -28,6 +28,31 @@ page-user-inbox {
         color: #c8c7cc;
       }
 
+      .back-btn {
+        background: transparent;
+
+        &:focus,
+        &:active {
+          background: transparent;
+        }
+
+        &.button-ios {
+          position: absolute;
+          top: 17px;
+          left: 0;
+
+          height: 2.3em;
+        }
+
+        &.button-md {
+          position: absolute;
+          top: 10px;
+          left: 0;
+
+          box-shadow: none;
+        }
+      }
+
       .page-title {
         display: flex;
         justify-content: center;
@@ -39,12 +64,22 @@ page-user-inbox {
       }
 
       i.fa {
-        position: absolute;
-        top: 20px;
         font-size: 30px;
         color: #b1b1b1 !important;
 
         cursor: pointer;
+      }
+
+      &.toolbar-ios {
+        .toolbar-content-ios {
+          i {
+            top: 24px;
+          }
+
+          .page-title {
+            margin-top: 7px;
+          }
+        }
       }
   }
 

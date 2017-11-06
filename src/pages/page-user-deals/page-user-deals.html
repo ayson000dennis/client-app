@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar *ngIf="hasData">
-    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>
+    <button ion-button class="back-btn" (click)="goPrevious()"><i class="fa fa-angle-left fa-lg"></i></button>
     <span class="business-title">{{business.company_name}}</span>
   </ion-navbar>
 </ion-header>
@@ -61,20 +61,46 @@
     <div class="row">
       <div class="col-12 about-business">
         <div class="about-description">
-            <p class="business-name">{{business.company_name}}</p>
-            <p class="short-description" [hidden]="!business.description"> {{business.description}}</p>
+          <p class="business-name">{{business.company_name}}</p>
+
+          <p class="short-description" [hidden]="!business.description" *ngIf="business.description.length >= 70">
+            <span class="shorten">{{business.description.substr(0, 70)}}... </span>
+            <span class="full-text hidden">{{business.description}}</span>
+            <a class="read-more" (click)="readMore()">Read more</a>
+            <a class="read-less hidden" (click)="readLess()">Read less</a>
+          </p>
+
+          <p class="short-description" [hidden]="!business.description" *ngIf="business.description.length <= 69">
+            {{business.description}}
+          </p>
         </div>
         <!-- <p class="about-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo ligula</p> -->
         <div *ngIf="business.business_type != '0' ; then isClickable else isNotClickable"></div>
 
         <ng-template #isClickable>
-          <ul class="social-links list-unstyled">
+          <ul class="social-links list-unstyled isClickable">
             <li class="address-link">
-              <i class="fa fa-map-marker fa-2x"></i>
-              <a class="clickable-link" (click)="viewMap(business.address, business.state, business.zip_postal)" target="_blank">
-                <span class="info-text"> {{business.address}}, {{business.state}}, {{business.zip_postal}} </span>
-              </a>
+              <div class="col-2">
+                <i class="fa fa-map-marker fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <a class="clickable-link" (click)="viewMap(business.address, business.state, business.zip_postal)" target="_blank">
+                  <span class="info-text">{{business.address}}, {{business.state}}, {{business.zip_postal}} </span>
+                </a>
+              </div>
             </li>
+
+            <li class="info-link" [hidden]="!business.phone_number">
+              <div class="col-2">
+                <i class="fa fa-phone fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <a class="clickable-link" href="tel:{{business.phone_number}}">
+                  <span class="info-text">{{business.phone_number}}</span>
+                </a>
+              </div>
+            </li>
+
             <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>
             <ng-template #hasOperations>
               <li *ngIf="business.operations[0] === '0'"></li>
@@ -82,44 +108,71 @@
               <li *ngIf="business.operations[0] === '1'"></li>
 
               <li *ngIf="business.operations[0] === '2'">
-                <a class="clickable-link">
-                  <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours
-                </a>
+                <div class="col-2">
+                  <i class="fa fa-clock-o fa-2x"></i>
+                </div>
+                <div class="col-10">
+                  <a class="clickable-link">
+                    Open 24 Hours
+                  </a>
+                </div>
               </li>
 
               <li class="operations-link" *ngIf="business.operations[0] !== '2' && business.operations[0] !== '0' && business.operations[0] !== '1'">
-                <i class="fa fa-clock-o fa-2x"></i>&nbsp;
+                <div class="col-2">
+                  <i class="fa fa-clock-o fa-2x"></i>
+                </div>
                 <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>
-                <ng-template #isOpen>
-                  Open Today {{currentDay[0].start}} - {{currentDay[0].end}}
-                 </ng-template>
-                <ng-template #isClosed>
-                  Closed Today
-                </ng-template>
-                <a class="clickable-link" (click)="showHours()">(show more)</a>
-                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">
-                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>
-                </ul>
+                <div class="col-10">
+                  <ng-template #isOpen>
+                    <span>Open Today {{currentDay[0].start}} - {{currentDay[0].end}}</span>
+                   </ng-template>
+                  <ng-template #isClosed>
+                    <span>Closed Today</span>
+                  </ng-template>
+                  <a class="clickable-link" tappable (click)="showHours()">(show more)</a>
+                </div>
+              </li>
+              <li>
+                <div class="col-12">
+                  <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">
+                    <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>
+                  </ul>
+                </div>
               </li>
             </ng-template>
 
-            <li class="info-link" [hidden]="!business.phone_number">
-              <i class="fa fa-phone fa-2x"></i>
-              <a class="clickable-link" href="tel:{{business.phone_number}}">
-                <span class="info-text"> {{business.phone_number}}</span>
-              </a>
+            <li class="info-link active-deals">
+              <div class="col-2">
+                <i class="fa fa-tag fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <a class="clickable-link" href="#dealsList">
+                  <span class="info-text">{{business.deal_id.length}} active deals</span>
+                </a>
+              </div>
             </li>
+
             <li class="info-link">
-              <i class="fa fa-comment fa-2x"></i>
-              <a class="clickable-link" tappable (click)="sendMessage()">
-                <span class="info-text"> Send Message</span>
-              </a>
+              <div class="col-2">
+                <i class="fa fa-heart fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <a class="clickable-link" id="addToFavorite1" tappable (click)="addToFavorites(business)">
+                  <span class="info-text">Add to favorites</span>
+                </a>
+              </div>
             </li>
-            <li class="info-link" >
-              <i class="fa fa-tag fa-2x"></i>
-              <a class="clickable-link">
-                <span class="info-text"> {{business.deal_id.length}} active deals</span>
-              </a>
+
+            <li class="info-link">
+              <div class="col-2">
+                <i class="fa fa-comment fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <a class="clickable-link" tappable (click)="sendMessage()">
+                  <span class="info-text">Send Message</span>
+                </a>
+              </div>
             </li>
             <!-- <li *ngIf="!business.deal_id.length; then hasDeal else noDeal"></li>
             <ng-template #hasDeal>
@@ -140,45 +193,54 @@
               </li>
             </ng-template> -->
 
-            <li class="info-link" [hidden]="!business.company_website">
-              <i class="fa fa-globe fa-2x"></i>
-              <a class="clickable-link" href="{{business.company_website}}" target="_blank">
-                <span class="info-text"> {{business.company_website}}</span>
-              </a>
-            </li>
-            <!-- <li class="info-link" [hidden]="!business.business_email">
-              <a class="clickable-link" href="mailto:{{business.business_email}}">
-                <i class="fa fa-envelope fa-2x"></i>
-                <span class="info-text"> {{business.business_email}}</span>
-              </a>
-            </li> -->
-            <li class="info-link" [hidden]="!business.facebook_url">
-              <i class="fa fa-facebook fa-2x"></i>
-              <a class="clickable-link" href="{{business.facebook_url}}" target="_blank">
-                <span class="info-text"> {{business.facebook_url}}</span>
-              </a>
-            </li>
-            <li class="info-link" [hidden]="!business.twitter_url">
-              <i class="fa fa-twitter fa-2x"></i>
-              <a class="clickable-link" href="{{business.twitter_url}}" target="_blank">
-                <span class="info-text"> {{business.twitter_url}}</span>
-              </a>
-            </li>
-            <li class="info-link" [hidden]="!business.instagram_url">
-              <i class="fa fa-instagram fa-2x"></i>
-              <a class="clickable-link" href="{{business.instagram_url}}" target="_blank">
-                <span class="info-text"> {{business.instagram_url}}</span>
-              </a>
-            </li>
+            <span class="social-media">
+              <li class="info-link">
+                <a class="clickable-link" ng-class="!business.company_website ? 'inactive' : '' " href="{{business.company_website}}" target="_blank">
+                  <i class="fa fa-globe fa-2x"></i>
+                </a>
+              </li>
+
+              <li class="info-link">
+                <a class="clickable-link" ng-class="!business.facebook_url ? 'inactive' : '' " href="{{business.facebook_url}}" target="_blank">
+                  <i class="fa fa-facebook fa-2x"></i>
+                </a>
+              </li>
+
+              <li class="info-link">
+                <a class="clickable-link" ng-class="!business.twitter_url ? 'inactive' : '' " href="{{business.twitter_url}}" target="_blank">
+                  <i class="fa fa-twitter fa-2x"></i>
+                </a>
+              </li>
+
+              <li class="info-link">
+                <a class="clickable-link" ng-class="!business.instagram_url ? 'inactive' : '' " href="{{business.instagram_url}}" target="_blank">
+                  <i class="fa fa-instagram fa-2x"></i>
+                </a>
+              </li>
+            </span>
           </ul>
         </ng-template>
 
         <ng-template #isNotClickable>
           <ul class="social-links list-unstyled">
             <li class="address-link">
-              <i class="fa fa-map-marker fa-2x"></i>
-              <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
+              <div class="col-2">
+                <i class="fa fa-map-marker fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
+              </div>
             </li>
+
+            <li class="info-link" [hidden]="!business.phone_number">
+              <div class="col-2">
+                <i class="fa fa-phone fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text"> {{business.phone_number}}</span>
+              </div>
+            </li>
+
             <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>
             <ng-template #hasOperations>
               <li class="operations-link" *ngIf="business.operations[0] === '0'"></li>
@@ -186,40 +248,73 @@
               <li class="operations-link" *ngIf="business.operations[0] === '1'"></li>
 
               <li class="operations-link" *ngIf="business.operations[0] === '2'">
-                <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours
+                <div class="col-2">
+                  <i class="fa fa-clock-o fa-2x"></i>
+                </div>
+                <div class="col-10">
+                  <span>Open 24 Hours</span>
+                </div>
               </li>
 
               <li class="operations-link" *ngIf="business.operations[0] !== '2' && business.operations[0] !== '0' && business.operations[0] !== '1'">
-                <i class="fa fa-clock-o fa-2x"></i> &nbsp;
-                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>
-                <ng-template #isOpen>Open Today </ng-template>
-                <ng-template #isClosed>
-                  Closed Today
-                  <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>
-                </ng-template>
-                <a class="toggle-collapse" (click)="showHours()">(show more)</a>
+                <div class="col-2">
+                  <i class="fa fa-clock-o fa-2x"></i>
+                </div>
+                <div class="col-10 op-hours">
+                  <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>
+                  <ng-template #isOpen>Open Today </ng-template>
+                  <ng-template #isClosed>
+                    Closed Today
+                    <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>
+                  </ng-template>
+                  <a class="toggle-collapse" tappable (click)="showHours()">(show more)</a>
+                </div>
                 <span *ngIf="operatingHours.length === 0; then h"></span>
-                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">
-                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>
-                </ul>
+              </li>
+
+              <li>
+                <div class="col-12">
+                  <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">
+                    <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>
+                  </ul>
+                </div>
               </li>
             </ng-template>
 
-            <li class="info-link" [hidden]="!business.phone_number">
-              <i class="fa fa-phone fa-2x"></i>
-              <span class="info-text"> {{business.phone_number}}</span>
+            <li class="info-link active-deals">
+              <div class="col-2">
+                <i class="fa fa-tag fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text"> {{business.deal_id.length}} active deals</span>
+              </div>
             </li>
+
+            <li class="info-link" id="addToFavorite1" tappable (click)="addToFavorites(business)">
+              <div class="col-2">
+                <i class="fa fa-heart fa-2x" ></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text">Add to favorites</span>
+              </div>
+            </li>
+
             <li class="info-link" tappable (click)="sendMessage()">
-              <i class="fa fa-comment fa-2x" ></i>
-              <span class="info-text"> Send Message</span>
+              <div class="col-2">
+                <i class="fa fa-comment fa-2x" ></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text">Send Message</span>
+              </div>
             </li>
-            <li class="info-link">
-              <i class="fa fa-tag fa-2x"></i>
-              <span class="info-text"> {{business.deal_id.length}} active deals</span>
-            </li>
+
             <li class="info-link" [hidden]="!business.company_website">
-              <i class="fa fa-globe fa-2x"></i>
-              <span class="info-text"> {{business.company_website}}</span>
+              <div class="col-2">
+                <i class="fa fa-globe fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text"> {{business.company_website}}</span>
+              </div>
             </li>
             <!-- <li class="info-link" [hidden]="!business.business_email">
               <a><i class="fa fa-envelope fa-2x"></i>
@@ -227,16 +322,28 @@
               </a>
             </li> -->
             <li class="info-link" [hidden]="!business.facebook_url">
-              <i class="fa fa-facebook fa-2x"></i>
-              <span class="info-text"> {{business.facebook_url}}</span>
+              <div class="col-2">
+                <i class="fa fa-facebook fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text"> {{business.facebook_url}}</span>
+              </div>
             </li>
             <li class="info-link" [hidden]="!business.twitter_url">
-              <i class="fa fa-twitter fa-2x"></i>
-              <span class="info-text"> {{business.twitter_url}}</span>
+              <div class="col-2">
+                <i class="fa fa-twitter fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text"> {{business.twitter_url}}</span>
+              </div>
             </li>
             <li class="info-link" [hidden]="!business.instagram_url">
-              <i class="fa fa-instagram fa-2x"></i>
-              <span class="info-text"> {{business.instagram_url}}</span>
+              <div class="col-2">
+                <i class="fa fa-instagram fa-2x"></i>
+              </div>
+              <div class="col-10">
+                <span class="info-text"> {{business.instagram_url}}</span>
+              </div>
             </li>
           </ul>
         </ng-template>
@@ -253,7 +360,7 @@
           <div class="media" *ngFor="let deal of business.deal_id">
             <img class="d-flex align-self-center mr-3" [src]="deal.photo.url">
             <div class="media-body align-self-center">
-              <a href="#"><h5 class="mt-0">{{deal.template}}</h5></a>
+              <a name="dealsList" href="#"><h5 class="mt-0">{{deal.template}}</h5></a>
             </div>
           </div>
         </ng-template>

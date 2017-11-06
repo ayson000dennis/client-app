@@ -61,14 +61,16 @@ export class UserLoyaltyCardDealsPage {
   goPrevious() {
     this.navCtrl.pop({
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goCard(title, stamps, stamps_needed) {
     this.navCtrl.push(UserLoyaltyStampCardPage, {title, stamps, stamps_needed,}, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 }

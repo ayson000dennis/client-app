@@ -33,14 +33,16 @@ export class UserFavoritesPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
@@ -62,7 +64,8 @@ export class UserFavoritesPage {
       console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
     });
   }

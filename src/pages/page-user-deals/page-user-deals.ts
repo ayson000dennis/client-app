@@ -104,6 +104,7 @@ export class UserDealsPage {
 
   ionViewWillEnter(){
     this.business = this.navParams.get('business');
+
     if(this.business.operations){
 
       var days = this.business.operations;
@@ -199,7 +200,8 @@ export class UserDealsPage {
   goToFavorites() {
       this.navCtrl.setRoot(UserFavoritesPage, {
         animate: true,
-        direction: 'back'
+        direction: 'back',
+        animation: 'md-transition'
       });
   }
 
@@ -214,14 +216,16 @@ export class UserDealsPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goListView() {
     this.navCtrl.setRoot(UserFindDealsPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
@@ -236,6 +240,20 @@ export class UserDealsPage {
     }
   }
 
+  readMore() {
+    $(".shorten").addClass("hidden");
+    $(".read-more").addClass("hidden");
+    $(".read-less").removeClass("hidden");
+    $(".full-text").removeClass("hidden");
+  }
+
+  readLess() {
+    $(".shorten").removeClass("hidden");
+    $(".read-more").removeClass("hidden");
+    $(".read-less").addClass("hidden");
+    $(".full-text").addClass("hidden");
+  }
+
   sendMessage() {
     this.storage.get('user').then(user =>{
 
@@ -245,7 +263,8 @@ export class UserDealsPage {
         userDetail: user
       },{
         animate: true,
-        direction: ' forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
 
     });
@@ -253,7 +272,10 @@ export class UserDealsPage {
   }
 
   goPrevious() {
-    this.navCtrl.pop();
+    this.navCtrl.pop({
+      animate: true,
+      direction: 'back',
+      animation: 'md-transition'
+    });
   }
-
 }

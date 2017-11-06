@@ -179,14 +179,16 @@ export class UserChatPage {
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   goToInbox() {
     this.navCtrl.setRoot(UserInboxPage, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 

@@ -116,42 +116,48 @@ export class DashboardPage {
   ToMembership() {
     this.navCtrl.setRoot(UserMembershipCardPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToLoyalty() {
     this.navCtrl.setRoot(UserLoyaltyCardsPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToFindDeals() {
     this.navCtrl.setRoot(UserFindDealsPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToFavorites() {
     this.navCtrl.setRoot(UserFavoritesPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToInbox() {
     this.navCtrl.setRoot(UserInboxPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToSettings() {
     this.navCtrl.setRoot(SettingsPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 }

@@ -1,5 +1,7 @@
 .pac-container {
+  z-index: 9999999;
   cursor: pointer;
+  pointer-events: auto;
   box-shadow: none;
   &:nth-of-type(even) {
     // margin-top: 46px !important;
@@ -53,13 +55,36 @@ page-user-find-deals {
         }
       }
 
+      .back-btn {
+        background: transparent;
+
+        &:focus,
+        &:active {
+          background: transparent;
+        }
+
+        &.button-ios {
+          position: absolute;
+          top: 17px;
+          left: 0;
+
+          height: 2.3em;
+        }
+
+        &.button-md {
+          position: absolute;
+          top: 10px;
+          left: 0;
+
+          box-shadow: none;
+        }
+      }
+
       .back-button {
         display: none !important;
       }
 
       i.fa {
-        position: absolute;
-        top: 20px;
         font-size: 30px;
         color: #b1b1b1 !important;
 
@@ -80,6 +105,10 @@ page-user-find-deals {
         .toolbar-content-ios {
           i {
             top: 24px;
+          }
+
+          .page-title {
+            margin-top: 7px;
           }
         }
       }
@@ -212,7 +241,7 @@ page-user-find-deals {
       visibility: hidden;
       // position: relative;
       .location-holder {
-        z-index: 9999999;
+        // z-index: 9999999;
         height: 41px;
         width: 257px;
 

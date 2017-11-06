@@ -36,14 +36,16 @@ export class UserLoyaltyCardsPage {
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
@@ -75,7 +77,8 @@ export class UserLoyaltyCardsPage {
     console.log(business_name)
     this.navCtrl.push(UserLoyaltyCardDealsPage, {business_id : business_id, business_name : business_name}, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 }

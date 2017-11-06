@@ -16,6 +16,9 @@ import { Storage } from '@ionic/storage';
 import { PaginationService } from '../../directives/pagination/index.pagination';
 import * as _ from 'lodash';
 
+import * as FastClick from 'fastclick';
+FastClick['attach'](document.body);
+
 import {} from '@types/googlemaps';
 declare var google: any;
 
@@ -77,11 +80,6 @@ export class UserFindDealsPage {
         }
       });
 
-      $(document).on({
-            'DOMNodeInserted': function() {
-                $('.pac-item, .pac-item span', this).addClass('needsclick');
-            }
-        }, '.pac-container');
     }
 
 
@@ -101,7 +99,6 @@ export class UserFindDealsPage {
     $('#deal-location').contextmenu(function() {
       return false;
     });
-
     // $('.locations-holder').on('mousedown', function() {
     //   self.getLocation();
     // });
@@ -119,10 +116,6 @@ export class UserFindDealsPage {
       $(".hasdeal-holder").css("display", "none");
     }
   }
-
-  // ionViewWillLeave() {
-  //   $('#mapView').remove();
-  // }
 
   setMapDataStorage() {
     this.storage.get('user_short_location').then(user_short_location => {
@@ -152,11 +145,10 @@ export class UserFindDealsPage {
           // console.log(this.selectedMapCenter.address, this.selectedMapCenter.location)
           //business deals data from map view
           var searched_business_deals = this.navParams.get('searched_business_deals');
-          var business_deals = this.navParams.get('business_deals');
 
           if(searched_business_deals !== undefined) {
 
-            // console.log('searched deals from map');
+            console.log('searched deals from map');
             // console.log(searched_business_deals);
             var search_input = this.navParams.get('search_input');
             $('#deal-name').val(search_input);
@@ -165,16 +157,16 @@ export class UserFindDealsPage {
               this.business_deals = [];
               this.sortData(filtered_searched_business_deals);
             } else {
-              // console.log('empty searched')
+              console.log('empty searched')
               this.business_deals = [];
             }
           } else {
             this.getFilteredDealsAndFavorites();
-
+            var business_deals = this.navParams.get('business_deals');
+            console.log(business_deals)
             if(business_deals !== undefined) {
-
-              // console.log('deals from find deals to map to find deals')
-              // console.log(business_deals);
+              console.log('deals from find deals to map to find deals')
+              console.log(business_deals)
               this.business_deals = business_deals;
               this.hasData = true;
             } else {
@@ -184,14 +176,10 @@ export class UserFindDealsPage {
               //     this.searchBusinessDeals();
               //   } else {
               //     console.log('all data')
-              //
-              //
               //     this.getBusinessDeals();
               //   }
               // });
               // console.log('data from non filtered')
-
-              ////////////////////////////////////
 
               this.getFilteredDealsAndFavorites();
 
@@ -203,15 +191,14 @@ export class UserFindDealsPage {
                     this.getBusinessDeals();
                   }
                 });
-                // console.log('data from non filtered')
+                console.log('data from non filtered')
               } else {
                 this.getFilteredDealsAndFavorites();
-                // console.log('data from filtered')
+                console.log('data from filtered')
               }
               ////////////////
             }
           }
-          // console.log(this.selectedMapCenter);
         } else {
 
           this.storage.get('user_selected_latlng').then(user_selected_latlng => {
@@ -245,21 +232,24 @@ export class UserFindDealsPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -267,14 +257,16 @@ export class UserFindDealsPage {
     var user_input = $('#deal-name').val();
     this.navCtrl.push(CategoryMenuPage, {user_input: user_input, business_deals: this.business_deals}, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   showSortMenu() {
     this.navCtrl.push(SortMenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -394,7 +386,8 @@ export class UserFindDealsPage {
       'search_input': this.search.input
     }, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -432,7 +425,8 @@ export class UserFindDealsPage {
   goToFavorites() {
       this.navCtrl.setRoot(UserFavoritesPage, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
   }
 
@@ -441,7 +435,8 @@ export class UserFindDealsPage {
       // console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
     });
   }
@@ -534,7 +529,7 @@ export class UserFindDealsPage {
     };
 
     var autocomplete = new google.maps.places.Autocomplete(location, options);
-    var searchBox = new google.maps.places.SearchBox(deal);
+    // var searchBox = new google.maps.places.SearchBox(deal);
 
     autocomplete.bindTo('bounds', self.map);
 
@@ -547,8 +542,8 @@ export class UserFindDealsPage {
     });
 
     autocomplete.addListener('place_changed', function() {
+      
       var place = autocomplete.getPlace();
-
       var city, state, country;
       place.address_components.forEach(result => {
         if(result.types[0]=="locality") {
@@ -589,16 +584,6 @@ export class UserFindDealsPage {
       }
 
     });
-
-    // need to stop prop of the touchend event (for ios devices)
-    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
-        setTimeout(function() {
-            var container = document.getElementsByClassName('pac-container')[0];
-            container.addEventListener('touchend', function(e) {
-                e.stopImmediatePropagation();
-            });
-        }, 500);
-    }
 
   }
 

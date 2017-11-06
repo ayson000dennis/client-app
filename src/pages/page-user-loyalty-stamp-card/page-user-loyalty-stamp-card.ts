@@ -84,7 +84,8 @@ export class UserLoyaltyStampCardPage {
   goBack() {
     this.navCtrl.pop({
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 }

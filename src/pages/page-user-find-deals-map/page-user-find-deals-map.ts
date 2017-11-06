@@ -89,9 +89,10 @@ export class UserFindDealsMapPage {
     var self = this;
     this.selectedMapCenter.address = this.navParams.get('map_address');
     this.business_deals = this.navParams.get('business_deals');
-
+    console.log(this.business_deals)
     $('#deal-location2').on('click', function() {
-      $(this).select();
+      $(this).get(0).setSelectionRange(0,9999);
+      // $(this).select();
       // $('.locations-holder').css('visibility', 'visible');
     });
 
@@ -115,6 +116,7 @@ export class UserFindDealsMapPage {
       self.initMap();
       console.log('map initializing')
       $('#searchBtn2').click();
+      this.searched_business_deals = undefined;
     }, 650);
   }
 
@@ -201,7 +203,7 @@ export class UserFindDealsMapPage {
     });
 
     autocomplete.addListener('place_changed', function() {
-
+      self.business_deals = undefined;
       var place = autocomplete.getPlace();
       var city, state, country;
       place.address_components.forEach(result => {
@@ -301,7 +303,6 @@ export class UserFindDealsMapPage {
   }
 
   createMarker(data) {
-
     var infowindow = new google.maps.InfoWindow();
     data.forEach(d => {
         var position = new google.maps.LatLng(d.lat, d.lng);
@@ -325,14 +326,14 @@ export class UserFindDealsMapPage {
 
           this.markers.push(marker);
 
-          if (d.photo !== undefined) {
-            this.thumb = d.photo;
+          if (d.files.length !== 0) {
+            this.thumb = d.files[0].url;
           } else {
             this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
           }
           var self = this;
           var address = d.city + ', ' + d.state + ', ' + d.country;
-          var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
+          // var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
 
           var content = '<div class="d-flex info-window"><div class="img-holder"><img src="'+this.thumb+'"/></div>' +
                         '<div class="info-holder">' +
@@ -534,7 +535,8 @@ export class UserFindDealsMapPage {
       console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
     });
   }
@@ -542,28 +544,32 @@ export class UserFindDealsMapPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showCategoryMenu() {
     this.navCtrl.push(CategoryMenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -584,7 +590,8 @@ export class UserFindDealsMapPage {
       },
       {
         animate: true,
-        direction: 'back'
+        direction: 'back',
+        animation: 'md-transition'
         }
     );
   }
