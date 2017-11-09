@@ -16,6 +16,8 @@ import { Storage } from '@ionic/storage';
 import { PaginationService } from '../../directives/pagination/index.pagination';
 import * as _ from 'lodash';
 
+import * as FastClick from 'fastclick';
+
 import {} from '@types/googlemaps';
 declare var google: any;
 
@@ -40,6 +42,7 @@ export class UserFindDealsPage {
   selectedMapCenter: {address: any, location: any} = {
     address: '', location: ''
   };
+  new_latlng: any;
 
   @ViewChild(Content) content: Content;
 
@@ -69,37 +72,51 @@ export class UserFindDealsPage {
     private geolocation: Geolocation,
     private paginationService : PaginationService)
     {
-      this.storage.get('all_business_deals').then(all_business_deals => {
-        if(all_business_deals === null) {
-          this.setBusinessDealsStorage();
-        } else {
-          return false;
-        }
+      // this.storage.get('all_business_deals').then(all_business_deals => {
+      //   if(all_business_deals === null) {
+      //     this.setBusinessDealsStorage();
+      //   } else {
+      //     return false;
+      //   }
+      // });
+      $(function() {
+        FastClick.attach(document.body);
       });
-
       $(document).on({
             'DOMNodeInserted': function() {
-                $('.pac-item, .pac-item span', this).addClass('needsclick');
+                $('.pac-container .pac-item, .pac-item span', this).addClass('needsclick');
             }
-        }, '.pac-container');
+        });
     }
 
 
   ionViewWillEnter(){
+    // $('.categories-header').hide();
+
     this.getUser();
     var self = this;
     this.setMapDataStorage();
-    this.dataDisplay();
+    // this.dataDisplay();
 
     //jQuery Get current location
     $('#deal-location').on('click', function() {
       // $(this).select();
       $(this).get(0).setSelectionRange(0,9999);
+      $('.pac-container').attr('data-tap-disabled', true);
+      // $('.pac-item').attr('data-tap-disabled', true);
       // $('.locations-holder').css('visibility', 'visible');
     });
 
     $('#deal-location').contextmenu(function() {
       return false;
+    });
+
+    //location input tweak for ios
+    $('#deal-location').on('keypress', function(){
+      $('.scroll-content').animate({scrollTop: 1}, 'fast');
+      setTimeout(()=>{
+        $('.scroll-content').animate({scrollTop: 0}, 'fast');
+      }, 50)
     });
 
     // $('.locations-holder').on('mousedown', function() {
@@ -112,17 +129,19 @@ export class UserFindDealsPage {
   }
 
   ionViewDidLoad() {
-    this.initMap();
+    var self = this;
+    setTimeout(function(){
+      self.initMap();
+      self.dataDisplay();
+      console.log('map initializing')
+    }, 650);
+
     $('#deal-location2').val('Los Angeles, CA');
 
     if ($('.hasdeal-holder').is(':empty')){
       $(".hasdeal-holder").css("display", "none");
     }
   }
-
-  // ionViewWillLeave() {
-  //   $('#mapView').remove();
-  // }
 
   setMapDataStorage() {
     this.storage.get('user_short_location').then(user_short_location => {
@@ -152,11 +171,9 @@ export class UserFindDealsPage {
           // console.log(this.selectedMapCenter.address, this.selectedMapCenter.location)
           //business deals data from map view
           var searched_business_deals = this.navParams.get('searched_business_deals');
-          var business_deals = this.navParams.get('business_deals');
-
           if(searched_business_deals !== undefined) {
 
-            // console.log('searched deals from map');
+            console.log('searched deals from map');
             // console.log(searched_business_deals);
             var search_input = this.navParams.get('search_input');
             $('#deal-name').val(search_input);
@@ -165,34 +182,17 @@ export class UserFindDealsPage {
               this.business_deals = [];
               this.sortData(filtered_searched_business_deals);
             } else {
-              // console.log('empty searched')
+              console.log('empty searched')
               this.business_deals = [];
             }
           } else {
             this.getFilteredDealsAndFavorites();
-
+            var business_deals = this.navParams.get('business_deals');
             if(business_deals !== undefined) {
-
-              // console.log('deals from find deals to map to find deals')
-              // console.log(business_deals);
+              console.log('deals from find deals to map to find deals');
               this.business_deals = business_deals;
               this.hasData = true;
             } else {
-              // this.storage.get('user_short_location').then(user_short_location => {
-              //   if (user_short_location !== null) {
-              //     console.log('user_short_location')
-              //     this.searchBusinessDeals();
-              //   } else {
-              //     console.log('all data')
-              //
-              //
-              //     this.getBusinessDeals();
-              //   }
-              // });
-              // console.log('data from non filtered')
-
-              ////////////////////////////////////
-
               this.getFilteredDealsAndFavorites();
 
               if (this.business_deals === undefined) {
@@ -203,24 +203,19 @@ export class UserFindDealsPage {
                     this.getBusinessDeals();
                   }
                 });
-                // console.log('data from non filtered')
+                console.log('data from non filtered')
               } else {
                 this.getFilteredDealsAndFavorites();
-                // console.log('data from filtered')
+                console.log('data from filtered')
               }
-              ////////////////
             }
           }
-          // console.log(this.selectedMapCenter);
         } else {
 
           this.storage.get('user_selected_latlng').then(user_selected_latlng => {
             this.storage.get('user_short_location').then(user_short_location => {
               // console.log('first enter find deals')
               if (user_short_location !== null) {
-
-                // console.log('first enter find deals')
-                // console.log(user_selected_latlng.lat, user_selected_latlng.lng)
                 this.default_location = new google.maps.LatLng(user_selected_latlng.lat, user_selected_latlng.lng);
                 this.map.setCenter(this.default_location);
                 $('#deal-location').val(user_short_location);
@@ -245,21 +240,24 @@ export class UserFindDealsPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -267,14 +265,16 @@ export class UserFindDealsPage {
     var user_input = $('#deal-name').val();
     this.navCtrl.push(CategoryMenuPage, {user_input: user_input, business_deals: this.business_deals}, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   showSortMenu() {
     this.navCtrl.push(SortMenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -285,12 +285,14 @@ export class UserFindDealsPage {
   }
 
   doInfinite(infiniteScroll) {
-
-   setTimeout(() => {
-     this.slice += 10;
-
-     infiniteScroll.complete();
-   }, 500);
+    if(this.business_deals.length <= this.slice) {
+      infiniteScroll.complete();
+    } else {
+      setTimeout(() => {
+        this.slice += 10;
+        infiniteScroll.complete();
+      }, 500);
+    }
  }
 
  sortData(data) {
@@ -307,7 +309,9 @@ export class UserFindDealsPage {
 
    var sorted_business_deals = data.concat(filtered_business_deals);
    sorted_business_deals.forEach(business => {
-     business._source.deal_id.forEach(deal =>{
+     business._source.deal_id.forEach(deal => {
+      var img = deal.photo.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+      deal.photo.url = img;
        if(deal.is_featured){
          business._source.featured_deal = deal;
        }
@@ -344,20 +348,20 @@ export class UserFindDealsPage {
    });
  }
 
- setBusinessDealsStorage() {
-   this.getUser();
-   this.api.Business.business_deals_list().then(deals => {
-     var all_data = [];
-     var all_business_deals = deals.hits.hits;
-     all_business_deals.forEach(all => {
-         all_data.push(all._source)
-     });
-    //  console.log(all_data);
-     this.storage.set('all_business_deals', all_data);
-   }).catch(error => {
-     console.log(error);
-   });
- }
+ // setBusinessDealsStorage() {
+ //   this.getUser();
+ //   this.api.Business.business_deals_list().then(deals => {
+ //     var all_data = [];
+ //     var all_business_deals = deals.hits.hits;
+ //     all_business_deals.forEach(all => {
+ //         all_data.push(all._source)
+ //     });
+ //    //  console.log(all_data);
+ //     this.storage.set('all_business_deals', all_data);
+ //   }).catch(error => {
+ //     console.log(error);
+ //   });
+ // }
 
  getFavorites() {
    this.api.Favorites.favorite_list(this.user._id).then(favorites => {
@@ -378,7 +382,8 @@ export class UserFindDealsPage {
     let filtered_business_deals = this.navParams.get('filtered_business_deals');
     let catergory_name = this.navParams.get('business_cat');
     if (filtered_business_deals != null) {
-      this.sortData(filtered_business_deals);
+      var data = this.getDealsWithinBound(filtered_business_deals);
+      this.sortData(data);
       //Set value catergory title display
       $('#selected-category').text(catergory_name);
       this.hasData = true;
@@ -394,7 +399,8 @@ export class UserFindDealsPage {
       'search_input': this.search.input
     }, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -404,6 +410,7 @@ export class UserFindDealsPage {
     selectedButton.className += " disabled";
 
     var deal_id = [];
+    var member_full_name = this.user.first_name + " " + this.user.last_name;
 
     if (business.deal_id.length !== 0) {
       business.deal_id.forEach(id => {
@@ -416,7 +423,8 @@ export class UserFindDealsPage {
     let deal_body = {
       deals_id : deal_id,
       business_id : business.u_id,
-      customer_id : this.user._id
+      customer_id : this.user._id,
+      member_full_name : member_full_name
     };
 
 
@@ -432,7 +440,8 @@ export class UserFindDealsPage {
   goToFavorites() {
       this.navCtrl.setRoot(UserFavoritesPage, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
   }
 
@@ -441,7 +450,8 @@ export class UserFindDealsPage {
       // console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
     });
   }
@@ -457,31 +467,25 @@ export class UserFindDealsPage {
     } else {
       var comma = $('#deal-location').val().split(",").length - 1;
       if (comma !== 2) {
-        // console.log('no comma')
         this.selectFirstResult();
         this.searchApi();
+        this.hasData = true;
       } else {
-        // console.log('2 comma')
         this.searchApi();
+        this.hasData = true;
       }
     }
   }
 
   searchApi() {
-    var spinner = '<i class="fa fa-spinner fa-spin"></i>';
+    var btn_spinner = '<i class="fa fa-spinner fa-spin"></i>';
+    var main_spinner = '<div class="loader-holder">Loading &nbsp; <i class="fa fa-spinner fa-spin"></i></div>';
 
     $('.fa.fa-search').hide();
     $('.btn-search-deals').attr('disabled', true);
-    $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
-    // this.storage.get('user_short_location').then(user_short_location => {
-    //   console.log(user_short_location)
-    //   this.selectedMapCenter.address = user_short_location;
-    //   // $('#deal-location').val(user_short_location);
-    //   this.storage.get('user_selected_latlng').then(user_selected_latlng => {
-    //     console.log(user_selected_latlng)
-    //     this.selectedMapCenter.location = user_selected_latlng;
-    //   });
-    // });
+    $('#deal-location').attr('disabled', true);
+    $(btn_spinner).appendTo('.search-banner .form-inline .btn-search-deals');
+    $(main_spinner).appendTo('.scroll-content .categories-main');
 
     if (this.search.input !== '') {
       var businessApi = this.api.Business.business_deals_search(this.search.input);
@@ -502,14 +506,20 @@ export class UserFindDealsPage {
       }
 
       $('.btn-search-deals').removeAttr('disabled');
+      $('#deal-location').removeAttr('disabled');
       $('.fa.fa-search').show();
+      $('.categories-header').show();
       $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+      $('.scroll-content .categories-main .loader-holder').remove();
 
     }).catch(error => {
       this.hasData = false;
       $('.btn-search-deals').removeAttr('disabled');
+      $('#deal-location').removeAttr('disabled');
       $('.fa.fa-search').show();
+      $('.categories-header').show();
       $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+      $('.scroll-content .categories-main .loader-holder').remove();
       console.log(error);
     });
   }
@@ -534,7 +544,7 @@ export class UserFindDealsPage {
     };
 
     var autocomplete = new google.maps.places.Autocomplete(location, options);
-    var searchBox = new google.maps.places.SearchBox(deal);
+    // var searchBox = new google.maps.places.SearchBox(deal);
 
     autocomplete.bindTo('bounds', self.map);
 
@@ -547,8 +557,19 @@ export class UserFindDealsPage {
     });
 
     autocomplete.addListener('place_changed', function() {
+      // need to stop prop of the touchend event
+      if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+        setTimeout(function() {
+			        var container = document.getElementsByClassName('pac-container')[0];
+			        console.log(container);
+			        container.addEventListener('touchstart', function(e) {
+			            e.stopImmediatePropagation();
+			            setTimeout(function(){
+                  },300);
+			        });
+			    }, 500);
+      }
       var place = autocomplete.getPlace();
-
       var city, state, country;
       place.address_components.forEach(result => {
         if(result.types[0]=="locality") {
@@ -570,6 +591,7 @@ export class UserFindDealsPage {
       var selected_lat = place.geometry.location.lat();
       var selected_lng = place.geometry.location.lng();
       var user_selected_latlng = {lat: selected_lat, lng: selected_lng};
+      this.new_latlng = user_selected_latlng;
 
       self.storage.set('user_selected_latlng', user_selected_latlng);
       self.storage.set('user_short_location', location);
@@ -589,16 +611,6 @@ export class UserFindDealsPage {
       }
 
     });
-
-    // need to stop prop of the touchend event (for ios devices)
-    if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
-        setTimeout(function() {
-            var container = document.getElementsByClassName('pac-container')[0];
-            container.addEventListener('touchend', function(e) {
-                e.stopImmediatePropagation();
-            });
-        }, 500);
-    }
 
   }
 

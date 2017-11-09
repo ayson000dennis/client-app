@@ -32,15 +32,28 @@ export class SettingsPage {
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   logOut() {
-    this.storage.remove('user');
-    this.navCtrl.push(LoginPage, {}, {
-      animate: true,
-      direction: 'back'
+    this.storage.clear();
+
+    this.storage.get('user').then(user => {
+      if (user == null) {
+        console.log('Storage data successfully cleared! You have been logout.');
+
+        this.navCtrl.push(LoginPage, {}, {
+          animate: true,
+          direction: 'back'
+        });
+      } else {
+        console.log('Storage data has not been cleared! Something went wrong.');
+      }
+    }).catch(err => {
+      console.log('Oops! Something went wrong.');
+      console.log('Error: ' + err);
     });
   }
 }

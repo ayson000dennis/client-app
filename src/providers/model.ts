@@ -8,6 +8,7 @@ export interface ChatMessage {
   business_id: string;
   first_name : string;
   last_name : string;
+  member_full_name: string;
   message: any;
   epoch?:number;
   message_by: string;

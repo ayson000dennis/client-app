@@ -33,14 +33,16 @@ export class UserFavoritesPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
@@ -52,6 +54,14 @@ export class UserFavoritesPage {
     this.storage.get("user").then(user => {
       this.api.Favorites.favorite_list(user._id).then(favorites => {
         console.log(favorites)
+
+          favorites.forEach(fav => {
+            if(fav.business_id[0].files.length !=0) {
+              var img = fav.business_id[0].files[0].url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+              fav.business_id[0].files[0].url = img;
+            }
+          });
+
         this.favorites = favorites;
       });
     });
@@ -62,7 +72,8 @@ export class UserFavoritesPage {
       console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
     });
   }

@@ -1,5 +1,20 @@
 page-user-chat {
 
+  // Iphone 5 portrait
+  @media screen and (device-aspect-ratio: 40/71) and (-webkit-min-device-pixel-ratio: 2) {
+    ion-navbar {
+
+      .back-btn-new {
+        margin-left: -30px !important;
+      }
+
+      .title {
+        left: -10px !important;
+      }
+
+    }
+  }
+
   ion-navbar {
     border-bottom: 1px solid transparent;
 

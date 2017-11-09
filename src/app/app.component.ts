@@ -51,7 +51,7 @@ export class MyApp {
         });
       }
     });
-
+    this.splashScreen.show();
     this.initializeApp();
 
     this.storage.get("user").then(user => {
@@ -62,11 +62,6 @@ export class MyApp {
       }
     });
 
-
-    // set our app's pages
-    // this.pages = [
-    //   { title: 'LOYALTY', component: UserMembershipCardPage }
-    // ];
   }
 
   initializeApp() {
@@ -74,7 +69,9 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
-      this.splashScreen.hide();
+      setTimeout(()=> {
+        this.splashScreen.hide();
+      }, 3000)
     });
   }
 

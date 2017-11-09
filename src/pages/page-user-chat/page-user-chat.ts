@@ -157,12 +157,14 @@ export class UserChatPage {
   }
 
   send(message) {
+    let member_full_name = this.userDetail.first_name + " " + this.userDetail.last_name;
+
     let user_id = this.userDetail._id,
     first_name = this.userDetail.first_name,
     last_name = this.userDetail.last_name,
     business_id = this.businessDetail._id
 
-    this.socketService.newRequest(UtilService.formatMessageRequest(user_id,business_id,first_name,last_name,message));
+    this.socketService.newRequest(UtilService.formatMessageRequest(user_id,business_id,first_name,last_name,member_full_name,message));
     this.chatBox = '';
     this.scrollToBottom();
   }
@@ -179,14 +181,16 @@ export class UserChatPage {
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   goToInbox() {
     this.navCtrl.setRoot(UserInboxPage, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 

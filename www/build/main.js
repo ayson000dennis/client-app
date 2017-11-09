@@ -12,9 +12,9 @@ webpackJsonp([1],{
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_user_favorites_page_user_favorites__ = __webpack_require__(78);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_user_chat_page_user_chat__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -97,6 +97,7 @@ var UserDealsPage = (function () {
     UserDealsPage.prototype.ionViewWillEnter = function () {
         var _this = this;
         this.business = this.navParams.get('business');
+        this.resizeImgs();
         if (this.business.operations) {
             var days = this.business.operations;
             if (this.business.operations[0] === '0') {
@@ -111,13 +112,16 @@ var UserDealsPage = (function () {
             else {
                 days.forEach(function (day, i) {
                     var d = Object.keys(day)[0];
+                    var isClosed = eval("day." + d + ".isChecked");
+                    // if(isClosed) {
                     var work = {
                         dayCount: i + 1,
                         day: d,
                         start: eval("day." + d + ".start"),
                         end: eval("day." + d + ".end"),
-                        isClosed: eval("day." + d + ".isChecked")
+                        isClosed: isClosed
                     };
+                    // }
                     _this.operatingHours.push(work);
                 });
                 this.operatingHours.forEach(function (operations) {
@@ -126,13 +130,28 @@ var UserDealsPage = (function () {
                         _this.currentDay.push(operations);
                     }
                 });
-                console.log(this.business.operations);
             }
         }
         if (this.business !== null) {
             this.hasData = true;
         }
         this.getFavorites();
+    };
+    UserDealsPage.prototype.resizeImgs = function () {
+        if (this.business.files.length !== 0) {
+            //resize banner imgs
+            this.business.files.forEach(function (files) {
+                var banner_imgs = files.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:500/");
+                files.url = banner_imgs;
+            });
+        }
+        if (this.business.deal_id.length !== 0) {
+            //resize deal imgs
+            this.business.deal_id.forEach(function (deal) {
+                var deal_imgs = deal.photo.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                deal.photo.url = deal_imgs;
+            });
+        }
     };
     UserDealsPage.prototype.getFavorites = function () {
         var _this = this;
@@ -185,7 +204,8 @@ var UserDealsPage = (function () {
     UserDealsPage.prototype.goToFavorites = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */], {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserDealsPage.prototype.viewMap = function (address, state, zip) {
@@ -197,13 +217,15 @@ var UserDealsPage = (function () {
     UserDealsPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_login_page_login__["a" /* LoginPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserDealsPage.prototype.goListView = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserDealsPage.prototype.showHours = function () {
@@ -216,6 +238,18 @@ var UserDealsPage = (function () {
             __WEBPACK_IMPORTED_MODULE_9_jquery__(".toggle-collapse").text("(show less)");
         }
     };
+    UserDealsPage.prototype.readMore = function () {
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".shorten").addClass("hidden");
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".read-more").addClass("hidden");
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".read-less").removeClass("hidden");
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".full-text").removeClass("hidden");
+    };
+    UserDealsPage.prototype.readLess = function () {
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".shorten").removeClass("hidden");
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".read-more").removeClass("hidden");
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".read-less").addClass("hidden");
+        __WEBPACK_IMPORTED_MODULE_9_jquery__(".full-text").addClass("hidden");
+    };
     UserDealsPage.prototype.sendMessage = function () {
         var _this = this;
         this.storage.get('user').then(function (user) {
@@ -225,12 +259,17 @@ var UserDealsPage = (function () {
                 userDetail: user
             }, {
                 animate: true,
-                direction: ' forward'
+                direction: 'forward',
+                animation: 'md-transition'
             });
         });
     };
     UserDealsPage.prototype.goPrevious = function () {
-        this.navCtrl.pop();
+        this.navCtrl.pop({
+            animate: true,
+            direction: 'back',
+            animation: 'md-transition'
+        });
     };
     return UserDealsPage;
 }());
@@ -240,7 +279,7 @@ __decorate([
 ], UserDealsPage.prototype, "slider", void 0);
 UserDealsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-deals\page-user-deals.html"*/'<ion-header>\n\n  <ion-navbar *ngIf="hasData">\n\n    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>\n\n    <span class="business-title">{{business.company_name}}</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding class="deals-page">\n\n  <div *ngIf="hasData">\n\n\n\n    <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null || business.operations.length === 0;"></div>\n\n\n\n    <!-- <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null"></div> -->\n\n\n\n    <div class="slider-holder" [hidden]="!business.deal_id.length || !business.files.length">\n\n      <div *ngIf="business?.files.length === 1; then oneImg else manyImgs"></div>\n\n      <ng-template #manyImgs>\n\n        <ion-slides #slider loop="true">\n\n          <ion-slide *ngFor="let img of business.files; let i = index;">\n\n            <img src="{{img.length !== 0 ? img.url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n\n          </ion-slide>\n\n\n\n        </ion-slides>\n\n        <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n\n        <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n\n      </ng-template>\n\n\n\n      <ng-template #oneImg>\n\n        <div class="img-banner">\n\n          <img src="{{business.files.length !== 0 ? business.files[0].url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n\n        </div>\n\n      </ng-template>\n\n\n\n    </div>\n\n\n\n    <!-- <div class="slider-holder">\n\n      <ion-slides #slider loop="true">\n\n        <ion-slide >\n\n          <img src="http://psdwizard.net/preview/gopage/assets/images/slider-img01.jpg" alt="Deals photo">\n\n        </ion-slide>\n\n      </ion-slides>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n\n    </div>\n\n\n\n     <nav id="business-actions" class="navbar navbar-light">\n\n      <ul class="nav nav-tabs">\n\n        <li class="nav-item">\n\n          <a class="nav-link"><i class="fa fa-map-o"></i> Directions</a>\n\n        </li>\n\n        <li class="nav-item">\n\n          <a class="nav-link" tappable (click)="getBusiness()"><i class="fa fa-star-o"></i> Add to Favorites</a>\n\n        </li>\n\n        <li class="nav-item">\n\n          <a class="nav-link" tappable (click)="sendMessage()"><i class="fa fa-comment-o"></i> Send Message</a>\n\n        </li>\n\n      </ul>\n\n    </nav> -->\n\n\n\n    <div class="row">\n\n      <div class="col-12 about-business">\n\n        <div class="about-description">\n\n            <p class="business-name">{{business.company_name}}</p>\n\n            <p class="short-description" [hidden]="!business.description"> {{business.description}}</p>\n\n        </div>\n\n        <!-- <p class="about-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo ligula</p> -->\n\n        <div *ngIf="business.business_type != \'0\' ; then isClickable else isNotClickable"></div>\n\n\n\n        <ng-template #isClickable>\n\n          <ul class="social-links list-unstyled">\n\n            <li class="address-link">\n\n              <i class="fa fa-map-marker fa-2x"></i>\n\n              <a class="clickable-link" (click)="viewMap(business.address, business.state, business.zip_postal)" target="_blank">\n\n                <span class="info-text"> {{business.address}}, {{business.state}}, {{business.zip_postal}} </span>\n\n              </a>\n\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n\n            <ng-template #hasOperations>\n\n              <li *ngIf="business.operations[0] === \'0\'"></li>\n\n\n\n              <li *ngIf="business.operations[0] === \'1\'"></li>\n\n\n\n              <li *ngIf="business.operations[0] === \'2\'">\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours\n\n                </a>\n\n              </li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n\n                <i class="fa fa-clock-o fa-2x"></i>&nbsp;\n\n                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>\n\n                <ng-template #isOpen>\n\n                  Open Today {{currentDay[0].start}} - {{currentDay[0].end}}\n\n                 </ng-template>\n\n                <ng-template #isClosed>\n\n                  Closed Today\n\n                </ng-template>\n\n                <a class="clickable-link" (click)="showHours()">(show more)</a>\n\n                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n\n                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n\n                </ul>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <li class="info-link" [hidden]="!business.phone_number">\n\n              <i class="fa fa-phone fa-2x"></i>\n\n              <a class="clickable-link" href="tel:{{business.phone_number}}">\n\n                <span class="info-text"> {{business.phone_number}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link">\n\n              <i class="fa fa-comment fa-2x"></i>\n\n              <a class="clickable-link" tappable (click)="sendMessage()">\n\n                <span class="info-text"> Send Message</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" >\n\n              <i class="fa fa-tag fa-2x"></i>\n\n              <a class="clickable-link">\n\n                <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n              </a>\n\n            </li>\n\n            <!-- <li *ngIf="!business.deal_id.length; then hasDeal else noDeal"></li>\n\n            <ng-template #hasDeal>\n\n              <li class="info-link" >\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-tag fa-2x"></i>\n\n                  <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n                </a>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <ng-template #noDeal>\n\n              <li class="info-link" >\n\n                <a class="clickable-link">\n\n                  <i class="fa fa-tag fa-2x"></i>\n\n                  <span class="info-text"> 0 active deals</span>\n\n                </a>\n\n              </li>\n\n            </ng-template> -->\n\n\n\n            <li class="info-link" [hidden]="!business.company_website">\n\n              <i class="fa fa-globe fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.company_website}}" target="_blank">\n\n                <span class="info-text"> {{business.company_website}}</span>\n\n              </a>\n\n            </li>\n\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n\n              <a class="clickable-link" href="mailto:{{business.business_email}}">\n\n                <i class="fa fa-envelope fa-2x"></i>\n\n                <span class="info-text"> {{business.business_email}}</span>\n\n              </a>\n\n            </li> -->\n\n            <li class="info-link" [hidden]="!business.facebook_url">\n\n              <i class="fa fa-facebook fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.facebook_url}}" target="_blank">\n\n                <span class="info-text"> {{business.facebook_url}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.twitter_url">\n\n              <i class="fa fa-twitter fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.twitter_url}}" target="_blank">\n\n                <span class="info-text"> {{business.twitter_url}}</span>\n\n              </a>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.instagram_url">\n\n              <i class="fa fa-instagram fa-2x"></i>\n\n              <a class="clickable-link" href="{{business.instagram_url}}" target="_blank">\n\n                <span class="info-text"> {{business.instagram_url}}</span>\n\n              </a>\n\n            </li>\n\n          </ul>\n\n        </ng-template>\n\n\n\n        <ng-template #isNotClickable>\n\n          <ul class="social-links list-unstyled">\n\n            <li class="address-link">\n\n              <i class="fa fa-map-marker fa-2x"></i>\n\n              <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>\n\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n\n            <ng-template #hasOperations>\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'0\'"></li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'1\'"></li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'2\'">\n\n                <i class="fa fa-clock-o fa-2x"></i> &nbsp; Open 24 Hours\n\n              </li>\n\n\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n\n                <i class="fa fa-clock-o fa-2x"></i> &nbsp;\n\n                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>\n\n                <ng-template #isOpen>Open Today </ng-template>\n\n                <ng-template #isClosed>\n\n                  Closed Today\n\n                  <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>\n\n                </ng-template>\n\n                <a class="toggle-collapse" (click)="showHours()">(show more)</a>\n\n                <span *ngIf="operatingHours.length === 0; then h"></span>\n\n                <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n\n                  <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n\n                </ul>\n\n              </li>\n\n            </ng-template>\n\n\n\n            <li class="info-link" [hidden]="!business.phone_number">\n\n              <i class="fa fa-phone fa-2x"></i>\n\n              <span class="info-text"> {{business.phone_number}}</span>\n\n            </li>\n\n            <li class="info-link" tappable (click)="sendMessage()">\n\n              <i class="fa fa-comment fa-2x" ></i>\n\n              <span class="info-text"> Send Message</span>\n\n            </li>\n\n            <li class="info-link">\n\n              <i class="fa fa-tag fa-2x"></i>\n\n              <span class="info-text"> {{business.deal_id.length}} active deals</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.company_website">\n\n              <i class="fa fa-globe fa-2x"></i>\n\n              <span class="info-text"> {{business.company_website}}</span>\n\n            </li>\n\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n\n              <a><i class="fa fa-envelope fa-2x"></i>\n\n                <span class="info-text"> {{business.business_email}}</span>\n\n              </a>\n\n            </li> -->\n\n            <li class="info-link" [hidden]="!business.facebook_url">\n\n              <i class="fa fa-facebook fa-2x"></i>\n\n              <span class="info-text"> {{business.facebook_url}}</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.twitter_url">\n\n              <i class="fa fa-twitter fa-2x"></i>\n\n              <span class="info-text"> {{business.twitter_url}}</span>\n\n            </li>\n\n            <li class="info-link" [hidden]="!business.instagram_url">\n\n              <i class="fa fa-instagram fa-2x"></i>\n\n              <span class="info-text"> {{business.instagram_url}}</span>\n\n            </li>\n\n          </ul>\n\n        </ng-template>\n\n      </div>\n\n\n\n      <div class="col-12 page-divider">\n\n        <h4>Deals</h4>\n\n      </div>\n\n\n\n      <div class="col-12 deals-list">\n\n        <div *ngIf="business.deal_id != 0 ; then hasDeal else noDeal"></div>\n\n\n\n        <ng-template #hasDeal>\n\n          <div class="media" *ngFor="let deal of business.deal_id">\n\n            <img class="d-flex align-self-center mr-3" [src]="deal.photo.url">\n\n            <div class="media-body align-self-center">\n\n              <a href="#"><h5 class="mt-0">{{deal.template}}</h5></a>\n\n            </div>\n\n          </div>\n\n        </ng-template>\n\n\n\n        <ng-template #noDeal>\n\n          <h4>No deals available</h4>.\n\n        </ng-template>\n\n\n\n        <!-- <div class="add-favorite"><a class="btn">Add to Favorites <i class="fa fa-chevron-right"></i></a></div> -->\n\n\n\n        <div *ngIf="business.is_favorite; then Favorite else notFavorite"></div>\n\n        <ng-template #Favorite>\n\n          <div class="claim-btn-holder">\n\n            <a class="add-favorite true disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n          </div>\n\n        </ng-template>\n\n        <ng-template #notFavorite>\n\n          <div class="claim-btn-holder">\n\n            <a class="btn add-favorite" id="addToFavorite1" tappable (click)="addToFavorites(business)">Add to Favorites</a>\n\n            <a class="btn add-favorite true" id="addedToFavorite2" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n          </div>\n\n        </ng-template>\n\n      </div>\n\n    </div>\n\n<!--\n\n    <div class="row map-holder">\n\n      <div class="map-view" id="mapView"></div>\n\n    </div> -->\n\n\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-deals\page-user-deals.html"*/
+        selector: 'page-user-deals',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-deals/page-user-deals.html"*/'<ion-header>\n  <ion-navbar *ngIf="hasData">\n    <button ion-button class="back-btn" (click)="goPrevious()"><i class="fa fa-angle-left fa-lg"></i></button>\n    <span class="business-title">{{business.company_name}}</span>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="deals-page">\n  <div *ngIf="hasData">\n\n    <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null || business.operations.length === 0;"></div>\n\n    <!-- <div *ngIf="business?.deal_id.length !== 0 || business.files.length !==0 || business.phone_number !== null || business.company_website !== null || business.business_email !== null"></div> -->\n\n    <div class="slider-holder" [hidden]="!business.deal_id.length || !business.files.length">\n      <div *ngIf="business?.files.length === 1; then oneImg else manyImgs"></div>\n      <ng-template #manyImgs>\n        <ion-slides #slider loop="true">\n          <ion-slide *ngFor="let img of business.files; let i = index;">\n            <img src="{{img.length !== 0 ? img.url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n          </ion-slide>\n\n        </ion-slides>\n        <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n        <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n      </ng-template>\n\n      <ng-template #oneImg>\n        <div class="img-banner">\n          <img src="{{business.files.length !== 0 ? business.files[0].url : \'assets/images/placeholder.jpg\'}}" alt="Deals photo">\n        </div>\n      </ng-template>\n\n    </div>\n\n    <!-- <div class="slider-holder">\n      <ion-slides #slider loop="true">\n        <ion-slide >\n          <img src="http://psdwizard.net/preview/gopage/assets/images/slider-img01.jpg" alt="Deals photo">\n        </ion-slide>\n      </ion-slides>\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left fa-lg"></i></span>\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right fa-lg"></i></span>\n    </div>\n\n     <nav id="business-actions" class="navbar navbar-light">\n      <ul class="nav nav-tabs">\n        <li class="nav-item">\n          <a class="nav-link"><i class="fa fa-map-o"></i> Directions</a>\n        </li>\n        <li class="nav-item">\n          <a class="nav-link" tappable (click)="getBusiness()"><i class="fa fa-star-o"></i> Add to Favorites</a>\n        </li>\n        <li class="nav-item">\n          <a class="nav-link" tappable (click)="sendMessage()"><i class="fa fa-comment-o"></i> Send Message</a>\n        </li>\n      </ul>\n    </nav> -->\n\n    <div class="row">\n      <div class="col-12 about-business">\n        <div class="about-description">\n          <p class="business-name">{{business.company_name}}</p>\n\n          <div *ngIf="business.description !== undefined; then hasDesc else noDesc"></div>\n\n          <ng-template #hasDesc>\n            <p class="short-description" [hidden]="business.description" *ngIf="business.description.length >= 70">\n              <span class="shorten">{{business.description.substr(0, 70)}}... </span>\n              <span class="full-text hidden">{{business.description}}</span>\n              <a class="read-more" (click)="readMore()">Read more</a>\n              <a class="read-less hidden" (click)="readLess()">Read less</a>\n            </p>\n\n            <p class="short-description" [hidden]="!business.description" *ngIf="business.description.length <= 69">\n              {{business.description}}\n            </p>\n          </ng-template>\n\n          <ng-template #noDesc>\n            <!-- //do something -->\n          </ng-template>\n\n        </div>\n        <!-- <p class="about-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo ligula</p> -->\n        <div *ngIf="business.business_type != \'0\' ; then isClickable else isNotClickable"></div>\n\n        <ng-template #isClickable>\n          <ul class="social-links list-unstyled isClickable">\n            <li class="address-link">\n              <div class="col-2">\n                <i class="fa fa-map-marker fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <a class="clickable-link" (click)="viewMap(business.address, business.state, business.zip_postal)" target="_blank">\n                  <span class="info-text">{{business.address}}, {{business.state}}, {{business.zip_postal}} </span>\n                </a>\n              </div>\n            </li>\n\n            <li class="info-link" [hidden]="!business.phone_number">\n              <div class="col-2">\n                <i class="fa fa-phone fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <a class="clickable-link" href="tel:{{business.phone_number}}">\n                  <span class="info-text">{{business.phone_number}}</span>\n                </a>\n              </div>\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n            <ng-template #hasOperations>\n              <li *ngIf="business.operations[0] === \'0\'"></li>\n\n              <li *ngIf="business.operations[0] === \'1\'"></li>\n\n              <li *ngIf="business.operations[0] === \'2\'">\n                <div class="col-2">\n                  <i class="fa fa-clock-o fa-2x"></i>\n                </div>\n                <div class="col-10">\n                  <a class="clickable-link">\n                    Open 24 Hours\n                  </a>\n                </div>\n              </li>\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n                <div class="col-2">\n                  <i class="fa fa-clock-o fa-2x"></i>\n                </div>\n                <div *ngIf="currentDay[0].isClosed !== true; then isOpen else isClosed"></div>\n                <div class="col-10">\n                  <ng-template #isOpen>\n                    <span>Open Today {{currentDay[0].start}} - {{currentDay[0].end}}</span>\n                   </ng-template>\n                  <ng-template #isClosed>\n                    <span>Closed Today</span>\n                  </ng-template>\n                  <a class="clickable-link" tappable (click)="showHours()">(show more)</a>\n                </div>\n              </li>\n              <li>\n                <div class="col-12">\n                  <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n                    <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n                  </ul>\n                </div>\n              </li>\n            </ng-template>\n\n            <li class="info-link active-deals">\n              <div class="col-2">\n                <i class="fa fa-tag fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <a class="clickable-link" href="#dealsList">\n                  <span class="info-text">{{business.deal_id.length}} active deals</span>\n                </a>\n              </div>\n            </li>\n\n            <li class="info-link">\n              <div class="col-2">\n                <i class="fa fa-heart fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <a class="clickable-link" tappable (click)="addToFavorites(business)">\n                  <span class="info-text">Add to favorites</span>\n                </a>\n              </div>\n            </li>\n\n            <li class="info-link">\n              <div class="col-2">\n                <i class="fa fa-comment fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <a class="clickable-link" tappable (click)="sendMessage()">\n                  <span class="info-text">Send Message</span>\n                </a>\n              </div>\n            </li>\n            <!-- <li *ngIf="!business.deal_id.length; then hasDeal else noDeal"></li>\n            <ng-template #hasDeal>\n              <li class="info-link" >\n                <a class="clickable-link">\n                  <i class="fa fa-tag fa-2x"></i>\n                  <span class="info-text"> {{business.deal_id.length}} active deals</span>\n                </a>\n              </li>\n            </ng-template>\n\n            <ng-template #noDeal>\n              <li class="info-link" >\n                <a class="clickable-link">\n                  <i class="fa fa-tag fa-2x"></i>\n                  <span class="info-text"> 0 active deals</span>\n                </a>\n              </li>\n            </ng-template> -->\n\n            <span class="social-media">\n              <li class="info-link">\n                <a class="clickable-link" ng-class="!business.company_website ? \'inactive\' : \'\' " href="{{business.company_website}}" target="_blank">\n                  <i class="fa fa-globe fa-2x"></i>\n                </a>\n              </li>\n\n              <li class="info-link">\n                <a class="clickable-link" ng-class="!business.facebook_url ? \'inactive\' : \'\' " href="{{business.facebook_url}}" target="_blank">\n                  <i class="fa fa-facebook fa-2x"></i>\n                </a>\n              </li>\n\n              <li class="info-link">\n                <a class="clickable-link" ng-class="!business.twitter_url ? \'inactive\' : \'\' " href="{{business.twitter_url}}" target="_blank">\n                  <i class="fa fa-twitter fa-2x"></i>\n                </a>\n              </li>\n\n              <li class="info-link">\n                <a class="clickable-link" ng-class="!business.instagram_url ? \'inactive\' : \'\' " href="{{business.instagram_url}}" target="_blank">\n                  <i class="fa fa-instagram fa-2x"></i>\n                </a>\n              </li>\n            </span>\n          </ul>\n        </ng-template>\n\n        <ng-template #isNotClickable>\n          <ul class="social-links list-unstyled">\n            <li class="address-link">\n              <div class="col-2">\n                <i class="fa fa-map-marker fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>\n              </div>\n            </li>\n\n            <li class="info-link" [hidden]="!business.phone_number">\n              <div class="col-2">\n                <i class="fa fa-phone fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text"> {{business.phone_number}}</span>\n              </div>\n            </li>\n\n            <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>\n            <ng-template #hasOperations>\n              <li class="operations-link" *ngIf="business.operations[0] === \'0\'"></li>\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'1\'"></li>\n\n              <li class="operations-link" *ngIf="business.operations[0] === \'2\'">\n                <div class="col-2">\n                  <i class="fa fa-clock-o fa-2x"></i>\n                </div>\n                <div class="col-10">\n                  <span>Open 24 Hours</span>\n                </div>\n              </li>\n\n              <li class="operations-link" *ngIf="business.operations[0] !== \'2\' && business.operations[0] !== \'0\' && business.operations[0] !== \'1\'">\n                <div class="col-2">\n                  <i class="fa fa-clock-o fa-2x"></i>\n                </div>\n                <div class="col-10 op-hours">\n                  <div *ngIf="currentDay[0].isClosed !== true; then isOpen else isClosed"></div>\n                  <ng-template #isOpen>\n                    <span>Open Today {{currentDay[0].start}} - {{currentDay[0].end}}</span>\n                   </ng-template>\n                  <ng-template #isClosed>\n                    Closed Today\n                    <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>\n                  </ng-template>\n                  <a class="toggle-collapse" tappable (click)="showHours()">(show more)</a>\n                </div>\n                <span *ngIf="operatingHours.length === 0; then h"></span>\n              </li>\n\n              <li>\n                <div class="col-12">\n                  <ul class="list-unstyled operations-list" *ngFor="let operations of operatingHours; let i = index">\n                    <li><strong>{{operations.day}}</strong> {{ operations.start }} -  {{ operations.end}}  </li>\n                  </ul>\n                </div>\n              </li>\n            </ng-template>\n\n            <li class="info-link active-deals">\n              <div class="col-2">\n                <i class="fa fa-tag fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text"> {{business.deal_id.length}} active deals</span>\n              </div>\n            </li>\n\n            <li class="info-link" tappable (click)="addToFavorites(business)">\n              <div class="col-2">\n                <i class="fa fa-heart fa-2x" ></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text">Add to favorites</span>\n              </div>\n            </li>\n\n            <li class="info-link" tappable (click)="sendMessage()">\n              <div class="col-2">\n                <i class="fa fa-comment fa-2x" ></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text">Send Message</span>\n              </div>\n            </li>\n\n            <li class="info-link" [hidden]="!business.company_website">\n              <div class="col-2">\n                <i class="fa fa-globe fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text"> {{business.company_website}}</span>\n              </div>\n            </li>\n            <!-- <li class="info-link" [hidden]="!business.business_email">\n              <a><i class="fa fa-envelope fa-2x"></i>\n                <span class="info-text"> {{business.business_email}}</span>\n              </a>\n            </li> -->\n            <li class="info-link" [hidden]="!business.facebook_url">\n              <div class="col-2">\n                <i class="fa fa-facebook fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text"> {{business.facebook_url}}</span>\n              </div>\n            </li>\n            <li class="info-link" [hidden]="!business.twitter_url">\n              <div class="col-2">\n                <i class="fa fa-twitter fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text"> {{business.twitter_url}}</span>\n              </div>\n            </li>\n            <li class="info-link" [hidden]="!business.instagram_url">\n              <div class="col-2">\n                <i class="fa fa-instagram fa-2x"></i>\n              </div>\n              <div class="col-10">\n                <span class="info-text"> {{business.instagram_url}}</span>\n              </div>\n            </li>\n          </ul>\n        </ng-template>\n      </div>\n\n      <div class="col-12 page-divider">\n        <h4>Deals</h4>\n      </div>\n\n      <div class="col-12 deals-list">\n        <div *ngIf="business.deal_id != 0 ; then hasDeal else noDeal"></div>\n\n        <ng-template #hasDeal>\n          <div class="media" *ngFor="let deal of business.deal_id">\n            <img class="d-flex align-self-center mr-3" [src]="deal.photo.url">\n            <div class="media-body align-self-center">\n              <a name="dealsList" href="#"><h5 class="mt-0">{{deal.template}}</h5></a>\n            </div>\n          </div>\n        </ng-template>\n\n        <ng-template #noDeal>\n          <h4>No deals available</h4>.\n        </ng-template>\n\n        <!-- <div class="add-favorite"><a class="btn">Add to Favorites <i class="fa fa-chevron-right"></i></a></div> -->\n\n        <div *ngIf="business.is_favorite; then Favorite else notFavorite"></div>\n        <ng-template #Favorite>\n          <div class="claim-btn-holder">\n            <a class="add-favorite true disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n          </div>\n        </ng-template>\n        <ng-template #notFavorite>\n          <div class="claim-btn-holder">\n            <a class="btn add-favorite" id="addToFavorite1" tappable (click)="addToFavorites(business)">Add to Favorites</a>\n            <a class="btn add-favorite true" id="addedToFavorite2" tappable (click)="goToFavorites()">Added to Favorites</a>\n          </div>\n        </ng-template>\n      </div>\n    </div>\n<!--\n    <div class="row map-holder">\n      <div class="map-view" id="mapView"></div>\n    </div> -->\n\n  </div>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-deals/page-user-deals.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__ionic_native_in_app_browser__["a" /* InAppBrowser */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
@@ -264,7 +303,7 @@ UserDealsPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_signup_page_signup__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -316,7 +355,7 @@ __decorate([
 ], SliderPage.prototype, "slider", void 0);
 SliderPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-slider',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-slider\page-slider.html"*/'<!-- <ion-header no-shadow>\n\n  <ion-navbar>\n\n    <button class="btn-green" (click)="signUp()">Get Started</button>\n\n    <button class="btn-green-out" (click)="signIn()">Sign In</button>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n\n\n<ion-content no-bounce class="page-slider text-center">\n\n  <ion-slides #slider pager="true" (ionSlideNextStart)="onSlideNext($event)">\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <!-- <p class="subtitle">\n\n        Helping members &amp; small<br> business win\n\n      </p> -->\n\n      <img class="slider-img main-image" src="assets/images/member-main-image.jpg" alt="">\n\n      <!-- <h3 class="main-title">Your Go To App for Local</h3>\n\n      <h3 class="main-title">Loyalty Deals &amp; Discounts</h3> -->\n\n\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n\n\n      <img class="slider-img" src="assets/images/member-iphone-login.png" alt="">\n\n      <p class="subtitle">\n\n        With GoPage you are a preferred <br>customer and receive the best deals and <br> alerts from your favorite business.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <img class="slider-img" src="assets/images/member-iphone-card.png" alt="">\n\n      <p class="subtitle">\n\n        Get rewarded for your loyalty! Use your <br>loyalty punchcard and redeem your <br> loyalty rewards from your favorite local <br> businesses.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <img class="slider-img" src="assets/images/member-iphone-map.png" alt="">\n\n      <p class="subtitle">\n\n        Your GoPage App finds the deals you are<br> looking for from registered GoPage <br>businesses.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <img class="slider-img" src="assets/images/member-iphone-messages.png" alt="">\n\n      <p class="subtitle">\n\n        Your favorite businesses alert <br>you first about deals, discounts <br>or events so you never miss out!\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n    </ion-slide>\n\n  </ion-slides>\n\n\n\n  <button class="btn-slider btn-green" (click)="signUp()">Get Started</button>\n\n  <button class="btn-slider btn-green-out" (click)="signIn()">Sign In</button>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-slider\page-slider.html"*/
+        selector: 'page-slider',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-slider/page-slider.html"*/'<!-- <ion-header no-shadow>\n\n  <ion-navbar>\n\n    <button class="btn-green" (click)="signUp()">Get Started</button>\n\n    <button class="btn-green-out" (click)="signIn()">Sign In</button>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n\n\n<ion-content no-bounce class="page-slider text-center">\n\n  <ion-slides #slider pager="true" (ionSlideNextStart)="onSlideNext($event)">\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <!-- <p class="subtitle">\n\n        Helping members &amp; small<br> business win\n\n      </p> -->\n\n      <img class="slider-img main-image" src="assets/images/member-main-image.jpg" alt="">\n\n      <!-- <h3 class="main-title">Your Go To App for Local</h3>\n\n      <h3 class="main-title">Loyalty Deals &amp; Discounts</h3> -->\n\n\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n\n\n      <img class="slider-img" src="assets/images/member-iphone-login.png" alt="">\n\n      <p class="subtitle">\n\n        With GoPage you are a preferred <br>customer and receive the best deals and <br> alerts from your favorite business.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <img class="slider-img" src="assets/images/member-iphone-card.png" alt="">\n\n      <p class="subtitle">\n\n        You get to easily find deals, flash sales, <br>loyalty offers and more that are near you <br>or in another location.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <img class="slider-img" src="assets/images/member-iphone-map.png" alt="">\n\n      <p class="subtitle">\n\n        Alerts are your choice, no one elses. You <br>can control who, when and how you receive <br>alerts from small business you like.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n      <img class="logo" src="assets/images/logo.png" alt="GoPage Logo">\n\n      <img class="slider-img" src="assets/images/member-iphone-messages.png" alt="">\n\n      <p class="subtitle">\n\n        Never carry another plastic or paper <br>small business loyalty card again. All your <br>small business loyalty cards are perfectly <br>organised, easy accessible and easy to use.\n\n      </p>\n\n\n\n      <span class="slide-nav prev" outline (click)="slidePrev()"><i class="fa fa-angle-left"></i></span>\n\n      <span class="slide-nav next" outline (click)="slideNext()"><i class="fa fa-angle-right"></i></span>\n\n    </ion-slide>\n\n\n\n    <ion-slide>\n\n    </ion-slide>\n\n  </ion-slides>\n\n\n\n  <button class="btn-slider btn-green" (click)="signUp()">Get Started</button>\n\n  <button class="btn-slider btn-green-out" (click)="signIn()">Sign In</button>\n\n</ion-content>\n\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-slider/page-slider.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], SliderPage);
@@ -334,8 +373,8 @@ SliderPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_user_loyalty_card_deals_page_user_loyalty_card_deals__ = __webpack_require__(173);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -363,13 +402,15 @@ var UserLoyaltyCardsPage = (function () {
     UserLoyaltyCardsPage.prototype.showMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__["a" /* MenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserLoyaltyCardsPage.prototype.goBack = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__["a" /* DashboardPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserLoyaltyCardsPage.prototype.ionViewWillEnter = function () {
@@ -397,14 +438,15 @@ var UserLoyaltyCardsPage = (function () {
         console.log(business_name);
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__page_user_loyalty_card_deals_page_user_loyalty_card_deals__["a" /* UserLoyaltyCardDealsPage */], { business_id: business_id, business_name: business_name }, {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     return UserLoyaltyCardsPage;
 }());
 UserLoyaltyCardsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-loyalty-cards',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-loyalty-cards\page-user-loyalty-cards.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Loyalty Cards</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div class="business-cards-holder" *ngIf="hasData">\n\n    <div *ngIf="loyalties.length !== 0; then hasLoyalties else noLoyalties"></div>\n\n    <ng-template #hasLoyalties>\n\n      <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">\n\n        <div class="img-holder">\n\n          <img src="{{loyalty.business_id[0].files[0].url !== null ? loyalty.business_id[0].files[0].url : assets/images/placeholder.jpg}}" alt="">\n\n        </div>\n\n        <div class="text-holder">\n\n          <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>\n\n          <span class="card-location-text">{{loyalty.business_id[0].country}}</span>\n\n          <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>\n\n          <i class="fa fa-chevron-right fa-2x"></i>\n\n        </div>\n\n      </div>\n\n    </ng-template>\n\n\n\n    <ng-template #noLoyalties>\n\n      <div class="no-loyalty-holder">\n\n        <h4>Currently you have no loyalty cards, go explore what different loyalty offers GoPage businesses have to offer!</h4>\n\n      </div>\n\n    </ng-template>\n\n\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-loyalty-cards\page-user-loyalty-cards.html"*/
+        selector: 'page-user-loyalty-cards',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-loyalty-cards/page-user-loyalty-cards.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n\n    <span class="page-title">Loyalty Cards</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div class="business-cards-holder" *ngIf="hasData">\n\n    <div *ngIf="loyalties.length !== 0; then hasLoyalties else noLoyalties"></div>\n\n    <ng-template #hasLoyalties>\n\n      <div class="business-cards" *ngFor="let loyalty of loyalties; let i = index;" tappable (click)="showCardDeals(loyalty.business_id[0]._id,loyalty.business_id[0].company_name)">\n\n        <div class="img-holder">\n\n          <img src="{{loyalty.business_id[0].files[0].url !== null ? loyalty.business_id[0].files[0].url : assets/images/placeholder.jpg}}" alt="">\n\n        </div>\n\n        <div class="text-holder">\n\n          <h3 class="card-title-text">{{loyalty.business_id[0].company_name}}</h3>\n\n          <span class="card-location-text">{{loyalty.business_id[0].country}}</span>\n\n          <span class="card-count-text">{{loyalty.loyalties_row}} loyalty cards</span>\n\n          <i class="fa fa-chevron-right fa-2x"></i>\n\n        </div>\n\n      </div>\n\n    </ng-template>\n\n\n\n    <ng-template #noLoyalties>\n\n      <div class="no-loyalty-holder">\n\n        <h4>Currently you have no loyalty cards, go explore what different loyalty offers GoPage businesses have to offer!</h4>\n\n      </div>\n\n    </ng-template>\n\n\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-loyalty-cards/page-user-loyalty-cards.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__["a" /* ApiService */],
@@ -422,7 +464,7 @@ UserLoyaltyCardsPage = __decorate([
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CategoryMenuPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__service_api_service_component__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -498,7 +540,7 @@ var CategoryMenuPage = (function () {
 }());
 CategoryMenuPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-category-menu',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-menu\page-category-menu\page-category-menu.html"*/'<ion-content padding class="content-category-menu">\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n  </p>\n\n\n\n  <ion-list class="menu-list">\n\n    <ul class="categories-list" >\n\n      <li (click)="seeAll()"><a href="#"><img src="assets/icon/icon-alldeals.svg">All Deals</a></li>\n\n      <div *ngFor="let business of business_category; let k = index;">\n\n        <li (click)="goFilterBusiness(business.name)" [hidden]="!business.name"><a href="#"><img src="assets/icon/icon-category-{{first_word[k]}}.svg">  {{ business.name }}</a></li>\n\n      </div>\n\n    </ul>\n\n  </ion-list>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-menu\page-category-menu\page-category-menu.html"*/
+        selector: 'page-category-menu',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-menu/page-category-menu/page-category-menu.html"*/'<ion-content padding class="content-category-menu">\n  <p class="title">\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n  </p>\n\n  <ion-list class="menu-list">\n    <ul class="categories-list" >\n      <li (click)="seeAll()"><a href="#"><img src="assets/icon/icon-alldeals.svg">All Deals</a></li>\n      <div *ngFor="let business of business_category; let k = index;">\n        <li (click)="goFilterBusiness(business.name)" [hidden]="!business.name"><a href="#"><img src="assets/icon/icon-category-{{first_word[k]}}.svg">  {{ business.name }}</a></li>\n      </div>\n    </ul>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-menu/page-category-menu/page-category-menu.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__service_api_service_component__["a" /* ApiService */],
@@ -541,7 +583,7 @@ var SortMenuPage = (function () {
 }());
 SortMenuPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-sort-menu',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-menu\page-sort-menu\page-sort-menu.html"*/'<ion-content padding class="content-sort-menu">\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n  </p>\n\n\n\n  <ion-list>\n\n    <h5>Sort by</h5>\n\n    <ion-item>\n\n      <ion-label>Sort by Relevance</ion-label>\n\n      <ion-checkbox [(ngModel)]="relevance"></ion-checkbox>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-label>Sort by Distance</ion-label>\n\n      <ion-checkbox [(ngModel)]="distance"></ion-checkbox>\n\n    </ion-item>\n\n\n\n    <ion-item>\n\n      <ion-label>Sort by Favorites</ion-label>\n\n      <ion-checkbox [(ngModel)]="favorites"></ion-checkbox>\n\n    </ion-item>\n\n\n\n    <div class="sortby-button">\n\n      <button class="btn cancel-btn" role="button" (click)="goBack()">Cancel</button>\n\n      <button class="btn done-btn" role="button" (click)="goBack()">Done</button>\n\n    </div>\n\n  </ion-list>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-menu\page-sort-menu\page-sort-menu.html"*/
+        selector: 'page-sort-menu',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-menu/page-sort-menu/page-sort-menu.html"*/'<ion-content padding class="content-sort-menu">\n  <p class="title">\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n  </p>\n\n  <ion-list>\n    <h5>Sort by</h5>\n    <ion-item>\n      <ion-label>Sort by Relevance</ion-label>\n      <ion-checkbox [(ngModel)]="relevance"></ion-checkbox>\n    </ion-item>\n\n    <ion-item>\n      <ion-label>Sort by Distance</ion-label>\n      <ion-checkbox [(ngModel)]="distance"></ion-checkbox>\n    </ion-item>\n\n    <ion-item>\n      <ion-label>Sort by Favorites</ion-label>\n      <ion-checkbox [(ngModel)]="favorites"></ion-checkbox>\n    </ion-item>\n\n    <div class="sortby-button">\n      <button class="btn cancel-btn" role="button" (click)="goBack()">Cancel</button>\n      <button class="btn done-btn" role="button" (click)="goBack()">Done</button>\n    </div>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-menu/page-sort-menu/page-sort-menu.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], SortMenuPage);
@@ -558,12 +600,12 @@ SortMenuPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_user_inbox_page_user_inbox__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_storage__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(26);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -672,8 +714,9 @@ var UserChatPage = (function () {
         this.txtChat.clearInput();
     };
     UserChatPage.prototype.send = function (message) {
+        var member_full_name = this.userDetail.first_name + " " + this.userDetail.last_name;
         var user_id = this.userDetail._id, first_name = this.userDetail.first_name, last_name = this.userDetail.last_name, business_id = this.businessDetail._id;
-        this.socketService.newRequest(__WEBPACK_IMPORTED_MODULE_5__providers__["e" /* UtilService */].formatMessageRequest(user_id, business_id, first_name, last_name, message));
+        this.socketService.newRequest(__WEBPACK_IMPORTED_MODULE_5__providers__["e" /* UtilService */].formatMessageRequest(user_id, business_id, first_name, last_name, member_full_name, message));
         this.chatBox = '';
         this.scrollToBottom();
     };
@@ -688,13 +731,15 @@ var UserChatPage = (function () {
     UserChatPage.prototype.showMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_1__page_menu_page_menu__["a" /* MenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserChatPage.prototype.goToInbox = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__page_user_inbox_page_user_inbox__["a" /* UserInboxPage */], {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     return UserChatPage;
@@ -709,7 +754,7 @@ __decorate([
 ], UserChatPage.prototype, "content", void 0);
 UserChatPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_4__angular_core__["n" /* Component */])({
-        selector: 'page-user-chat',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-chat\page-user-chat.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button class="back-btn-new" (click)="goToInbox()">\n\n       <i class="fa fa-angle-left" aria-hidden="true"></i>\n\n    </button>\n\n    <span class=\'title\'> {{ businessDetail?.company_name }}</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n\n\n<ion-content id="messages" #content>\n\n  <div *ngIf="hasData">\n\n    <ion-list no-lines>\n\n\n\n      <ion-item *ngFor="let msg of messages">\n\n        <chat-bubble [chatMessage]="msg"></chat-bubble>\n\n      </ion-item>\n\n\n\n    </ion-list>\n\n  </div>\n\n\n\n    <span class="fa fa-spinner fa-spin loader"></span>\n\n</ion-content>\n\n\n\n<ion-footer *ngIf="hasData" no-border class="chatPageFooter" [keyboardAttach]="content" [btnClicked]="btnEmitter">\n\n  <ion-toolbar>\n\n\n\n    <ion-item no-lines>\n\n      <ion-label style="margin:0px;"></ion-label>\n\n      <div item-content style="width:100%;">\n\n        <elastic-textarea #txtChat placeholder="Send a message" lineHeight="20" maxExpand="5"></elastic-textarea>\n\n      </div>\n\n    </ion-item>\n\n\n\n    <ion-buttons right style="margin-left:10px">\n\n      <button ion-button icon-only\n\n              [disabled]="txtChat.content.trim().length<1"\n\n              (click)="sendMessage()">\n\n              SEND\n\n        <!-- <ion-icon name="md-send"></ion-icon> -->\n\n      </button>\n\n    </ion-buttons>\n\n\n\n  </ion-toolbar>\n\n</ion-footer>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-chat\page-user-chat.html"*/
+        selector: 'page-user-chat',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-chat/page-user-chat.html"*/'<ion-header>\n  <ion-navbar>\n    <button class="back-btn-new" (click)="goToInbox()">\n       <i class="fa fa-angle-left" aria-hidden="true"></i>\n    </button>\n    <span class=\'title\'> {{ businessDetail?.company_name }}</span>\n  </ion-navbar>\n</ion-header>\n\n\n<ion-content id="messages" #content>\n  <div *ngIf="hasData">\n    <ion-list no-lines>\n\n      <ion-item *ngFor="let msg of messages">\n        <chat-bubble [chatMessage]="msg"></chat-bubble>\n      </ion-item>\n\n    </ion-list>\n  </div>\n\n    <span class="fa fa-spinner fa-spin loader"></span>\n</ion-content>\n\n<ion-footer *ngIf="hasData" no-border class="chatPageFooter" [keyboardAttach]="content" [btnClicked]="btnEmitter">\n  <ion-toolbar>\n\n    <ion-item no-lines>\n      <ion-label style="margin:0px;"></ion-label>\n      <div item-content style="width:100%;">\n        <elastic-textarea #txtChat placeholder="Send a message" lineHeight="20" maxExpand="5"></elastic-textarea>\n      </div>\n    </ion-item>\n\n    <ion-buttons right style="margin-left:10px">\n      <button ion-button icon-only\n              [disabled]="txtChat.content.trim().length<1"\n              (click)="sendMessage()">\n              SEND\n        <!-- <ion-icon name="md-send"></ion-icon> -->\n      </button>\n    </ion-buttons>\n\n  </ion-toolbar>\n</ion-footer>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-chat/page-user-chat.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_0_ionic_angular__["k" /* NavParams */],
@@ -968,7 +1013,7 @@ DatabaseService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_signup_mobile_success_page_signup_mobile_success__ = __webpack_require__(429);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_signup_email_page_signup_email__ = __webpack_require__(82);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__);
@@ -1185,7 +1230,7 @@ var SignupMobilePage = (function () {
 }());
 SignupMobilePage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-signup-mobile',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-signup-mobile\page-signup-mobile.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <!-- <ion-card *ngIf="userData">\n\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n\n  </ion-card> -->\n\n\n\n  <div class="form1">\n\n    <p class="title">\n\n      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n    </p>\n\n    <p class="text-center subtitle">\n\n      Sign up with <a href="#" (click)="fbConnect()">Facebook</a>, <a href="#" (click)="gpConnect()">Google</a> or <a href="#" (click)="goSignupEmail()">email address</a>\n\n    </p>\n\n    <div class="divider">\n\n      <span>or</span>\n\n    </div>\n\n    <p class="description">Enter your mobile number</p>\n\n    <form class="form-signup">\n\n      <label>\n\n        <div class="holder-country-code">\n\n          <div class="country-code">\n\n            <img src="assets/images/icon-flag-us.jpg" alt=""/>\n\n            <span class="fa fa-caret-down"></span>\n\n          </div>\n\n          <ul class="country-dropdown">\n\n            <li class="country-dropdown-val">\n\n              <img src="assets/images/icon-flag-us.jpg" alt=""/><span class="country-name">U.S. </span><span class="country-area-code">(+1)</span>\n\n            </li>\n\n            <li class="country-dropdown-val">\n\n              <img src="assets/images/icon-flag-ca.jpg" alt=""/><span class="country-name">Canada </span><span class="country-area-code">(+1)</span>\n\n            </li>\n\n          </ul>\n\n        </div>\n\n        <input type="number" name="number" placeholder="Mobile number" [(ngModel)]="posts.number"/>\n\n        <span class="text-validate"></span>\n\n      </label>\n\n      <button class="btn-green" type="submit" (click)="signMeUp()">Sign Up</button>\n\n    </form>\n\n    <hr class="hr" />\n\n    <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>\n\n  </div>\n\n\n\n  <div class="form2">\n\n    <p class="title">\n\n      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n      Verify Your Mobile Number\n\n    </p>\n\n    <form class="form-verify">\n\n      <label>\n\n        <input type="text" placeholder="Verification Code">\n\n        <span class="text-validate"></span>\n\n      </label>\n\n      <button class="btn-green" type="submit" (click)="verifyMe()">Verify</button>\n\n    </form>\n\n  </div>\n\n\n\n  <div class="form3">\n\n    <p class="title">\n\n      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n      Create a Password\n\n    </p>\n\n    <form class="form-password">\n\n      <label>\n\n        <input id="enter-password" class="input-mobile" type="password" placeholder="Enter password" />\n\n        <input id="confirm-password" class="input-mobile" type="password" placeholder="Confirm password" />\n\n        <span class="text-validate"></span>\n\n      </label>\n\n      <button class="btn-green" type="submit" (click)="createMyPass()">Submit</button>\n\n    </form>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-signup-mobile\page-signup-mobile.html"*/
+        selector: 'page-signup-mobile',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-signup-mobile/page-signup-mobile.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <!-- <ion-card *ngIf="userData">\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n  </ion-card> -->\n\n  <div class="form1">\n    <p class="title">\n      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n    </p>\n    <p class="text-center subtitle">\n      Sign up with <a href="#" (click)="fbConnect()">Facebook</a>, <a href="#" (click)="gpConnect()">Google</a> or <a href="#" (click)="goSignupEmail()">email address</a>\n    </p>\n    <div class="divider">\n      <span>or</span>\n    </div>\n    <p class="description">Enter your mobile number</p>\n    <form class="form-signup">\n      <label>\n        <div class="holder-country-code">\n          <div class="country-code">\n            <img src="assets/images/icon-flag-us.jpg" alt=""/>\n            <span class="fa fa-caret-down"></span>\n          </div>\n          <ul class="country-dropdown">\n            <li class="country-dropdown-val">\n              <img src="assets/images/icon-flag-us.jpg" alt=""/><span class="country-name">U.S. </span><span class="country-area-code">(+1)</span>\n            </li>\n            <li class="country-dropdown-val">\n              <img src="assets/images/icon-flag-ca.jpg" alt=""/><span class="country-name">Canada </span><span class="country-area-code">(+1)</span>\n            </li>\n          </ul>\n        </div>\n        <input type="number" name="number" placeholder="Mobile number" [(ngModel)]="posts.number"/>\n        <span class="text-validate"></span>\n      </label>\n      <button class="btn-green" type="submit" (click)="signMeUp()">Sign Up</button>\n    </form>\n    <hr class="hr" />\n    <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>\n  </div>\n\n  <div class="form2">\n    <p class="title">\n      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n      Verify Your Mobile Number\n    </p>\n    <form class="form-verify">\n      <label>\n        <input type="text" placeholder="Verification Code">\n        <span class="text-validate"></span>\n      </label>\n      <button class="btn-green" type="submit" (click)="verifyMe()">Verify</button>\n    </form>\n  </div>\n\n  <div class="form3">\n    <p class="title">\n      <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n      Create a Password\n    </p>\n    <form class="form-password">\n      <label>\n        <input id="enter-password" class="input-mobile" type="password" placeholder="Enter password" />\n        <input id="confirm-password" class="input-mobile" type="password" placeholder="Confirm password" />\n        <span class="text-validate"></span>\n      </label>\n      <button class="btn-green" type="submit" (click)="createMyPass()">Submit</button>\n    </form>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-signup-mobile/page-signup-mobile.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],
@@ -1208,7 +1253,7 @@ SignupMobilePage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_reset_pass_success_page_reset_pass_success__ = __webpack_require__(430);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__angular_http__ = __webpack_require__(43);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_rxjs_add_operator_map__);
@@ -1277,7 +1322,7 @@ var ResetPassPage = (function () {
 }());
 ResetPassPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-reset-pass',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-reset-pass\page-reset-pass.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <p class="title">\n\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n\n    Reset Password\n\n  </p>\n\n  <form class="form-reset">\n\n    <label><input type="email" name="email" placeholder="Email or Mobile number" [(ngModel)]="posts.email" /><span class="text-validate">Email address is required.</span></label>\n\n    <button class="btn-green" type="submit" (click)="resetMe()">Send</button>\n\n  </form>\n\n  <p class="description text-center">Enter the email address or mobile number associated with your account, and we’ll email or text your new random generated password.<p>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-reset-pass\page-reset-pass.html"*/
+        selector: 'page-reset-pass',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-reset-pass/page-reset-pass.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <p class="title">\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n    Reset Password\n  </p>\n  <form class="form-reset">\n    <label><input type="email" name="email" placeholder="Email or Mobile number" [(ngModel)]="posts.email" /><span class="text-validate">Email address is required.</span></label>\n    <button class="btn-green" type="submit" (click)="resetMe()">Send</button>\n  </form>\n  <p class="description text-center">Enter the email address or mobile number associated with your account, and we’ll email or text your new random generated password.<p>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-reset-pass/page-reset-pass.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_4__angular_http__["b" /* Http */]])
@@ -1296,10 +1341,10 @@ ResetPassPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_screen_orientation__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_user_loyalty_stamp_card_page_user_loyalty_stamp_card__ = __webpack_require__(232);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_api_service_component__ = __webpack_require__(26);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1353,13 +1398,15 @@ var UserLoyaltyCardDealsPage = (function () {
     UserLoyaltyCardDealsPage.prototype.goPrevious = function () {
         this.navCtrl.pop({
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserLoyaltyCardDealsPage.prototype.goCard = function (title, stamps, stamps_needed) {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__page_user_loyalty_stamp_card_page_user_loyalty_stamp_card__["a" /* UserLoyaltyStampCardPage */], { title: title, stamps: stamps, stamps_needed: stamps_needed, }, {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     return UserLoyaltyCardDealsPage;
@@ -1367,7 +1414,7 @@ var UserLoyaltyCardDealsPage = (function () {
 UserLoyaltyCardDealsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPage */])(),
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-loyalty-card-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-loyalty-card-deals\page-user-loyalty-card-deals.html"*/'<!--\n\n  Generated template for the PageUserLoyaltyCardDealsPage page.\n\n\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n\n  Ionic pages and navigation.\n\n-->\n\n<ion-header>\n\n  <!-- <div class="back-btn-holder" tappable (click)="backToLoyaltyCards()">\n\n    <ion-icon ios="ios-arrow-back"></ion-icon>\n\n    <p>Back to Loyalty Cards</p>\n\n  </div> -->\n\n  <ion-navbar *ngIf="hasData">\n\n    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>\n\n    <span class="business-title">{{business_name}}</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="card-deals-holder" *ngIf="hasData">\n\n    <div class="card-deal" *ngFor="let deal of deals" (click)="goCard(deal.deals_id[0].template, deal.loyalty_details.stamp, deal.deals_id[0].buy_pcs)">\n\n      <div class="img-holder">\n\n        <img [src]="deal.deals_id[0].photo.url" alt="">\n\n      </div>\n\n      <div class="text-holder">\n\n        <h3 class="deal-title-text">{{deal.deals_id[0].template}}</h3>\n\n         <span class="card-stamp-text">{{deal.loyalty_details.stamp}} of {{deal.deals_id[0].buy_pcs}}</span>\n\n        <span class="card-expiration-text">Expires {{deal.deals_id[0].end_date | date : \'MM/dd/yyyy\'}}</span>\n\n        <i class="fa fa-chevron-right fa-2x"></i>\n\n      </div>\n\n    </div>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-loyalty-card-deals\page-user-loyalty-card-deals.html"*/,
+        selector: 'page-user-loyalty-card-deals',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-loyalty-card-deals/page-user-loyalty-card-deals.html"*/'<!--\n  Generated template for the PageUserLoyaltyCardDealsPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n  <!-- <div class="back-btn-holder" tappable (click)="backToLoyaltyCards()">\n    <ion-icon ios="ios-arrow-back"></ion-icon>\n    <p>Back to Loyalty Cards</p>\n  </div> -->\n  <ion-navbar *ngIf="hasData">\n    <button ion-button class="back-btn" (click)="goPrevious()"><i class="fa fa-angle-left fa-lg"></i></button>\n    <span class="business-title">{{business_name}}</span>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div class="card-deals-holder" *ngIf="hasData">\n    <div class="card-deal" *ngFor="let deal of deals" (click)="goCard(deal.deals_id[0].template, deal.loyalty_details.stamp, deal.deals_id[0].buy_pcs)">\n      <div class="img-holder">\n        <img [src]="deal.deals_id[0].photo.url" alt="">\n      </div>\n      <div class="text-holder">\n        <h3 class="deal-title-text">{{deal.deals_id[0].template}}</h3>\n         <span class="card-stamp-text">{{deal.loyalty_details.stamp}} of {{deal.deals_id[0].buy_pcs}}</span>\n        <span class="card-expiration-text">Expires {{deal.deals_id[0].end_date | date : \'MM/dd/yyyy\'}}</span>\n        <i class="fa fa-chevron-right fa-2x"></i>\n      </div>\n    </div>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-loyalty-card-deals/page-user-loyalty-card-deals.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -1411,9 +1458,9 @@ webpackEmptyAsyncContext.id = 184;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_signup_page_signup__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_reset_pass_page_reset_pass__ = __webpack_require__(171);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__);
@@ -1547,12 +1594,17 @@ var LoginPage = (function () {
 }());
 LoginPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-login',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-login\page-login.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <ion-card *ngIf="userData">\n\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n\n  </ion-card>\n\n\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goSignup()">\n\n    Welcome Back\n\n  </p>\n\n  <button class="btn login-fb" (click)="fbConnect()"><span class="fa fa-facebook"></span> Continue with Facebook</button>\n\n  <button class="btn login-google" (click)="gpConnect()"><span class="fa fa-google"></span> Continue with Google</button>\n\n  <div class="divider">\n\n    <span>or</span>\n\n  </div>\n\n  <form class="form-login">\n\n    <label><input type="email" name="username" placeholder="Email or Phone" [(ngModel)]="posts.username" /><span class="text-validate">Email address is required.</span></label>\n\n    <label><input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" /><span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span></label>\n\n    <button class="btn-green" type="submit" (click)="logMeIn()">Log In</button>\n\n  </form>\n\n  <a class="description forgot-pass" (click)="goReset()">Forgot your password?</a>\n\n  <hr class="hr" />\n\n  <p class="description">Don\'t have an account? <a href="#" (click)="goSignup()">Sign Up</a></p>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-login\page-login.html"*/
+        selector: 'page-login',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-login/page-login.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <ion-card *ngIf="userData">\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n  </ion-card>\n\n  <p class="title">\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goSignup()">\n    Welcome Back\n  </p>\n  <button class="btn login-fb" (click)="fbConnect()"><span class="fa fa-facebook"></span> Continue with Facebook</button>\n  <button class="btn login-google" (click)="gpConnect()"><span class="fa fa-google"></span> Continue with Google</button>\n  <div class="divider">\n    <span>or</span>\n  </div>\n  <form class="form-login">\n    <label><input type="email" name="username" placeholder="Email or Phone" [(ngModel)]="posts.username" /><span class="text-validate">Email address is required.</span></label>\n    <label><input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" /><span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span></label>\n    <button class="btn-green" type="submit" (click)="logMeIn()">Log In</button>\n  </form>\n  <a class="description forgot-pass" (click)="goReset()">Forgot your password?</a>\n  <hr class="hr" />\n  <p class="description">Don\'t have an account? <a href="#" (click)="goSignup()">Sign Up</a></p>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-login/page-login.html"*/
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */]) === "function" && _g || Object])
+    __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
+        __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],
+        __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */],
+        __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */],
+        __WEBPACK_IMPORTED_MODULE_9__ionic_storage__["b" /* Storage */],
+        __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */]])
 ], LoginPage);
 
-var _a, _b, _c, _d, _e, _f, _g;
 //# sourceMappingURL=page-login.js.map
 
 /***/ }),
@@ -1562,7 +1614,7 @@ var _a, _b, _c, _d, _e, _f, _g;
 
 var map = {
 	"../pages/page-user-loyalty-card-deals/page-user-loyalty-card-deals.module": [
-		807,
+		808,
 		0
 	]
 };
@@ -1590,7 +1642,7 @@ module.exports = webpackAsyncContext;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_screen_orientation__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1663,14 +1715,15 @@ var UserLoyaltyStampCardPage = (function () {
     UserLoyaltyStampCardPage.prototype.goBack = function () {
         this.navCtrl.pop({
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     return UserLoyaltyStampCardPage;
 }());
 UserLoyaltyStampCardPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-loyalty-stamp-card',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-loyalty-stamp-card\page-user-loyalty-stamp-card.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <p class="title">\n\n      <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n\n      <span *ngIf="this.title">{{this.title}}</span>\n\n    </p>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="stamps-window">\n\n    <div class="holder-stamps"></div>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-loyalty-stamp-card\page-user-loyalty-stamp-card.html"*/,
+        selector: 'page-user-loyalty-stamp-card',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-loyalty-stamp-card/page-user-loyalty-stamp-card.html"*/'<ion-header>\n  <ion-navbar>\n    <p class="title">\n      <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n      <span *ngIf="this.title">{{this.title}}</span>\n    </p>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div class="stamps-window">\n    <div class="holder-stamps"></div>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-loyalty-stamp-card/page-user-loyalty-stamp-card.html"*/,
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -1682,7 +1735,7 @@ UserLoyaltyStampCardPage = __decorate([
 
 /***/ }),
 
-/***/ 27:
+/***/ 26:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1692,7 +1745,7 @@ UserLoyaltyStampCardPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_config__ = __webpack_require__(57);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__ = __webpack_require__(473);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_Rx___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_Rx__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1932,12 +1985,13 @@ var UtilService = (function () {
             sameElse: 'MM/DD ' + timeString
         });
     };
-    UtilService.formatMessageRequest = function (user_id, business_id, first_name, last_name, message) {
+    UtilService.formatMessageRequest = function (user_id, business_id, first_name, last_name, member_full_name, message) {
         return {
             user_id: user_id,
             business_id: business_id,
             first_name: first_name,
             last_name: last_name,
+            member_full_name: member_full_name,
             message: message,
             is_read: false,
             message_by: "member"
@@ -1969,8 +2023,8 @@ UtilService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_inbox_page_user_inbox__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_settings_page_settings__ = __webpack_require__(426);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_storage__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_rxjs_add_operator_map__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2015,7 +2069,6 @@ var DashboardPage = (function () {
         this.storage.get('user').then(function (user) {
             _this.user = user;
             _this.firstname = user.first_name;
-            _this.hasData = true;
         });
     };
     DashboardPage.prototype.getNotificationCount = function () {
@@ -2033,6 +2086,7 @@ var DashboardPage = (function () {
                         }
                         _this.notifCountTotal = withChats.length;
                     }
+                    _this.hasData = true;
                 }).catch(function (error) {
                     console.log(error);
                 });
@@ -2067,44 +2121,50 @@ var DashboardPage = (function () {
     DashboardPage.prototype.ToMembership = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_user_membership_card_page_user_membership_card__["a" /* UserMembershipCardPage */], {}, {
             animate: true,
-            direction: ' forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     DashboardPage.prototype.ToLoyalty = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__page_user_loyalty_cards_page_user_loyalty_cards__["a" /* UserLoyaltyCardsPage */], {}, {
             animate: true,
-            direction: ' forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     DashboardPage.prototype.ToFindDeals = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {}, {
             animate: true,
-            direction: ' forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     DashboardPage.prototype.ToFavorites = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */], {}, {
             animate: true,
-            direction: ' forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     DashboardPage.prototype.ToInbox = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__page_user_inbox_page_user_inbox__["a" /* UserInboxPage */], {}, {
             animate: true,
-            direction: ' forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     DashboardPage.prototype.ToSettings = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__page_settings_page_settings__["a" /* SettingsPage */], {}, {
             animate: true,
-            direction: ' forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     return DashboardPage;
 }());
 DashboardPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-dashboard',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-dashboard\page-dashboard.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <img class="header-logo" src="assets/images/logo-min.png" alt="GoPage Logo">\n\n    <span class="name">\n\n      <span class="fa-stack has-notif" (click)="ToInbox()">\n\n        <i class="fa fa-square fa-stack-2x"></i>\n\n        <!-- <span class="fa fa-stack-1x" *ngIf="!hasNotify">0</span> -->\n\n        <span class="fa fa-stack-1x">{{ notifCountTotal }}</span>\n\n      </span>\n\n      Hi, {{firstname}}\n\n    </span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="container dashboard-menu">\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToMembership()">\n\n          <img src="assets/icon/membership-card.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Membership Card\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToLoyalty()">\n\n          <img src="assets/icon/loyalty-card.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Loyalty Card\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToFindDeals()">\n\n          <img src="assets/icon/find-deals.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Find Deals\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToFavorites()">\n\n          <img src="assets/icon/favorites.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Favorites\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n\n\n    <div class="row">\n\n      <div class="col">\n\n        <ion-card (click)="ToInbox()">\n\n          <img src="assets/icon/inbox.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Inbox\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n\n\n      <div class="col">\n\n        <ion-card (click)="ToSettings()">\n\n          <img src="assets/icon/settings.png"/>\n\n          <ion-card-content>\n\n            <ion-card-title>\n\n              Settings\n\n            </ion-card-title>\n\n          </ion-card-content>\n\n        </ion-card>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-dashboard\page-dashboard.html"*/
+        selector: 'page-dashboard',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-dashboard/page-dashboard.html"*/'<ion-header>\n  <ion-navbar>\n    <img class="header-logo" src="assets/images/logo-min.png" alt="GoPage Logo">\n    <span class="name">\n      <span *ngIf="hasData" [ngClass]="[ notifCountTotal != 0 ? \'has-notif\' : \'no-notif\']" class="fa-stack" (click)="ToInbox()">\n        <i class="fa fa-square fa-stack-2x"></i>\n        <!-- <span class="fa fa-stack-1x" *ngIf="!hasNotify">0</span> -->\n        <span class="fa fa-stack-1x">{{ notifCountTotal }}</span>\n      </span>\n      Hi, {{firstname}}\n    </span>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div class="container dashboard-menu">\n    <div class="row">\n      <div class="col">\n        <ion-card (click)="ToMembership()">\n          <img src="assets/icon/membership-card.png"/>\n          <ion-card-content>\n            <ion-card-title>\n              Membership Card\n            </ion-card-title>\n          </ion-card-content>\n        </ion-card>\n      </div>\n\n\n      <div class="col">\n        <ion-card (click)="ToLoyalty()">\n          <img src="assets/icon/loyalty-card.png"/>\n          <ion-card-content>\n            <ion-card-title>\n              Loyalty Card\n            </ion-card-title>\n          </ion-card-content>\n        </ion-card>\n      </div>\n    </div>\n\n    <div class="row">\n      <div class="col">\n        <ion-card (click)="ToFindDeals()">\n          <img src="assets/icon/find-deals.png"/>\n          <ion-card-content>\n            <ion-card-title>\n              Find Deals\n            </ion-card-title>\n          </ion-card-content>\n        </ion-card>\n      </div>\n\n      <div class="col">\n        <ion-card (click)="ToFavorites()">\n          <img src="assets/icon/favorites.png"/>\n          <ion-card-content>\n            <ion-card-title>\n              Favorites\n            </ion-card-title>\n          </ion-card-content>\n        </ion-card>\n      </div>\n    </div>\n\n    <div class="row">\n      <div class="col">\n        <ion-card (click)="ToInbox()">\n          <img src="assets/icon/inbox.png"/>\n          <ion-card-content>\n            <ion-card-title>\n              Inbox\n            </ion-card-title>\n          </ion-card-content>\n        </ion-card>\n      </div>\n\n      <div class="col">\n        <ion-card (click)="ToSettings()">\n          <img src="assets/icon/settings.png"/>\n          <ion-card-content>\n            <ion-card-title>\n              Settings\n            </ion-card-title>\n          </ion-card-content>\n        </ion-card>\n      </div>\n    </div>\n  </div>\n\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-dashboard/page-dashboard.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],
@@ -2223,15 +2283,14 @@ SocketService = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__ = __webpack_require__(160);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_dashboard_page_dashboard__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_menu_page_category_menu_page_category_menu__ = __webpack_require__(161);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_menu_page_sort_menu_page_sort_menu__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_jquery__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_menu_page_category_menu_page_category_menu__ = __webpack_require__(161);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_menu_page_sort_menu_page_sort_menu__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_user_deals_page_user_deals__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_user_find_deals_page_user_find_deals__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__ionic_storage__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2241,7 +2300,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
 
 
 
@@ -2301,8 +2359,10 @@ var UserFindDealsMapPage = (function () {
         var self = this;
         this.selectedMapCenter.address = this.navParams.get('map_address');
         this.business_deals = this.navParams.get('business_deals');
-        __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').on('click', function () {
-            __WEBPACK_IMPORTED_MODULE_11_jquery__(this).select();
+        console.log(this.business_deals);
+        __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').on('click', function () {
+            __WEBPACK_IMPORTED_MODULE_10_jquery__(this).get(0).setSelectionRange(0, 9999);
+            // $(this).select();
             // $('.locations-holder').css('visibility', 'visible');
         });
         // $('.locations-holder').on('mousedown', function() {
@@ -2311,7 +2371,14 @@ var UserFindDealsMapPage = (function () {
         // $('#deal-location2').on('blur', function() {
         //   $('.locations-holder').css('visibility', 'hidden');
         // });
-        __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').contextmenu(function () {
+        //location input tweak for ios
+        __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location').on('keypress', function () {
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('.scroll-content').animate({ scrollTop: 1 }, 'fast');
+            setTimeout(function () {
+                __WEBPACK_IMPORTED_MODULE_10_jquery__('.scroll-content').animate({ scrollTop: 0 }, 'fast');
+            }, 50);
+        });
+        __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').contextmenu(function () {
             return false;
         });
     };
@@ -2320,7 +2387,7 @@ var UserFindDealsMapPage = (function () {
         setTimeout(function () {
             self.initMap();
             console.log('map initializing');
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#searchBtn2').click();
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('#searchBtn2').click();
         }, 650);
     };
     UserFindDealsMapPage.prototype.initMap = function () {
@@ -2332,8 +2399,8 @@ var UserFindDealsMapPage = (function () {
             var map_center = this.navParams.get('map_center');
             var search_input = this.navParams.get('search_input');
             this.default_location = map_center;
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-name2').val(search_input);
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val(this.selectedMapCenter.address);
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-name2').val(search_input);
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val(this.selectedMapCenter.address);
             if (search_input !== '') {
                 console.log('creating searched input');
                 var business_deals = this.navParams.get('business_deals');
@@ -2343,11 +2410,11 @@ var UserFindDealsMapPage = (function () {
             }
             else {
                 console.log('creating all');
-                this.storage.get('all_business_deals').then(function (all_business_deals) {
-                    setTimeout(function () {
-                        _this.createMarker(all_business_deals);
-                    });
-                });
+                // this.storage.get('all_business_deals').then(all_business_deals => {
+                //   setTimeout(() => {
+                //     this.createMarker(all_business_deals);
+                //   });
+                // });
             }
         }
         else {
@@ -2360,11 +2427,11 @@ var UserFindDealsMapPage = (function () {
                     if (self.lat != null && self.lng != null) {
                         _this.default_location = new google.maps.LatLng(self.lat, self.lng);
                         _this.selectedMapCenter.address = self.address;
-                        __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val(self.address);
+                        __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val(self.address);
                     }
                     else {
                         _this.default_location = new google.maps.LatLng(34.0522, -118.2437);
-                        __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val('Los Angeles, CA');
+                        __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val('Los Angeles, CA');
                     }
                 });
             });
@@ -2398,6 +2465,18 @@ var UserFindDealsMapPage = (function () {
             anchorPoint: new google.maps.Point(0, -29)
         });
         autocomplete.addListener('place_changed', function () {
+            // need to stop prop of the touchend event
+            if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+                setTimeout(function () {
+                    var container = document.getElementsByClassName('pac-container')[0];
+                    console.log(container);
+                    container.addEventListener('touchstart', function (e) {
+                        e.stopImmediatePropagation();
+                        setTimeout(function () {
+                        }, 300);
+                    });
+                }, 500);
+            }
             var place = autocomplete.getPlace();
             var city, state, country;
             place.address_components.forEach(function (result) {
@@ -2419,6 +2498,7 @@ var UserFindDealsMapPage = (function () {
             var user_selected_latlng = { lat: selected_lat, lng: selected_lng };
             self.storage.set('user_selected_latlng', user_selected_latlng);
             self.storage.set('user_short_location', location);
+            self.storage.set('user_long_location', place.formatted_address);
             if (!place.geometry)
                 return;
             if (place.geometry.viewport) {
@@ -2511,15 +2591,40 @@ var UserFindDealsMapPage = (function () {
                 optimized: false
             });
             _this.markers.push(marker);
-            if (d.photo !== undefined) {
-                _this.thumb = d.photo;
+            if (d.deal_id.length !== 0) {
+                d.deal_id.forEach(function (deal) {
+                    if (deal.is_featured) {
+                        var img = deal.photo.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                        d.featured_img = img;
+                    }
+                });
+                if (d.featured_img !== undefined) {
+                    _this.thumb = d.featured_img;
+                }
+                else {
+                    if (d.deal_id[0].photo.url !== undefined) {
+                        _this.thumb = d.deal_id[0].photo.url;
+                    }
+                    else {
+                        _this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+                    }
+                }
             }
             else {
-                _this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+                if (d.files.length !== 0) {
+                    d.files.forEach(function (files) {
+                        var img = files.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                        files.url = img;
+                    });
+                    _this.thumb = d.files[0].url;
+                }
+                else {
+                    _this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+                }
             }
             var self = _this;
             var address = d.city + ', ' + d.state + ', ' + d.country;
-            var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
+            // var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
             var content = '<div class="d-flex info-window"><div class="img-holder"><img src="' + _this.thumb + '"/></div>' +
                 '<div class="info-holder">' +
                 '<div tappable id="businessInfo"><h3>' + d.company_name + '</h3></div>' +
@@ -2532,7 +2637,7 @@ var UserFindDealsMapPage = (function () {
                 infowindow.setZIndex(9999);
                 infowindow.setContent(content);
                 infowindow.open(_this.map, marker);
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('#businessInfo').on('click', function () {
+                __WEBPACK_IMPORTED_MODULE_10_jquery__('#businessInfo').on('click', function () {
                     self.getBusiness(d);
                 });
             });
@@ -2589,7 +2694,7 @@ var UserFindDealsMapPage = (function () {
                         }
                     });
                     var location = city + ', ' + state + ', ' + country;
-                    __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location').val(location);
+                    __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location').val(location);
                     self.storage.set('user_short_location', location);
                     self.storage.set('user_long_location', address);
                 }
@@ -2604,7 +2709,7 @@ var UserFindDealsMapPage = (function () {
     };
     UserFindDealsMapPage.prototype.selectFirstResult = function () {
         var self = this;
-        var firstResult = __WEBPACK_IMPORTED_MODULE_11_jquery__(".pac-container .pac-item:first").text();
+        var firstResult = __WEBPACK_IMPORTED_MODULE_10_jquery__(".pac-container .pac-item:first").text();
         this.geocoder.geocode({ "address": firstResult }, function (results, status) {
             if (status === 'OK') {
                 var address = results[0].formatted_address;
@@ -2629,23 +2734,23 @@ var UserFindDealsMapPage = (function () {
                 self.storage.set('user_long_location', address);
                 self.storage.set('user_selected_latlng', user_selected_latlng);
                 self.map.setCenter(results[0].geometry.location);
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val(location);
+                __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val(location);
             }
         });
     };
     UserFindDealsMapPage.prototype.searchBusinessDeals = function () {
         this.mapResults = [];
         this.removeMarkers();
-        if (__WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val() === '') {
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').addClass('danger');
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('.alert-holder').fadeIn();
+        if (__WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val() === '') {
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').addClass('danger');
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('.alert-holder').fadeIn();
             setTimeout(function () {
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').removeClass('danger');
-                __WEBPACK_IMPORTED_MODULE_11_jquery__('.alert-holder').fadeOut();
+                __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').removeClass('danger');
+                __WEBPACK_IMPORTED_MODULE_10_jquery__('.alert-holder').fadeOut();
             }, 3000);
         }
         else {
-            var comma = __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val().split(",").length - 1;
+            var comma = __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val().split(",").length - 1;
             if (comma !== 2) {
                 this.selectFirstResult();
                 this.searchApi();
@@ -2658,14 +2763,14 @@ var UserFindDealsMapPage = (function () {
     UserFindDealsMapPage.prototype.searchApi = function () {
         var _this = this;
         var spinner = '<i class="fa fa-spinner fa-spin"></i>';
-        __WEBPACK_IMPORTED_MODULE_11_jquery__('.btn-search-deals').prop('disabled', true);
+        __WEBPACK_IMPORTED_MODULE_10_jquery__('.btn-search-deals').prop('disabled', true);
         // $('.fa.fa-search').hide();
         // $(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
         var loader = '<div id="mapLoader"><div class="icon-holder"><i class="fa fa-spinner fa-spin"></i></div></div>';
-        __WEBPACK_IMPORTED_MODULE_11_jquery__(loader).appendTo('#mapView');
-        __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView div').first().css('opacity', 0.3);
-        __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-location2').val(this.selectedMapCenter.address);
-        var user_input = __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-name2').val();
+        __WEBPACK_IMPORTED_MODULE_10_jquery__(loader).appendTo('#mapView');
+        __WEBPACK_IMPORTED_MODULE_10_jquery__('#mapView div').first().css('opacity', 0.3);
+        __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-location2').val(this.selectedMapCenter.address);
+        var user_input = __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-name2').val();
         if (user_input !== '') {
             var businessApi = this.api.Business.business_deals_search(user_input);
             console.log(user_input);
@@ -2682,75 +2787,81 @@ var UserFindDealsMapPage = (function () {
             });
             _this.createMarker(_this.mapResults);
             console.log(_this.mapResults);
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('.btn-search-deals').prop('disabled', false);
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('.btn-search-deals').prop('disabled', false);
             // $('.fa.fa-search').show();
             // $('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapLoader').remove();
-            __WEBPACK_IMPORTED_MODULE_11_jquery__('#mapView div:first-of-type').css('opacity', 1);
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('#mapLoader').remove();
+            __WEBPACK_IMPORTED_MODULE_10_jquery__('#mapView div:first-of-type').css('opacity', 1);
         });
     };
     UserFindDealsMapPage.prototype.getBusiness = function (business) {
         var _this = this;
         this.api.Business.business_view(business.u_id).then(function (business) {
             console.log(business);
-            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
+            _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
                 animate: true,
-                direction: 'forward'
+                direction: 'forward',
+                animation: 'md-transition'
             });
         });
     };
     UserFindDealsMapPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_login_page_login__["a" /* LoginPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserFindDealsMapPage.prototype.showMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__["a" /* MenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsMapPage.prototype.goBack = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_dashboard_page_dashboard__["a" /* DashboardPage */], {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_9__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserFindDealsMapPage.prototype.showCategoryMenu = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__page_menu_page_category_menu_page_category_menu__["a" /* CategoryMenuPage */], {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_5__page_menu_page_category_menu_page_category_menu__["a" /* CategoryMenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsMapPage.prototype.showSortMenu = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_7__page_menu_page_sort_menu_page_sort_menu__["a" /* SortMenuPage */], {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__page_menu_page_sort_menu_page_sort_menu__["a" /* SortMenuPage */], {
             animate: true,
             direction: 'forward'
         });
     };
     UserFindDealsMapPage.prototype.goListView = function () {
-        this.search.input = __WEBPACK_IMPORTED_MODULE_11_jquery__('#deal-name2').val();
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_10__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {
+        this.search.input = __WEBPACK_IMPORTED_MODULE_10_jquery__('#deal-name2').val();
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_9__page_user_find_deals_page_user_find_deals__["a" /* UserFindDealsPage */], {
             'business_deals': this.business_deals,
             'searched_business_deals': this.searched_business_deals,
             'search_input': this.search.input
         }, {
             animate: true,
-            direction: 'back'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     return UserFindDealsMapPage;
 }());
 UserFindDealsMapPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-find-deals-map',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-find-deals-map\page-user-find-deals-map.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Find Deals</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n  <div class="jumbotron search-banner">\n\n    <form class="form-inline form-search-deals text-center">\n\n      <input type="text" class="form-control" id="deal-name2" placeholder="Search GoPage Deals">\n\n      <label>\n\n        <span class="fa fa-map-marker"></span>\n\n        <input type="text" class="form-control" id="deal-location2" placeholder="Los Angeles, CA">\n\n        <div class="locations-holder">\n\n          <div class="location-holder" id="getLocation">\n\n            <ul>\n\n              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>\n\n            </ul>\n\n          </div>\n\n        </div>\n\n      </label>\n\n      <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>\n\n      <button class="btn-search-deals" type="submit" id="searchBtn2" (click)="searchBusinessDeals()">\n\n        <i class="fa fa-search"></i>\n\n      </button>\n\n    </form>\n\n  </div>\n\n\n\n  <nav id="filter-sort-map" class="navbar navbar-light">\n\n    <ul class="nav nav-tabs">\n\n      <li class="nav-item">\n\n        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>\n\n      </li>\n\n      <!-- <li class="nav-item">\n\n        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>\n\n      </li> -->\n\n      <li class="nav-item">\n\n        <a class="nav-link" (click)="goListView()"><i class="fa fa-list"></i> Back to list</a>\n\n      </li>\n\n    </ul>\n\n  </nav>\n\n\n\n  <div #mapView id="mapView">\n\n\n\n  </div>\n\n\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-find-deals-map\page-user-find-deals-map.html"*/
+        selector: 'page-user-find-deals-map',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-find-deals-map/page-user-find-deals-map.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n\n    <span class="page-title">Find Deals</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n  <div class="jumbotron search-banner">\n\n    <form class="form-inline form-search-deals text-center">\n\n      <input type="text" class="form-control" id="deal-name2" placeholder="Search GoPage Deals">\n\n      <label>\n\n        <span class="fa fa-map-marker"></span>\n\n        <input type="text" class="form-control" id="deal-location2" placeholder="Los Angeles, CA">\n\n        <div class="locations-holder">\n\n          <div class="location-holder" id="getLocation">\n\n            <ul>\n\n              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>\n\n            </ul>\n\n          </div>\n\n        </div>\n\n      </label>\n\n      <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>\n\n      <button class="btn-search-deals" type="submit" id="searchBtn2" (click)="searchBusinessDeals()">\n\n        <i class="fa fa-search"></i>\n\n      </button>\n\n    </form>\n\n  </div>\n\n\n\n  <nav id="filter-sort-map" class="navbar navbar-light">\n\n    <ul class="nav nav-tabs">\n\n      <li class="nav-item">\n\n        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>\n\n      </li>\n\n      <!-- <li class="nav-item">\n\n        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>\n\n      </li> -->\n\n      <li class="nav-item">\n\n        <a class="nav-link" (click)="goListView()"><i class="fa fa-list"></i> Back to list</a>\n\n      </li>\n\n    </ul>\n\n  </nav>\n\n\n\n  <div #mapView id="mapView">\n\n\n\n  </div>\n\n\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-find-deals-map/page-user-find-deals-map.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
-        __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__["a" /* ApiService */],
-        __WEBPACK_IMPORTED_MODULE_12__ionic_storage__["b" /* Storage */],
+        __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__["a" /* ApiService */],
+        __WEBPACK_IMPORTED_MODULE_11__ionic_storage__["b" /* Storage */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
         __WEBPACK_IMPORTED_MODULE_2__ionic_native_geolocation__["a" /* Geolocation */]])
 ], UserFindDealsMapPage);
@@ -2779,7 +2890,7 @@ UserFindDealsMapPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_storage__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2811,21 +2922,34 @@ var SettingsPage = (function () {
     SettingsPage.prototype.goBack = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__page_dashboard_page_dashboard__["a" /* DashboardPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     SettingsPage.prototype.logOut = function () {
-        this.storage.remove('user');
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__page_login_page_login__["a" /* LoginPage */], {}, {
-            animate: true,
-            direction: 'back'
+        var _this = this;
+        this.storage.clear();
+        this.storage.get('user').then(function (user) {
+            if (user == null) {
+                console.log('Storage data successfully cleared! You have been logout.');
+                _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__page_login_page_login__["a" /* LoginPage */], {}, {
+                    animate: true,
+                    direction: 'back'
+                });
+            }
+            else {
+                console.log('Storage data has not been cleared! Something went wrong.');
+            }
+        }).catch(function (err) {
+            console.log('Oops! Something went wrong.');
+            console.log('Error: ' + err);
         });
     };
     return SettingsPage;
 }());
 SettingsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-settings',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-settings\page-settings.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Settings</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <div class="container settings-menu">\n\n    <a (click)="ComingSoon()">Notif<span></span>ication</a>\n\n    <hr class="divider" />\n\n    <a class="logout" (click)="logOut()">Logout</a>\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-settings\page-settings.html"*/
+        selector: 'page-settings',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-settings/page-settings.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n    <span class="page-title">Settings</span>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <div class="container settings-menu">\n    <a (click)="ComingSoon()">Notif<span></span>ication</a>\n    <hr class="divider" />\n    <a class="logout" (click)="logOut()">Logout</a>\n  </div>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-settings/page-settings.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["a" /* AlertController */],
@@ -2878,7 +3002,7 @@ var SignupSuccessPage = (function () {
 }());
 SignupSuccessPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-signup-success',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-signup-success\page-signup-success.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <p class="title">\n\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n\n    Sign Up Success\n\n  </p>\n\n  <p class="description text-center">We’ve just emailed you a link. <br>Please check your inbox and confirm your email<p>\n\n  <a class="btn btn-green text-center" (click)="goLogin()">Okay</a>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-signup-success\page-signup-success.html"*/
+        selector: 'page-signup-success',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-signup-success/page-signup-success.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <p class="title">\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n    Sign Up Success\n  </p>\n  <p class="description text-center">We’ve just emailed you a link. <br>Please check your inbox and confirm your email<p>\n  <a class="btn btn-green text-center" (click)="goLogin()">Okay</a>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-signup-success/page-signup-success.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], SignupSuccessPage);
@@ -2929,7 +3053,7 @@ var SignupMobileSuccessPage = (function () {
 }());
 SignupMobileSuccessPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-signup-mobile-success',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-signup-mobile-success\page-signup-mobile-success.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <p class="title">\n\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n\n    Sign Up Success\n\n  </p>\n\n  <p class="description text-center">You have successfully registered. <br>You can now log-in.<p>\n\n  <a class="btn btn-green text-center" (click)="goLogin()">Okay</a>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-signup-mobile-success\page-signup-mobile-success.html"*/
+        selector: 'page-signup-mobile-success',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-signup-mobile-success/page-signup-mobile-success.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <p class="title">\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n    Sign Up Success\n  </p>\n  <p class="description text-center">You have successfully registered. <br>You can now log-in.<p>\n  <a class="btn btn-green text-center" (click)="goLogin()">Okay</a>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-signup-mobile-success/page-signup-mobile-success.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], SignupMobileSuccessPage);
@@ -2980,7 +3104,7 @@ var ResetPassSuccessPage = (function () {
 }());
 ResetPassSuccessPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-reset-pass-success',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-reset-pass-success\page-reset-pass-success.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <p class="title">\n\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n\n    Reset Password Success\n\n  </p>\n\n  <p class="description text-center">You should receive an email/text from us shortly. <br>We’ll meet you back here.<p>\n\n  <a class="btn btn-green text-center" (click)="goHome()">Back to Login</a>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-reset-pass-success\page-reset-pass-success.html"*/
+        selector: 'page-reset-pass-success',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-reset-pass-success/page-reset-pass-success.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <p class="title">\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">\n    Reset Password Success\n  </p>\n  <p class="description text-center">You should receive an email/text from us shortly. <br>We’ll meet you back here.<p>\n  <a class="btn btn-green text-center" (click)="goHome()">Back to Login</a>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-reset-pass-success/page-reset-pass-success.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], ResetPassSuccessPage);
@@ -3018,7 +3142,7 @@ var ItemDetailsPage = (function () {
 }());
 ItemDetailsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-item-details',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\item-details\item-details.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button menuToggle *ngIf="!selectedItem">\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Item Details</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <h3 text-center *ngIf="selectedItem">\n\n    {{selectedItem.title}}\n\n    <ion-icon [name]="selectedItem.icon"></ion-icon>\n\n  </h3>\n\n  <h4 text-center *ngIf="selectedItem">\n\n    You navigated here from <b>{{selectedItem.title}}</b>\n\n  </h4>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\item-details\item-details.html"*/
+        selector: 'page-item-details',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/item-details/item-details.html"*/'<ion-header>\n  <ion-navbar>\n    <button menuToggle *ngIf="!selectedItem">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Item Details</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <h3 text-center *ngIf="selectedItem">\n    {{selectedItem.title}}\n    <ion-icon [name]="selectedItem.icon"></ion-icon>\n  </h3>\n  <h4 text-center *ngIf="selectedItem">\n    You navigated here from <b>{{selectedItem.title}}</b>\n  </h4>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/item-details/item-details.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]])
 ], ItemDetailsPage);
@@ -3078,21 +3202,21 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__pages_page_user_loyalty_card_deals_page_user_loyalty_card_deals__ = __webpack_require__(173);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__pages_page_user_inbox_page_user_inbox__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__pages_page_user_deals_page_user_deals__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pages_list_list__ = __webpack_require__(780);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__pages_list_list__ = __webpack_require__(781);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__directives_pagination_index_pagination__ = __webpack_require__(425);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__ionic_native_status_bar__ = __webpack_require__(431);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35__ionic_native_splash_screen__ = __webpack_require__(432);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_36__ionic_native_screen_orientation__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_37__ionic_native_geolocation__ = __webpack_require__(160);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38_ngx_qrcode2__ = __webpack_require__(781);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_38_ngx_qrcode2__ = __webpack_require__(782);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_39__ionic_native_barcode_scanner__ = __webpack_require__(427);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_40__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_41__ionic_storage__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_42__pages_page_user_chat_page_user_chat__ = __webpack_require__(163);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_43__providers__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__components_elasticTextarea__ = __webpack_require__(801);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__components_chatBubble__ = __webpack_require__(803);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__directives__ = __webpack_require__(805);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_44__components_elasticTextarea__ = __webpack_require__(802);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_45__components_chatBubble__ = __webpack_require__(804);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_46__directives__ = __webpack_require__(806);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3315,7 +3439,7 @@ var MenuPage = (function () {
 }());
 MenuPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-menu',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-menu\page-menu.html"*/'<ion-content padding class="content-page-menu">\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n  </p>\n\n\n\n  <ion-list class="menu-list">\n\n    <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n      <span class="label-{{p.title}}">{{p.title}}</span>\n\n    </button>\n\n  </ion-list>\n\n\n\n  <hr class="divider">\n\n  <a class="logout" href="#" (click)="logOut()">Logout</a>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-menu\page-menu.html"*/
+        selector: 'page-menu',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-menu/page-menu.html"*/'<ion-content padding class="content-page-menu">\n  <p class="title">\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n  </p>\n\n  <ion-list class="menu-list">\n    <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n      <span class="label-{{p.title}}">{{p.title}}</span>\n    </button>\n  </ion-list>\n\n  <hr class="divider">\n  <a class="logout" href="#" (click)="logOut()">Logout</a>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-menu/page-menu.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */]])
 ], MenuPage);
@@ -3353,8 +3477,8 @@ var config = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_barcode_scanner__ = __webpack_require__(427);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__service_api_service_component__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_user_inbox_page_user_inbox__ = __webpack_require__(79);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -3390,25 +3514,29 @@ var UserMembershipCardPage = (function () {
     UserMembershipCardPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__page_login_page_login__["a" /* LoginPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserMembershipCardPage.prototype.goBack = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__page_dashboard_page_dashboard__["a" /* DashboardPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserMembershipCardPage.prototype.viewInbox = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__page_user_inbox_page_user_inbox__["a" /* UserInboxPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserMembershipCardPage.prototype.showMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__page_menu_page_menu__["a" /* MenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserMembershipCardPage.prototype.ionViewWillEnter = function () {
@@ -3437,7 +3565,7 @@ var UserMembershipCardPage = (function () {
 }());
 UserMembershipCardPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-membership-card',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-membership-card\page-user-membership-card.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Membership Card</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="holder-qrcode" *ngIf="hasData" >\n\n    <p class="member-name">{{user.first_name}}</p>\n\n    <ion-card *ngIf="createdCode">\n\n    <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>\n\n    </ion-card>\n\n    <p class="qrcode-id">{{user.membership_number}}</p>\n\n  </div>\n\n</ion-content>\n\n\n\n<!-- <button ion-button full icon-left (click)="createCode()"><ion-icon name="barcode"></ion-icon>Create Code</button> -->\n\n  <!-- <button ion-button full icon-left (click)="scanCode()" color="secondary"><ion-icon name="qr-scanner"></ion-icon>Scan Code</button> -->\n\n <!--  <ion-item>\n\n\n\n    <ion-input type="text" placeholder="MY QR Code data" [(ngModel)]="qrData">\n\n    </ion-input>\n\n  </ion-item>\n\n -->\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-membership-card\page-user-membership-card.html"*/
+        selector: 'page-user-membership-card',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-membership-card/page-user-membership-card.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n    <span class="page-title">Membership Card</span>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <div class="holder-qrcode" *ngIf="hasData" >\n    <p class="member-name">{{user.first_name}}</p>\n    <ion-card *ngIf="createdCode">\n    <ngx-qrcode [qrc-value]="createdCode"></ngx-qrcode>\n    </ion-card>\n    <p class="qrcode-id">{{user.membership_number}}</p>\n  </div>\n</ion-content>\n\n<!-- <button ion-button full icon-left (click)="createCode()"><ion-icon name="barcode"></ion-icon>Create Code</button> -->\n  <!-- <button ion-button full icon-left (click)="scanCode()" color="secondary"><ion-icon name="qr-scanner"></ion-icon>Scan Code</button> -->\n <!--  <ion-item>\n\n    <ion-input type="text" placeholder="MY QR Code data" [(ngModel)]="qrData">\n    </ion-input>\n  </ion-item>\n -->\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-membership-card/page-user-membership-card.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -3464,14 +3592,16 @@ UserMembershipCardPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_menu_page_category_menu_page_category_menu__ = __webpack_require__(161);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_menu_page_sort_menu_page_sort_menu__ = __webpack_require__(162);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__service_api_service_component__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__ = __webpack_require__(104);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__page_user_find_deals_map_page_user_find_deals_map__ = __webpack_require__(424);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__page_user_favorites_page_user_favorites__ = __webpack_require__(78);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__ionic_storage__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__directives_pagination_index_pagination__ = __webpack_require__(425);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_fastclick__ = __webpack_require__(780);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_fastclick___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_15_fastclick__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -3496,9 +3626,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var UserFindDealsPage = (function () {
     function UserFindDealsPage(navCtrl, navParams, platform, api, storage, geolocation, paginationService) {
-        var _this = this;
         this.navCtrl = navCtrl;
         this.navParams = navParams;
         this.platform = platform;
@@ -3522,33 +3652,45 @@ var UserFindDealsPage = (function () {
             input: '',
             location: ''
         };
-        this.storage.get('all_business_deals').then(function (all_business_deals) {
-            if (all_business_deals === null) {
-                _this.setBusinessDealsStorage();
-            }
-            else {
-                return false;
-            }
+        // this.storage.get('all_business_deals').then(all_business_deals => {
+        //   if(all_business_deals === null) {
+        //     this.setBusinessDealsStorage();
+        //   } else {
+        //     return false;
+        //   }
+        // });
+        __WEBPACK_IMPORTED_MODULE_12_jquery__(function () {
+            __WEBPACK_IMPORTED_MODULE_15_fastclick__["attach"](document.body);
         });
         __WEBPACK_IMPORTED_MODULE_12_jquery__(document).on({
             'DOMNodeInserted': function () {
-                __WEBPACK_IMPORTED_MODULE_12_jquery__('.pac-item, .pac-item span', this).addClass('needsclick');
+                __WEBPACK_IMPORTED_MODULE_12_jquery__('.pac-container .pac-item, .pac-item span', this).addClass('needsclick');
             }
-        }, '.pac-container');
+        });
     }
     UserFindDealsPage.prototype.ionViewWillEnter = function () {
+        // $('.categories-header').hide();
         this.getUser();
         var self = this;
         this.setMapDataStorage();
-        this.dataDisplay();
+        // this.dataDisplay();
         //jQuery Get current location
         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').on('click', function () {
             // $(this).select();
             __WEBPACK_IMPORTED_MODULE_12_jquery__(this).get(0).setSelectionRange(0, 9999);
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('.pac-container').attr('data-tap-disabled', true);
+            // $('.pac-item').attr('data-tap-disabled', true);
             // $('.locations-holder').css('visibility', 'visible');
         });
         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').contextmenu(function () {
             return false;
+        });
+        //location input tweak for ios
+        __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').on('keypress', function () {
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('.scroll-content').animate({ scrollTop: 1 }, 'fast');
+            setTimeout(function () {
+                __WEBPACK_IMPORTED_MODULE_12_jquery__('.scroll-content').animate({ scrollTop: 0 }, 'fast');
+            }, 50);
         });
         // $('.locations-holder').on('mousedown', function() {
         //   self.getLocation();
@@ -3557,15 +3699,17 @@ var UserFindDealsPage = (function () {
         __WEBPACK_IMPORTED_MODULE_12_jquery__('#selected-category').text('All Deals');
     };
     UserFindDealsPage.prototype.ionViewDidLoad = function () {
-        this.initMap();
+        var self = this;
+        setTimeout(function () {
+            self.initMap();
+            self.dataDisplay();
+            console.log('map initializing');
+        }, 650);
         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location2').val('Los Angeles, CA');
         if (__WEBPACK_IMPORTED_MODULE_12_jquery__('.hasdeal-holder').is(':empty')) {
             __WEBPACK_IMPORTED_MODULE_12_jquery__(".hasdeal-holder").css("display", "none");
         }
     };
-    // ionViewWillLeave() {
-    //   $('#mapView').remove();
-    // }
     UserFindDealsPage.prototype.setMapDataStorage = function () {
         var _this = this;
         this.storage.get('user_short_location').then(function (user_short_location) {
@@ -3591,9 +3735,8 @@ var UserFindDealsPage = (function () {
                     // console.log(this.selectedMapCenter.address, this.selectedMapCenter.location)
                     //business deals data from map view
                     var searched_business_deals = _this.navParams.get('searched_business_deals');
-                    var business_deals = _this.navParams.get('business_deals');
                     if (searched_business_deals !== undefined) {
-                        // console.log('searched deals from map');
+                        console.log('searched deals from map');
                         // console.log(searched_business_deals);
                         var search_input = _this.navParams.get('search_input');
                         __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-name').val(search_input);
@@ -3603,32 +3746,19 @@ var UserFindDealsPage = (function () {
                             _this.sortData(filtered_searched_business_deals);
                         }
                         else {
-                            // console.log('empty searched')
+                            console.log('empty searched');
                             _this.business_deals = [];
                         }
                     }
                     else {
                         _this.getFilteredDealsAndFavorites();
+                        var business_deals = _this.navParams.get('business_deals');
                         if (business_deals !== undefined) {
-                            // console.log('deals from find deals to map to find deals')
-                            // console.log(business_deals);
+                            console.log('deals from find deals to map to find deals');
                             _this.business_deals = business_deals;
                             _this.hasData = true;
                         }
                         else {
-                            // this.storage.get('user_short_location').then(user_short_location => {
-                            //   if (user_short_location !== null) {
-                            //     console.log('user_short_location')
-                            //     this.searchBusinessDeals();
-                            //   } else {
-                            //     console.log('all data')
-                            //
-                            //
-                            //     this.getBusinessDeals();
-                            //   }
-                            // });
-                            // console.log('data from non filtered')
-                            ////////////////////////////////////
                             _this.getFilteredDealsAndFavorites();
                             if (_this.business_deals === undefined) {
                                 _this.storage.get('user_short_location').then(function (user_short_location) {
@@ -3639,24 +3769,20 @@ var UserFindDealsPage = (function () {
                                         _this.getBusinessDeals();
                                     }
                                 });
-                                // console.log('data from non filtered')
+                                console.log('data from non filtered');
                             }
                             else {
                                 _this.getFilteredDealsAndFavorites();
-                                // console.log('data from filtered')
+                                console.log('data from filtered');
                             }
-                            ////////////////
                         }
                     }
-                    // console.log(this.selectedMapCenter);
                 }
                 else {
                     _this.storage.get('user_selected_latlng').then(function (user_selected_latlng) {
                         _this.storage.get('user_short_location').then(function (user_short_location) {
                             // console.log('first enter find deals')
                             if (user_short_location !== null) {
-                                // console.log('first enter find deals')
-                                // console.log(user_selected_latlng.lat, user_selected_latlng.lng)
                                 _this.default_location = new google.maps.LatLng(user_selected_latlng.lat, user_selected_latlng.lng);
                                 _this.map.setCenter(_this.default_location);
                                 __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').val(user_short_location);
@@ -3678,32 +3804,37 @@ var UserFindDealsPage = (function () {
     UserFindDealsPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_login_page_login__["a" /* LoginPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.goBack = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_dashboard_page_dashboard__["a" /* DashboardPage */], {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.showMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__page_menu_page_menu__["a" /* MenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.showCategoryMenu = function () {
         var user_input = __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-name').val();
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__page_menu_page_category_menu_page_category_menu__["a" /* CategoryMenuPage */], { user_input: user_input, business_deals: this.business_deals }, {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.showSortMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_7__page_menu_page_sort_menu_page_sort_menu__["a" /* SortMenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.getUser = function () {
@@ -3714,10 +3845,15 @@ var UserFindDealsPage = (function () {
     };
     UserFindDealsPage.prototype.doInfinite = function (infiniteScroll) {
         var _this = this;
-        setTimeout(function () {
-            _this.slice += 10;
+        if (this.business_deals.length <= this.slice) {
             infiniteScroll.complete();
-        }, 500);
+        }
+        else {
+            setTimeout(function () {
+                _this.slice += 10;
+                infiniteScroll.complete();
+            }, 500);
+        }
     };
     UserFindDealsPage.prototype.sortData = function (data) {
         var _this = this;
@@ -3734,6 +3870,8 @@ var UserFindDealsPage = (function () {
         var sorted_business_deals = data.concat(filtered_business_deals);
         sorted_business_deals.forEach(function (business) {
             business._source.deal_id.forEach(function (deal) {
+                var img = deal.photo.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                deal.photo.url = img;
                 if (deal.is_featured) {
                     business._source.featured_deal = deal;
                 }
@@ -3768,21 +3906,20 @@ var UserFindDealsPage = (function () {
             console.log(error);
         });
     };
-    UserFindDealsPage.prototype.setBusinessDealsStorage = function () {
-        var _this = this;
-        this.getUser();
-        this.api.Business.business_deals_list().then(function (deals) {
-            var all_data = [];
-            var all_business_deals = deals.hits.hits;
-            all_business_deals.forEach(function (all) {
-                all_data.push(all._source);
-            });
-            //  console.log(all_data);
-            _this.storage.set('all_business_deals', all_data);
-        }).catch(function (error) {
-            console.log(error);
-        });
-    };
+    // setBusinessDealsStorage() {
+    //   this.getUser();
+    //   this.api.Business.business_deals_list().then(deals => {
+    //     var all_data = [];
+    //     var all_business_deals = deals.hits.hits;
+    //     all_business_deals.forEach(all => {
+    //         all_data.push(all._source)
+    //     });
+    //    //  console.log(all_data);
+    //     this.storage.set('all_business_deals', all_data);
+    //   }).catch(error => {
+    //     console.log(error);
+    //   });
+    // }
     UserFindDealsPage.prototype.getFavorites = function () {
         var _this = this;
         this.api.Favorites.favorite_list(this.user._id).then(function (favorites) {
@@ -3802,7 +3939,8 @@ var UserFindDealsPage = (function () {
         var filtered_business_deals = this.navParams.get('filtered_business_deals');
         var catergory_name = this.navParams.get('business_cat');
         if (filtered_business_deals != null) {
-            this.sortData(filtered_business_deals);
+            var data = this.getDealsWithinBound(filtered_business_deals);
+            this.sortData(data);
             //Set value catergory title display
             __WEBPACK_IMPORTED_MODULE_12_jquery__('#selected-category').text(catergory_name);
             this.hasData = true;
@@ -3816,7 +3954,8 @@ var UserFindDealsPage = (function () {
             'search_input': this.search.input
         }, {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.addToFavorites = function (business) {
@@ -3824,6 +3963,7 @@ var UserFindDealsPage = (function () {
         selectedButton.style.display = "none";
         selectedButton.className += " disabled";
         var deal_id = [];
+        var member_full_name = this.user.first_name + " " + this.user.last_name;
         if (business.deal_id.length !== 0) {
             business.deal_id.forEach(function (id) {
                 deal_id.push(id);
@@ -3835,7 +3975,8 @@ var UserFindDealsPage = (function () {
         var deal_body = {
             deals_id: deal_id,
             business_id: business.u_id,
-            customer_id: this.user._id
+            customer_id: this.user._id,
+            member_full_name: member_full_name
         };
         this.api.Favorites.add_to_favorite(deal_body).then(function (favorite) {
             console.log(JSON.stringify(favorite.message));
@@ -3847,7 +3988,8 @@ var UserFindDealsPage = (function () {
     UserFindDealsPage.prototype.goToFavorites = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_11__page_user_favorites_page_user_favorites__["a" /* UserFavoritesPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserFindDealsPage.prototype.getBusiness = function (business) {
@@ -3856,7 +3998,8 @@ var UserFindDealsPage = (function () {
             // console.log(business)
             _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
                 animate: true,
-                direction: 'forward'
+                direction: 'forward',
+                animation: 'md-transition'
             });
         });
     };
@@ -3872,31 +4015,25 @@ var UserFindDealsPage = (function () {
         else {
             var comma = __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').val().split(",").length - 1;
             if (comma !== 2) {
-                // console.log('no comma')
                 this.selectFirstResult();
                 this.searchApi();
+                this.hasData = true;
             }
             else {
-                // console.log('2 comma')
                 this.searchApi();
+                this.hasData = true;
             }
         }
     };
     UserFindDealsPage.prototype.searchApi = function () {
         var _this = this;
-        var spinner = '<i class="fa fa-spinner fa-spin"></i>';
+        var btn_spinner = '<i class="fa fa-spinner fa-spin"></i>';
+        var main_spinner = '<div class="loader-holder">Loading &nbsp; <i class="fa fa-spinner fa-spin"></i></div>';
         __WEBPACK_IMPORTED_MODULE_12_jquery__('.fa.fa-search').hide();
         __WEBPACK_IMPORTED_MODULE_12_jquery__('.btn-search-deals').attr('disabled', true);
-        __WEBPACK_IMPORTED_MODULE_12_jquery__(spinner).appendTo('.search-banner .form-inline .btn-search-deals');
-        // this.storage.get('user_short_location').then(user_short_location => {
-        //   console.log(user_short_location)
-        //   this.selectedMapCenter.address = user_short_location;
-        //   // $('#deal-location').val(user_short_location);
-        //   this.storage.get('user_selected_latlng').then(user_selected_latlng => {
-        //     console.log(user_selected_latlng)
-        //     this.selectedMapCenter.location = user_selected_latlng;
-        //   });
-        // });
+        __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').attr('disabled', true);
+        __WEBPACK_IMPORTED_MODULE_12_jquery__(btn_spinner).appendTo('.search-banner .form-inline .btn-search-deals');
+        __WEBPACK_IMPORTED_MODULE_12_jquery__(main_spinner).appendTo('.scroll-content .categories-main');
         if (this.search.input !== '') {
             var businessApi = this.api.Business.business_deals_search(this.search.input);
         }
@@ -3916,13 +4053,19 @@ var UserFindDealsPage = (function () {
                 // this.hasData = false;
             }
             __WEBPACK_IMPORTED_MODULE_12_jquery__('.btn-search-deals').removeAttr('disabled');
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').removeAttr('disabled');
             __WEBPACK_IMPORTED_MODULE_12_jquery__('.fa.fa-search').show();
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('.categories-header').show();
             __WEBPACK_IMPORTED_MODULE_12_jquery__('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('.scroll-content .categories-main .loader-holder').remove();
         }).catch(function (error) {
             _this.hasData = false;
             __WEBPACK_IMPORTED_MODULE_12_jquery__('.btn-search-deals').removeAttr('disabled');
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('#deal-location').removeAttr('disabled');
             __WEBPACK_IMPORTED_MODULE_12_jquery__('.fa.fa-search').show();
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('.categories-header').show();
             __WEBPACK_IMPORTED_MODULE_12_jquery__('.search-banner .form-inline .btn-search-deals .fa-spinner').remove();
+            __WEBPACK_IMPORTED_MODULE_12_jquery__('.scroll-content .categories-main .loader-holder').remove();
             console.log(error);
         });
     };
@@ -3941,7 +4084,7 @@ var UserFindDealsPage = (function () {
             componentRestrictions: { country: ['us', 'ca'] }
         };
         var autocomplete = new google.maps.places.Autocomplete(location, options);
-        var searchBox = new google.maps.places.SearchBox(deal);
+        // var searchBox = new google.maps.places.SearchBox(deal);
         autocomplete.bindTo('bounds', self.map);
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
@@ -3950,6 +4093,18 @@ var UserFindDealsPage = (function () {
             anchorPoint: new google.maps.Point(0, -29)
         });
         autocomplete.addListener('place_changed', function () {
+            // need to stop prop of the touchend event
+            if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+                setTimeout(function () {
+                    var container = document.getElementsByClassName('pac-container')[0];
+                    console.log(container);
+                    container.addEventListener('touchstart', function (e) {
+                        e.stopImmediatePropagation();
+                        setTimeout(function () {
+                        }, 300);
+                    });
+                }, 500);
+            }
             var place = autocomplete.getPlace();
             var city, state, country;
             place.address_components.forEach(function (result) {
@@ -3969,6 +4124,7 @@ var UserFindDealsPage = (function () {
             var selected_lat = place.geometry.location.lat();
             var selected_lng = place.geometry.location.lng();
             var user_selected_latlng = { lat: selected_lat, lng: selected_lng };
+            this.new_latlng = user_selected_latlng;
             self.storage.set('user_selected_latlng', user_selected_latlng);
             self.storage.set('user_short_location', location);
             self.storage.set('user_long_location', place.formatted_address);
@@ -3985,15 +4141,6 @@ var UserFindDealsPage = (function () {
                 self.map.setCenter(place.geometry.location);
             }
         });
-        // need to stop prop of the touchend event (for ios devices)
-        if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
-            setTimeout(function () {
-                var container = document.getElementsByClassName('pac-container')[0];
-                container.addEventListener('touchend', function (e) {
-                    e.stopImmediatePropagation();
-                });
-            }, 500);
-        }
     };
     UserFindDealsPage.prototype.getDealsWithinBound = function (data) {
         var _this = this;
@@ -4103,7 +4250,7 @@ __decorate([
 ], UserFindDealsPage.prototype, "content", void 0);
 UserFindDealsPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-find-deals',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-find-deals\page-user-find-deals.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Find Deals</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n  <div class="jumbotron search-banner">\n\n    <form class="form-inline form-search-deals text-center">\n\n      <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">\n\n      <!-- <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;"> -->\n\n      <label>\n\n        <span class="fa fa-map-marker"></span>\n\n        <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">\n\n        <div class="locations-holder">\n\n          <div class="location-holder" id="getLocation">\n\n            <ul>\n\n              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>\n\n            </ul>\n\n          </div>\n\n        </div>\n\n      </label>\n\n      <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>\n\n      <button class="btn-search-deals" type="submit" id="searchBtn" (click)="searchBusinessDeals()">\n\n        <i class="fa fa-search"></i>\n\n      </button>\n\n    </form>\n\n  </div>\n\n\n\n  <nav id="filter-sort-map" class="navbar navbar-light">\n\n    <ul class="nav nav-tabs">\n\n      <li class="nav-item">\n\n        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>\n\n      </li>\n\n      <!-- <li class="nav-item">\n\n        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>\n\n      </li> -->\n\n      <li class="nav-item">\n\n        <a class="nav-link" (click)="goMapView()"><i class="fa fa-map-marker"></i> Map view</a>\n\n      </li>\n\n    </ul>\n\n  </nav>\n\n\n\n  <div class="categories-header">\n\n    <div class="row">\n\n      <div class="col">\n\n        <p class="deals-category">\n\n          <span id="selected-category"></span>\n\n        </p>\n\n        <ion-item>\n\n          <ion-label> Show Image</ion-label>\n\n          <ion-toggle [(ngModel)]="toggleImage"></ion-toggle>\n\n        </ion-item>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <div class="categories-main">\n\n    <div class="map-view" id="mapView"></div>\n\n    <div class="row">\n\n      <div class="col holder-categories-result1">\n\n        <div class="row">\n\n          <div class="col categories-result" *ngIf="hasData">\n\n\n\n            <div *ngIf="business_deals?.length === 0; then noData else hasData"></div>\n\n            <ng-template #noData>\n\n              <div class="no-data-holder">\n\n                <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">\n\n              </div>\n\n            </ng-template>\n\n            <ng-template #hasData>\n\n              <div class="deal media {{toggleImage ? \'toggled\' : \'\'}}" *ngFor="let business of business_deals | slice:0:slice; let i = index">\n\n                <span *ngIf="business.deal_id.length !== 0; then hasDeal else noDeal "></span>\n\n\n\n                <!-- has deal -->\n\n                <ng-template #hasDeal>\n\n                  <div class="hasdeal-template">\n\n                    <div *ngIf="business.featured_deal !== undefined; then hasFeatured else noFeatured"></div>\n\n\n                    <ng-template #hasFeatured>\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.featured_deal.photo.url !== unknown ? business.featured_deal.photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.featured_deal.template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.featured_deal.template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.featured_deal.end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n\n\n                      </div>\n\n                    </ng-template>\n\n\n                    <ng-template #noFeatured>\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n\n\n                      </div>\n\n                    </ng-template>\n\n\n                    <!-- <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                      <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                        <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                      </a>\n\n                      <div class="media-body align-self-center">\n\n                        <a class="business-link">{{business.company_name}}</a>\n\n                        <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                        <a class="deal-title">\n\n                          <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                        </a>\n\n                        <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                      </div>\n\n\n\n                    </div> -->\n\n\n\n                    <div class="col-xs-4">\n\n                      <div class="deals-button">\n\n                        <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                        <ng-template #notFavorite>\n\n                          <div class="claim-btn-holder">\n\n                            <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                            <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                          </div>\n\n                        </ng-template>\n\n                        <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                        <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                      </div>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n\n\n                <!-- no deal -->\n\n                <ng-template #noDeal>\n\n                  <div class="col-xs-8">\n\n                    <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                      <img class="d-flex mr-3" src="{{business.files.length !== 0 ? business.files[0].url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.company_name}}">\n\n                    </a>\n\n                    <div class="media-body align-self-center">\n\n                      <a class="business-link">{{business.company_name}}</a>\n\n                      <p class="business-address">{{business.address}}</p>\n\n                    </div>\n\n                  </div>\n\n\n\n                  <div class="col-xs-4">\n\n                    <div class="deals-button">\n\n                      <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                      <ng-template #notFavorite>\n\n                        <div class="claim-btn-holder">\n\n                          <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                          <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                        </div>\n\n                      </ng-template>\n\n                      <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                      <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n              </div>\n\n            </ng-template>\n\n          </div>\n\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">\n\n    <ion-infinite-scroll-content\n\n      loadingSpinner="bubbles">\n\n    </ion-infinite-scroll-content>\n\n  </ion-infinite-scroll>\n\n\n\n  <!-- <div class="row" *ngIf="showPagination">\n\n    <nav class="col-12 holder-pagination">\n\n      <ul class="pagination list-unstyled" *ngIf="pager.pages && pager.pages.length">\n\n        <li class="page-item prev-page">\n\n          <button class="page-link prev-page" [ngClass]="{disabled:pager.currentPage === 1}" (click)="setPagination(pager.currentPage - 1)" ion-button small><i class="fa fa-angle-left"></i>&nbsp;<span class="prev">Prev</span></button>\n\n        </li>\n\n        <li class="page-item" *ngFor="let page of pager.pages">\n\n          <button class="page-link" [ngClass]="{active:pager.currentPage === page}" (click)="setPagination(page)" ion-button small>\n\n            {{page}}\n\n          </button>\n\n        </li>\n\n        <li class="page-item">\n\n          <button class="page-link next-page" [ngClass]="{disabled:pager.currentPage === pager.totalPages}" (click)="setPagination(pager.currentPage + 1)" ion-button small><span class="next">Next</span>&nbsp;<i class="fa fa-angle-right"></i></button>\n\n        </li>\n\n      </ul>\n\n    </nav>\n\n  </div> -->\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-find-deals\page-user-find-deals.html"*/
+        selector: 'page-user-find-deals',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-find-deals/page-user-find-deals.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n\n    <span class="page-title">Find Deals</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n\n\n  <div class="jumbotron search-banner">\n\n    <form class="form-inline form-search-deals text-center">\n\n      <input type="text" class="form-control" id="deal-name" placeholder="Search GoPage Deals" name="input" [(ngModel)]="search.input">\n\n      <!-- <input type="text" class="form-control" id="deal-name2" style="visibility: hidden; position: absolute;"> -->\n\n      <label>\n\n        <span class="fa fa-map-marker"></span>\n\n        <input type="text" class="form-control" id="deal-location" placeholder="Los Angeles, CA" name="location" [(ngModel)]="search.location">\n\n        <div class="locations-holder">\n\n          <div class="location-holder" id="getLocation">\n\n            <ul>\n\n              <li class="location"><a><i class="fa fa-compass" aria-hidden="true"></i>Current Location</a></li>\n\n            </ul>\n\n          </div>\n\n        </div>\n\n      </label>\n\n      <div class="alert-holder"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Please specify your location.</div>\n\n      <button class="btn-search-deals" type="submit" id="searchBtn" (click)="searchBusinessDeals()">\n\n        <i class="fa fa-search"></i>\n\n      </button>\n\n    </form>\n\n  </div>\n\n\n\n  <nav id="filter-sort-map" class="navbar navbar-light">\n\n    <ul class="nav nav-tabs">\n\n      <li class="nav-item">\n\n        <a class="nav-link filter-categories" (click)="showCategoryMenu()"><i class="fa fa-filter"></i> Categories</a>\n\n      </li>\n\n      <!-- <li class="nav-item">\n\n        <a class="nav-link filter-sort" (click)="showSortMenu()"><i class="fa fa-sort"></i> Sort</a>\n\n      </li> -->\n\n      <li class="nav-item">\n\n        <a class="nav-link" (click)="goMapView()"><i class="fa fa-map-marker"></i> Map view</a>\n\n      </li>\n\n    </ul>\n\n  </nav>\n\n\n\n  <div class="categories-header">\n\n    <div class="row">\n\n      <div class="col">\n\n        <p class="deals-category">\n\n          <span id="selected-category"></span>\n\n        </p>\n\n        <ion-item>\n\n          <ion-label> Show Image</ion-label>\n\n          <ion-toggle [(ngModel)]="toggleImage"></ion-toggle>\n\n        </ion-item>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <div class="categories-main">\n\n    <div class="map-view" id="mapView"></div>\n\n    <div class="row">\n\n      <div class="col holder-categories-result1">\n\n        <div class="row">\n\n          <div class="col categories-result" *ngIf="hasData">\n\n\n\n            <div *ngIf="business_deals?.length === 0; then noData else hasData"></div>\n\n            <ng-template #noData>\n\n              <div class="no-data-holder">\n\n                <img src="https://cdn.filestackcontent.com/DFT7nNCRSLlF5uUkZAKk">\n\n              </div>\n\n            </ng-template>\n\n            <ng-template #hasData>\n\n              <div class="deal media {{toggleImage ? \'toggled\' : \'\'}}" *ngFor="let business of business_deals | slice:0:slice; let i = index">\n\n                <span *ngIf="business.deal_id.length !== 0; then hasDeal else noDeal "></span>\n\n\n\n                <!-- has deal -->\n\n                <ng-template #hasDeal>\n\n                  <div class="hasdeal-template">\n\n                    <div *ngIf="business.featured_deal !== undefined; then hasFeatured else noFeatured"></div>\n\n\n                    <ng-template #hasFeatured>\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.featured_deal.photo.url !== unknown ? business.featured_deal.photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.featured_deal.template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.featured_deal.template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.featured_deal.end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n\n\n                      </div>\n\n                    </ng-template>\n\n\n                    <ng-template #noFeatured>\n\n                      <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                        <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                          <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                        </a>\n\n                        <div class="media-body align-self-center">\n\n                          <a class="business-link">{{business.company_name}}</a>\n\n                          <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                          <a class="deal-title">\n\n                            <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                          </a>\n\n                          <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                        </div>\n\n\n\n                      </div>\n\n                    </ng-template>\n\n\n                    <!-- <div class="col-xs-8" tappable (click)="getBusiness(business)">\n\n                      <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                        <img class="d-flex mr-3" src="{{business.deal_id[0].photo.url !== unknown ? business.deal_id[0].photo.url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.deal_id[0].template}}">\n\n                      </a>\n\n                      <div class="media-body align-self-center">\n\n                        <a class="business-link">{{business.company_name}}</a>\n\n                        <p class="business-address">{{business.country}}, {{business.state}}</p>\n\n                        <a class="deal-title">\n\n                          <h6 class="mt-0"><i class="fa fa-tag"></i> {{business.deal_id[0].template}}</h6>\n\n                        </a>\n\n                        <p class="expiration-date"><i class="fa fa-clock-o fa-lg"></i> Expires {{business.deal_id[0].end_date | date: \'MM/dd/yyyy\'}}</p>\n\n                      </div>\n\n\n\n                    </div> -->\n\n\n\n                    <div class="col-xs-4">\n\n                      <div class="deals-button">\n\n                        <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                        <ng-template #notFavorite>\n\n                          <div class="claim-btn-holder">\n\n                            <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                            <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                          </div>\n\n                        </ng-template>\n\n                        <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                        <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                      </div>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n\n\n                <!-- no deal -->\n\n                <ng-template #noDeal>\n\n                  <div class="col-xs-8">\n\n                    <a class="deal-thumbnail" *ngIf="toggleImage">\n\n                      <img class="d-flex mr-3" src="{{business.files.length !== 0 ? business.files[0].url : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\'}}" alt="{{business.company_name}}">\n\n                    </a>\n\n                    <div class="media-body align-self-center">\n\n                      <a class="business-link">{{business.company_name}}</a>\n\n                      <p class="business-address">{{business.address}}</p>\n\n                    </div>\n\n                  </div>\n\n\n\n                  <div class="col-xs-4">\n\n                    <div class="deals-button">\n\n                      <div *ngIf="business.is_favorite; then Favorite  else  notFavorite"></div>\n\n                      <ng-template #notFavorite>\n\n                        <div class="claim-btn-holder">\n\n                          <a class="btn btn-claim" [attr.id]="\'addToFavorite\'+business.u_id" id="addToFavorite" tappable (click)="addToFavorites(business)">Add to Favorites <i class="fa fa-chevron-right"></i></a>\n\n                          <a class="btn btn-claimed" id="addedToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a>\n\n                        </div>\n\n                      </ng-template>\n\n                      <ng-template #Favorite><a class="btn btn-claim disabled" id="addToFavorite" tappable (click)="goToFavorites()">Added to Favorites</a></ng-template>\n\n                      <a class="btn btn-more" tappable (click)="getBusiness(business)" >More Details <i class="fa fa-chevron-right"></i></a>\n\n                    </div>\n\n                  </div>\n\n                </ng-template>\n\n              </div>\n\n            </ng-template>\n\n          </div>\n\n        </div>\n\n      </div>\n\n    </div>\n\n  </div>\n\n\n\n  <ion-infinite-scroll (ionInfinite)="doInfinite($event)">\n\n    <ion-infinite-scroll-content\n\n      loadingSpinner="bubbles">\n\n    </ion-infinite-scroll-content>\n\n  </ion-infinite-scroll>\n\n\n\n  <!-- <div class="row" *ngIf="showPagination">\n\n    <nav class="col-12 holder-pagination">\n\n      <ul class="pagination list-unstyled" *ngIf="pager.pages && pager.pages.length">\n\n        <li class="page-item prev-page">\n\n          <button class="page-link prev-page" [ngClass]="{disabled:pager.currentPage === 1}" (click)="setPagination(pager.currentPage - 1)" ion-button small><i class="fa fa-angle-left"></i>&nbsp;<span class="prev">Prev</span></button>\n\n        </li>\n\n        <li class="page-item" *ngFor="let page of pager.pages">\n\n          <button class="page-link" [ngClass]="{active:pager.currentPage === page}" (click)="setPagination(page)" ion-button small>\n\n            {{page}}\n\n          </button>\n\n        </li>\n\n        <li class="page-item">\n\n          <button class="page-link next-page" [ngClass]="{disabled:pager.currentPage === pager.totalPages}" (click)="setPagination(pager.currentPage + 1)" ion-button small><span class="next">Next</span>&nbsp;<i class="fa fa-angle-right"></i></button>\n\n        </li>\n\n      </ul>\n\n    </nav>\n\n  </div> -->\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-find-deals/page-user-find-deals.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -4130,12 +4277,12 @@ UserFindDealsPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(431);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_native_splash_screen__ = __webpack_require__(432);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_screen_orientation__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ionic_storage__ = __webpack_require__(23);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__ionic_native_keyboard__ = __webpack_require__(433);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__providers_database_service__ = __webpack_require__(165);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_sql__ = __webpack_require__(164);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_socket_service__ = __webpack_require__(412);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_12_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4177,6 +4324,7 @@ var MyApp = (function () {
                 });
             }
         });
+        this.splashScreen.show();
         this.initializeApp();
         this.storage.get("user").then(function (user) {
             if (user !== null) {
@@ -4186,10 +4334,6 @@ var MyApp = (function () {
                 _this.rootPage = __WEBPACK_IMPORTED_MODULE_2__pages_page_slider_page_slider__["a" /* SliderPage */];
             }
         });
-        // set our app's pages
-        // this.pages = [
-        //   { title: 'LOYALTY', component: UserMembershipCardPage }
-        // ];
     }
     MyApp.prototype.initializeApp = function () {
         var _this = this;
@@ -4197,7 +4341,9 @@ var MyApp = (function () {
             // Okay, so the platform is ready and our plugins are available.
             // Here you can do any higher level native things you might need.
             _this.statusBar.styleDefault();
-            _this.splashScreen.hide();
+            setTimeout(function () {
+                _this.splashScreen.hide();
+            }, 3000);
         });
     };
     MyApp.prototype.openPage = function (page) {
@@ -4213,7 +4359,7 @@ __decorate([
     __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */])
 ], MyApp.prototype, "nav", void 0);
 MyApp = __decorate([
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"E:\Projects\client-app\src\app\app.html"*/'<ion-nav #nav [root]="rootPage"></ion-nav>\n\n\n\n<!-- <ion-menu [content]="nav">\n\n  <ion-header>\n\n    <ion-toolbar>\n\n      <ion-title>Pages</ion-title>\n\n    </ion-toolbar>\n\n  </ion-header>\n\n\n\n  <ion-content>\n\n    <ion-list>\n\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n        {{p.title}}\n\n      </button>\n\n    </ion-list>\n\n  </ion-content>\n\n</ion-menu> -->\n\n'/*ion-inline-end:"E:\Projects\client-app\src\app\app.html"*/,
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/app/app.html"*/'<ion-nav #nav [root]="rootPage"></ion-nav>\n\n\n\n<!-- <ion-menu [content]="nav">\n\n  <ion-header>\n\n    <ion-toolbar>\n\n      <ion-title>Pages</ion-title>\n\n    </ion-toolbar>\n\n  </ion-header>\n\n\n\n  <ion-content>\n\n    <ion-list>\n\n      <button ion-item *ngFor="let p of pages" (click)="openPage(p)">\n\n        {{p.title}}\n\n      </button>\n\n    </ion-list>\n\n  </ion-content>\n\n</ion-menu> -->\n\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/app/app.html"*/,
         providers: [__WEBPACK_IMPORTED_MODULE_8__ionic_native_keyboard__["a" /* Keyboard */], __WEBPACK_IMPORTED_MODULE_9__providers_database_service__["a" /* DatabaseService */], __WEBPACK_IMPORTED_MODULE_10__providers_sql__["a" /* Sql */], __WEBPACK_IMPORTED_MODULE_11__providers_socket_service__["a" /* SocketService */]]
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["l" /* Platform */],
@@ -4509,14 +4655,17 @@ webpackContext.id = 756;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(43);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__ = __webpack_require__(76);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__page_slider_page_slider__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__page_login_page_login__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_signup_email_page_signup_email__ = __webpack_require__(82);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_signup_mobile_page_signup_mobile__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map__ = __webpack_require__(52);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_rxjs_add_operator_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__app_config__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_slider_page_slider__ = __webpack_require__(158);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_login_page_login__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__page_signup_email_page_signup_email__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__page_signup_mobile_page_signup_mobile__ = __webpack_require__(170);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__page_dashboard_page_dashboard__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_rxjs_add_operator_map__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_13_rxjs_add_operator_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__app_config__ = __webpack_require__(57);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4538,12 +4687,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
+
 var SignupPage = (function () {
-    function SignupPage(navCtrl, http, fb, gp) {
+    function SignupPage(navCtrl, http, fb, gp, storage, api, events) {
         this.navCtrl = navCtrl;
         this.http = http;
         this.fb = fb;
         this.gp = gp;
+        this.storage = storage;
+        this.api = api;
+        this.events = events;
         this.posts = {
             first_name: '',
             last_name: '',
@@ -4556,39 +4711,36 @@ var SignupPage = (function () {
         };
     }
     SignupPage.prototype.goBack = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_5__page_slider_page_slider__["a" /* SliderPage */], {}, {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__page_slider_page_slider__["a" /* SliderPage */], {}, {
             animate: true,
             direction: 'back'
         });
     };
     SignupPage.prototype.goLogin = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_6__page_login_page_login__["a" /* LoginPage */], {}, {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__page_login_page_login__["a" /* LoginPage */], {}, {
             animate: true,
             direction: 'forward'
         });
     };
     SignupPage.prototype.goSignupEmail = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__page_signup_email_page_signup_email__["a" /* SignupEmailPage */], {}, {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_10__page_signup_email_page_signup_email__["a" /* SignupEmailPage */], {}, {
             animate: true,
             direction: 'forward'
         });
     };
     SignupPage.prototype.goSignupMobile = function () {
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_9__page_signup_mobile_page_signup_mobile__["a" /* SignupMobilePage */], {}, {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_11__page_signup_mobile_page_signup_mobile__["a" /* SignupMobilePage */], {}, {
             animate: true,
             direction: 'forward'
         });
     };
     SignupPage.prototype.fbConnect = function () {
         var _this = this;
-        var baseUrl = __WEBPACK_IMPORTED_MODULE_11__app_config__["a" /* default */].baseUrl;
+        var baseUrl = __WEBPACK_IMPORTED_MODULE_14__app_config__["a" /* default */].baseUrl;
         this.fb.login(['email', 'public_profile']).then(function (res) {
             _this.fb.api('me?fields=id,email', []).then(function (profile) {
-                _this.http.post(baseUrl + 'api/users/login', { email: profile['email'], is_social: '1', number: ' ', account_type: '1', status: '1', permission: '3' }).subscribe(function (res) {
-                    _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__page_user_membership_card_page_user_membership_card__["a" /* UserMembershipCardPage */], {}, {
-                        animate: true,
-                        direction: 'forward'
-                    });
+                _this.http.post(baseUrl + 'api/users/login', { email: profile['email'], is_social: '1', permission: '3' }).subscribe(function (res) {
+                    _this.getUser(res.json());
                 }, function (err) {
                     console.log(err);
                 });
@@ -4597,27 +4749,59 @@ var SignupPage = (function () {
             console.log('Error logging into Facebook', err);
         });
     };
+    // fbConnect() {
+    //   var baseUrl = Config.baseUrl;
+    //
+    //   this.fb.login(['email', 'public_profile']).then((res: FacebookLoginResponse) => {
+    //     this.fb.api('me?fields=id,email', []).then(profile => {
+    //       this.http.post(baseUrl + 'api/users/login',{email: profile['email'], is_social: '1', number: ' ', account_type: '1', status: '1', permission: '3'}).subscribe(res => {
+    //         this.navCtrl.setRoot(UserMembershipCardPage, {}, {
+    //           animate: true,
+    //           direction: 'forward'
+    //         });
+    //       }, err => {
+    //         console.log(err);
+    //       });
+    //     });
+    //   }).catch(err => {
+    //     console.log('Error logging into Facebook', err)
+    //   });
+    // }
     SignupPage.prototype.gpConnect = function () {
         this.gp.login({})
             .then(function (res) {
             return console.log(res);
         });
-        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_7__page_user_membership_card_page_user_membership_card__["a" /* UserMembershipCardPage */], {}, {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_9__page_user_membership_card_page_user_membership_card__["a" /* UserMembershipCardPage */], {}, {
             animate: true,
             direction: 'forward'
         })
             .catch(function (err) { return console.log('error -- ' + err); });
     };
+    SignupPage.prototype.getUser = function (token) {
+        var _this = this;
+        this.api.Users.user(token.user_id).then(function (user) {
+            _this.events.publish('user:login', user);
+            _this.storage.set('user', user);
+            _this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_12__page_dashboard_page_dashboard__["a" /* DashboardPage */], {}, {
+                animate: true,
+                direction: 'forward'
+            });
+        });
+    };
     return SignupPage;
 }());
 SignupPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-signup',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-signup\page-signup.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <!-- <ion-card *ngIf="userData">\n\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n\n  </ion-card> -->\n\n\n\n  <p class="title">\n\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">Sign Up\n\n  </p>\n\n  <button class="btn login-fb" (click)="fbConnect()"><span class="fa fa-facebook"></span> Continue with Facebook</button>\n\n  <button class="btn login-google" (click)="gpConnect()"><span class="fa fa-google"></span> Continue with Google</button>\n\n  <div class="divider">\n\n    <span>or</span>\n\n  </div>\n\n  <button class="btn btn-green" (click)="goSignupEmail()"><span class="fa fa-envelope-o"></span> Sign Up with Email</button>\n\n  <button class="btn btn-green" (click)="goSignupMobile()"><span class="fa fa-mobile"></span> Sign Up with Mobile number</button>\n\n\n\n  <!-- <form class="form-signup">\n\n    <label>\n\n      <input type="text" name="first_name" placeholder="First name" [(ngModel)]="posts.first_name" />\n\n      <span class="text-validate">First name is required.</span>\n\n    </label>\n\n    <label>\n\n      <input type="text" name="last_name" placeholder="Last name" [(ngModel)]="posts.last_name" />\n\n      <span class="text-validate">Last name is required.</span>\n\n    </label>\n\n    <label>\n\n      <input type="email" name="email" placeholder="Email address" [(ngModel)]="posts.email" />\n\n      <span class="text-validate">Email address is required.</span>\n\n    </label>\n\n    <label>\n\n      <input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" />\n\n      <span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span>\n\n    </label>\n\n    <input class="btn-green" type="submit" value="Sign Up" (click)="signMeUp()" />\n\n  </form> -->\n\n  <!-- <p class="description">By signing up, you agree to GoPage\'s <br><a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a></p> -->\n\n  <hr class="hr" />\n\n  <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-signup\page-signup.html"*/
+        selector: 'page-signup',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-signup/page-signup.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <!-- <ion-card *ngIf="userData">\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n  </ion-card> -->\n\n  <p class="title">\n    <img class="btn-nav" src="assets/icon/icon-back.png" alt="" (click)="goBack()">Sign Up\n  </p>\n  <button class="btn login-fb" (click)="fbConnect()"><span class="fa fa-facebook"></span> Continue with Facebook</button>\n  <button class="btn login-google" (click)="gpConnect()"><span class="fa fa-google"></span> Continue with Google</button>\n  <div class="divider">\n    <span>or</span>\n  </div>\n  <button class="btn btn-green" (click)="goSignupEmail()"><span class="fa fa-envelope-o"></span> Sign Up with Email</button>\n  <button class="btn btn-green" (click)="goSignupMobile()"><span class="fa fa-mobile"></span> Sign Up with Mobile number</button>\n\n  <!-- <form class="form-signup">\n    <label>\n      <input type="text" name="first_name" placeholder="First name" [(ngModel)]="posts.first_name" />\n      <span class="text-validate">First name is required.</span>\n    </label>\n    <label>\n      <input type="text" name="last_name" placeholder="Last name" [(ngModel)]="posts.last_name" />\n      <span class="text-validate">Last name is required.</span>\n    </label>\n    <label>\n      <input type="email" name="email" placeholder="Email address" [(ngModel)]="posts.email" />\n      <span class="text-validate">Email address is required.</span>\n    </label>\n    <label>\n      <input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" />\n      <span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span>\n    </label>\n    <input class="btn-green" type="submit" value="Sign Up" (click)="signMeUp()" />\n  </form> -->\n  <!-- <p class="description">By signing up, you agree to GoPage\'s <br><a href="#">Terms &amp; Conditions</a> and <a href="#">Privacy Policy</a></p> -->\n  <hr class="hr" />\n  <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-signup/page-signup.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],
         __WEBPACK_IMPORTED_MODULE_3__ionic_native_facebook__["a" /* Facebook */],
-        __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */]])
+        __WEBPACK_IMPORTED_MODULE_4__ionic_native_google_plus__["a" /* GooglePlus */],
+        __WEBPACK_IMPORTED_MODULE_6__ionic_storage__["b" /* Storage */],
+        __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__["a" /* ApiService */],
+        __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["c" /* Events */]])
 ], SignupPage);
 
 //# sourceMappingURL=page-signup.js.map
@@ -4703,8 +4887,8 @@ var PaginationService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_login_page_login__ = __webpack_require__(22);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_deals_page_user_deals__ = __webpack_require__(104);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__service_api_service_component__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_storage__ = __webpack_require__(23);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -4733,13 +4917,15 @@ var UserFavoritesPage = (function () {
     UserFavoritesPage.prototype.goHome = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_2__page_login_page_login__["a" /* LoginPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserFavoritesPage.prototype.goBack = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__["a" /* DashboardPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     UserFavoritesPage.prototype.ionViewWillEnter = function () {
@@ -4750,6 +4936,12 @@ var UserFavoritesPage = (function () {
         this.storage.get("user").then(function (user) {
             _this.api.Favorites.favorite_list(user._id).then(function (favorites) {
                 console.log(favorites);
+                favorites.forEach(function (fav) {
+                    if (fav.business_id[0].files.length != 0) {
+                        var img = fav.business_id[0].files[0].url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                        fav.business_id[0].files[0].url = img;
+                    }
+                });
                 _this.favorites = favorites;
             });
         });
@@ -4760,7 +4952,8 @@ var UserFavoritesPage = (function () {
             console.log(business);
             _this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_4__page_user_deals_page_user_deals__["a" /* UserDealsPage */], { business: business }, {
                 animate: true,
-                direction: 'forward'
+                direction: 'forward',
+                animation: 'md-transition'
             });
         });
     };
@@ -4793,7 +4986,7 @@ var UserFavoritesPage = (function () {
 }());
 UserFavoritesPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-favorites',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-favorites\page-user-favorites.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Favorites</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="favorites-holder">\n\n    <div *ngIf="favorites?.length !== 0; then hasFavorites else noFavorites"></div>\n\n    <ng-template #hasFavorites>\n\n      <div class="favorites media" *ngFor="let favorite of favorites; let i = index">\n\n        <div class="col-xs-8">\n\n          <div class="img-holder" tappable (click)="getBusiness(favorite)">\n\n            <div *ngIf="favorite.business_id[0].files?.length !== 0; then hasPhoto else noPhoto"></div>\n\n            <ng-template #hasPhoto>\n\n              <img class="d-flex mr-3" [src]="favorite.business_id[0].files[0]?.url" alt="">\n\n            </ng-template>\n\n            <ng-template #noPhoto>\n\n              <img class="d-flex mr-3" src="https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww" alt="">\n\n            </ng-template>\n\n            <!-- <img class="d-flex mr-3" [src]="[favorite.business_id[0].files.length !== 0 ? "{{favorite.business_id[0].files[0].url}}" : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\']" alt=""> -->\n\n          </div>\n\n          <div class="text-holder media-body" tappable (click)="getBusiness(favorite)">\n\n            <h3 class="title-text">{{favorite.business_id[0].company_name}}</h3>\n\n            <div class="company-text">{{favorite.business_id[0].title}}</div>\n\n            <div class="location-text">{{favorite.business_id[0].city}}, {{favorite.business_id[0].state}}, {{favorite.business_id[0].country}}</div>\n\n            <!-- <div class="expiration-text"><i class="fa fa-clock-o"></i> Expires {{favorite.end_date | date : \'MM/dd/yyyy\'}}</div> -->\n\n            <i class="fa fa-chevron-right fa-2x"></i>\n\n          </div>\n\n        </div>\n\n\n\n        <div class="favorites-button">\n\n          <a class="btn remove-btn" tappable (click)="removeFavorite(favorite._id, i)">Remove</a>\n\n          <a class="btn btn-more" tappable (click)="getBusiness(favorite)">More Deals <i class="fa fa-chevron-right"></i></a>\n\n        </div>\n\n\n\n      </div>\n\n    </ng-template>\n\n\n\n    <ng-template #noFavorites>\n\n      <div class="no-favorites-holder">\n\n        <h4>Once you favorite a business, it will show up here!</h4>\n\n      </div>\n\n    </ng-template>\n\n\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-favorites\page-user-favorites.html"*/
+        selector: 'page-user-favorites',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-favorites/page-user-favorites.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n\n    <span class="page-title">Favorites</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content padding>\n\n  <div class="favorites-holder">\n\n    <div *ngIf="favorites?.length !== 0; then hasFavorites else noFavorites"></div>\n\n    <ng-template #hasFavorites>\n\n      <div class="favorites media" *ngFor="let favorite of favorites; let i = index">\n\n        <div class="col-xs-8">\n\n          <div class="img-holder" tappable (click)="getBusiness(favorite)">\n\n            <div *ngIf="favorite.business_id[0].files?.length !== 0; then hasPhoto else noPhoto"></div>\n\n            <ng-template #hasPhoto>\n\n              <img class="d-flex mr-3" [src]="favorite.business_id[0].files[0]?.url" alt="">\n\n            </ng-template>\n\n            <ng-template #noPhoto>\n\n              <img class="d-flex mr-3" src="https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww" alt="">\n\n            </ng-template>\n\n            <!-- <img class="d-flex mr-3" [src]="[favorite.business_id[0].files.length !== 0 ? "{{favorite.business_id[0].files[0].url}}" : \'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww\']" alt=""> -->\n\n          </div>\n\n          <div class="text-holder media-body" tappable (click)="getBusiness(favorite)">\n\n            <h3 class="title-text">{{favorite.business_id[0].company_name}}</h3>\n\n            <div class="company-text">{{favorite.business_id[0].title}}</div>\n\n            <div class="location-text">{{favorite.business_id[0].city}}, {{favorite.business_id[0].state}}, {{favorite.business_id[0].country}}</div>\n\n            <!-- <div class="expiration-text"><i class="fa fa-clock-o"></i> Expires {{favorite.end_date | date : \'MM/dd/yyyy\'}}</div> -->\n\n            <i class="fa fa-chevron-right fa-2x"></i>\n\n          </div>\n\n        </div>\n\n\n\n        <div class="favorites-button">\n\n          <a class="btn remove-btn" tappable (click)="removeFavorite(favorite._id, i)">Remove</a>\n\n          <a class="btn btn-more" tappable (click)="getBusiness(favorite)">More Deals <i class="fa fa-chevron-right"></i></a>\n\n        </div>\n\n\n\n      </div>\n\n    </ng-template>\n\n\n\n    <ng-template #noFavorites>\n\n      <div class="no-favorites-holder">\n\n        <h4>Once you favorite a business, it will show up here!</h4>\n\n      </div>\n\n    </ng-template>\n\n\n\n  </div>\n\n</ion-content>\n\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-favorites/page-user-favorites.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */],
@@ -4807,7 +5000,7 @@ UserFavoritesPage = __decorate([
 
 /***/ }),
 
-/***/ 780:
+/***/ 781:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4851,7 +5044,7 @@ var ListPage = (function () {
 }());
 ListPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-list',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\list\list.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>My First List</ion-title>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n  <ion-list>\n\n    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">\n\n      <ion-icon name="{{item.icon}}" item-left></ion-icon>\n\n      {{item.title}}\n\n      <div class="item-note" item-right>\n\n        {{item.note}}\n\n      </div>\n\n    </button>\n\n  </ion-list>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\list\list.html"*/
+        selector: 'page-list',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/list/list.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>My First List</ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <ion-list>\n    <button ion-item *ngFor="let item of items" (click)="itemTapped($event, item)">\n      <ion-icon name="{{item.icon}}" item-left></ion-icon>\n      {{item.title}}\n      <div class="item-note" item-right>\n        {{item.note}}\n      </div>\n    </button>\n  </ion-list>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/list/list.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]])
 ], ListPage);
@@ -4870,10 +5063,10 @@ ListPage = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__page_user_chat_page_user_chat__ = __webpack_require__(163);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_api_service_component__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__service_api_service_component__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers__ = __webpack_require__(80);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_8_jquery__);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -4904,8 +5097,6 @@ var UserInboxPage = (function () {
         this.hasData = false;
         this.hasNoData = false;
         this.hasNotify = false;
-        // hasNotify2 : boolean = false;
-        // hasNotifyDone : boolean = false;
         this.isRefetch = false;
         this.inInbox = true;
         this.init();
@@ -4920,6 +5111,21 @@ var UserInboxPage = (function () {
         this.socketService.disconnect();
         this.hasData = false;
         this.inInbox = false;
+    };
+    UserInboxPage.prototype.initializeItems = function () {
+        this.items = this.businessList;
+    };
+    UserInboxPage.prototype.getItems = function (ev) {
+        // Reset items back to all of the items
+        this.initializeItems();
+        // set val to the value of the searchbar
+        var val = ev.target.value;
+        // if the value is an empty string don't filter the items
+        if (val && val.trim() != '') {
+            this.items = this.items.filter(function (item) {
+                return (item.business_id[0].company_name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+            });
+        }
     };
     UserInboxPage.prototype.fetchInboxData = function () {
         var _this = this;
@@ -4960,8 +5166,10 @@ var UserInboxPage = (function () {
                     }
                     else {
                         _this.businessList = newChats;
+                        _this.initializeItems();
                         _this.hasData = true;
                         __WEBPACK_IMPORTED_MODULE_8_jquery__('body').find('.fa.loader').remove();
+                        _this.hasData = true;
                         console.log('Inbox data loaded');
                     }
                 }
@@ -5015,7 +5223,8 @@ var UserInboxPage = (function () {
     UserInboxPage.prototype.showMenu = function () {
         this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_2__page_menu_page_menu__["a" /* MenuPage */], {
             animate: true,
-            direction: 'forward'
+            direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserInboxPage.prototype.viewMessage = function (businessDetail, userDetail) {
@@ -5025,19 +5234,21 @@ var UserInboxPage = (function () {
         }, {
             animate: true,
             direction: 'forward',
+            animation: 'md-transition'
         });
     };
     UserInboxPage.prototype.goBack = function () {
         this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_3__page_dashboard_page_dashboard__["a" /* DashboardPage */], {}, {
             animate: true,
-            direction: 'back'
+            direction: 'back',
+            animation: 'md-transition'
         });
     };
     return UserInboxPage;
 }());
 UserInboxPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-user-inbox',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-user-inbox\page-user-inbox.html"*/'<ion-header>\n\n  <ion-navbar>\n\n    <i class="fa fa-angle-left fa-lg" (click)="goBack()"></i>\n\n    <span class="page-title">Inbox</span>\n\n  </ion-navbar>\n\n</ion-header>\n\n\n\n<ion-content>\n\n\n\n\n\n\n\n    <h5 *ngIf="hasNoData"> Your inbox is empty </h5>\n\n\n\n    <ion-list id="inbox-list" *ngFor="let business of businessList;">\n\n\n\n      <ion-item *ngIf="business.last_chat.length != 0" tappable (click)="viewMessage(business.business_id[0],business.user_id[0])">\n\n\n\n          <span [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" class="name" *ngIf="business.business_id[0] && business.business_id[0].company_name"> {{business.business_id[0].company_name}}  </span>\n\n\n\n          <span class="name" [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" *ngIf="business.business_id[0] && !business.business_id[0].company_name"> No Company Name </span>\n\n\n\n          <span class="name" *ngIf="business.business_id && business.business_id.length == 0"> No Business Data </span>\n\n\n\n          <p [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" class="message" *ngIf="business.last_chat.length != 0"> {{ business.last_chat[0].message  }}  </p>\n\n\n\n          <span [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" class="date-time" *ngIf="business.last_chat.length != 0">  {{formatEpoch(business.last_chat[0].epoch)}} </span>\n\n\n\n      </ion-item>\n\n\n\n    </ion-list>\n\n\n\n    <span class="fa fa-spinner fa-spin loader"></span>\n\n\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-user-inbox\page-user-inbox.html"*/
+        selector: 'page-user-inbox',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-user-inbox/page-user-inbox.html"*/'<ion-header>\n  <ion-navbar>\n    <button ion-button class="back-btn" (click)="goBack()"><i class="fa fa-angle-left fa-lg"></i></button>\n    <span class="page-title">Inbox</span>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n\n    <h5 *ngIf="hasNoData"> No Conversations </h5>\n\n    <ion-searchbar placeholder="Search inbox" *ngIf="hasData" (ionInput)="getItems($event)"></ion-searchbar>\n\n    <ion-list id="inbox-list" *ngFor="let business of items;">\n\n      <ion-item *ngIf="business.last_chat.length != 0" tappable (click)="viewMessage(business.business_id[0],business.user_id[0])">\n\n          <span [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" class="name" *ngIf="business.business_id[0] && business.business_id[0].company_name"> {{business.business_id[0].company_name}}  </span>\n\n          <span class="name" [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" *ngIf="business.business_id[0] && !business.business_id[0].company_name"> No Company Name </span>\n\n          <span class="name" *ngIf="business.business_id && business.business_id.length == 0"> No Business Data </span>\n\n          <p [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" class="message" *ngIf="business.last_chat.length != 0"> {{ business.last_chat[0].message  }}  </p>\n\n          <span [ngClass]="[business.last_chat.length != 0 && business.last_chat[0].is_read == false && business.last_chat[0].message_by === \'business\' ? \'new\' : \'\']" class="date-time" *ngIf="business.last_chat.length != 0">  {{formatEpoch(business.last_chat[0].epoch)}} </span>\n\n      </ion-item>\n\n    </ion-list>\n\n    <span class="fa fa-spinner fa-spin loader"></span>\n\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-user-inbox/page-user-inbox.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["b" /* Storage */],
@@ -5076,18 +5287,18 @@ UserInboxPage = __decorate([
 
 /***/ }),
 
-/***/ 801:
+/***/ 802:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__elasticTextarea__ = __webpack_require__(802);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__elasticTextarea__ = __webpack_require__(803);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__elasticTextarea__["a"]; });
 
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 802:
+/***/ 803:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5141,7 +5352,7 @@ __decorate([
 ElasticTextarea = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'elastic-textarea',
-        inputs: ['placeholder', 'lineHeight', 'maxExpand'],template:/*ion-inline-start:"E:\Projects\client-app\src\components\elasticTextarea\elasticTextarea.html"*/'<!--suppress ALL -->\n\n<ion-textarea #ionTxtArea\n\n              placeholder=\'{{ "Type your message..." }}\'\n\n              [(ngModel)]="content"\n\n              (ngModelChange)=\'onChange($event)\'>\n\n</ion-textarea>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\components\elasticTextarea\elasticTextarea.html"*/
+        inputs: ['placeholder', 'lineHeight', 'maxExpand'],template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/components/elasticTextarea/elasticTextarea.html"*/'<!--suppress ALL -->\n<ion-textarea #ionTxtArea\n              placeholder=\'{{ "Type your message..." }}\'\n              [(ngModel)]="content"\n              (ngModelChange)=\'onChange($event)\'>\n</ion-textarea>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/components/elasticTextarea/elasticTextarea.html"*/
     }),
     __metadata("design:paramtypes", [])
 ], ElasticTextarea);
@@ -5150,18 +5361,18 @@ ElasticTextarea = __decorate([
 
 /***/ }),
 
-/***/ 803:
+/***/ 804:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__chatBubble__ = __webpack_require__(804);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__chatBubble__ = __webpack_require__(805);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__chatBubble__["a"]; });
 
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 804:
+/***/ 805:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5191,7 +5402,7 @@ var ChatBubble = (function () {
 ChatBubble = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
         selector: 'chat-bubble',
-        inputs: ['chatMessage'],template:/*ion-inline-start:"E:\Projects\client-app\src\components\chatBubble\chatBubble.html"*/'<div>\n\n  <div class="chat-bubble {{chatMessage.message_by === \'member\' ? \'right\' : \'left\'}}">\n\n    <div class="message">{{chatMessage.message}}</div>\n\n  </div>\n\n  <div class="message-detail {{chatMessage.message_by === \'member\' ? \'right\' : \'left\'}}">\n\n    <span>{{formatEpoch(chatMessage.epoch)}}</span>\n\n  </div>\n\n</div>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\components\chatBubble\chatBubble.html"*/
+        inputs: ['chatMessage'],template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/components/chatBubble/chatBubble.html"*/'<div>\n  <div class="chat-bubble {{chatMessage.message_by === \'member\' ? \'right\' : \'left\'}}">\n    <div class="message">{{chatMessage.message}}</div>\n  </div>\n  <div class="message-detail {{chatMessage.message_by === \'member\' ? \'right\' : \'left\'}}">\n    <span>{{formatEpoch(chatMessage.epoch)}}</span>\n  </div>\n</div>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/components/chatBubble/chatBubble.html"*/
     }),
     __metadata("design:paramtypes", [])
 ], ChatBubble);
@@ -5200,18 +5411,18 @@ ChatBubble = __decorate([
 
 /***/ }),
 
-/***/ 805:
+/***/ 806:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__keyboard_attach_directive__ = __webpack_require__(806);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__keyboard_attach_directive__ = __webpack_require__(807);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__keyboard_attach_directive__["a"]; });
 
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
-/***/ 806:
+/***/ 807:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5344,7 +5555,7 @@ KeyboardAttachDirective = __decorate([
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__page_user_membership_card_page_user_membership_card__ = __webpack_require__(58);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__page_signup_success_page_signup_success__ = __webpack_require__(428);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__page_signup_mobile_page_signup_mobile__ = __webpack_require__(170);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery__ = __webpack_require__(25);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__ = __webpack_require__(52);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11_rxjs_add_operator_map__);
@@ -5514,7 +5725,7 @@ var SignupEmailPage = (function () {
 }());
 SignupEmailPage = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
-        selector: 'page-signup-email',template:/*ion-inline-start:"E:\Projects\client-app\src\pages\page-signup-email\page-signup-email.html"*/'<!-- <ion-header>\n\n  <ion-navbar>\n\n    <button ion-button menuToggle>\n\n      <ion-icon name="menu"></ion-icon>\n\n    </button>\n\n    <ion-title>Login</ion-title>\n\n  </ion-navbar>\n\n</ion-header> -->\n\n<ion-content padding>\n\n  <!-- <ion-card *ngIf="userData">\n\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n\n  </ion-card> -->\n\n\n\n  <p class="title">\n\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n\n  </p>\n\n  <p class="text-center subtitle">\n\n    Sign up with <a href="#" (click)="fbConnect()">Facebook</a>, <a href="#" (click)="gpConnect()">Google</a> or <a href="#" (click)="goSignupMobile()">mobile number</a>\n\n  </p>\n\n  <div class="divider">\n\n    <span>or</span>\n\n  </div>\n\n\n\n  <form class="form-signup">\n\n    <label>\n\n      <input type="text" name="first_name" placeholder="First name" [(ngModel)]="posts.first_name" />\n\n      <span class="text-validate">First name is required.</span>\n\n    </label>\n\n    <label>\n\n      <input type="text" name="last_name" placeholder="Last name" [(ngModel)]="posts.last_name" />\n\n      <span class="text-validate">Last name is required.</span>\n\n    </label>\n\n    <label>\n\n      <input type="email" name="email" placeholder="Email address" [(ngModel)]="posts.email" />\n\n      <span class="text-validate">Email address is required.</span>\n\n    </label>\n\n    <label>\n\n      <input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" />\n\n      <span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span>\n\n    </label>\n\n    <button class="btn-green" type="submit" (click)="signMeUp()">Sign Up</button>\n\n  </form>\n\n  <hr class="hr" />\n\n  <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>\n\n</ion-content>\n\n'/*ion-inline-end:"E:\Projects\client-app\src\pages\page-signup-email\page-signup-email.html"*/
+        selector: 'page-signup-email',template:/*ion-inline-start:"/var/www/html/GoPage/mobile/src/pages/page-signup-email/page-signup-email.html"*/'<!-- <ion-header>\n  <ion-navbar>\n    <button ion-button menuToggle>\n      <ion-icon name="menu"></ion-icon>\n    </button>\n    <ion-title>Login</ion-title>\n  </ion-navbar>\n</ion-header> -->\n<ion-content padding>\n  <!-- <ion-card *ngIf="userData">\n    <ion-card-header>{{ userData.email }}</ion-card-header>\n  </ion-card> -->\n\n  <p class="title">\n    <img class="btn-nav to-right" src="assets/icon/icon-close.png" alt="" (click)="goBack()">\n  </p>\n  <p class="text-center subtitle">\n    Sign up with <a href="#" (click)="fbConnect()">Facebook</a>, <a href="#" (click)="gpConnect()">Google</a> or <a href="#" (click)="goSignupMobile()">mobile number</a>\n  </p>\n  <div class="divider">\n    <span>or</span>\n  </div>\n\n  <form class="form-signup">\n    <label>\n      <input type="text" name="first_name" placeholder="First name" [(ngModel)]="posts.first_name" />\n      <span class="text-validate">First name is required.</span>\n    </label>\n    <label>\n      <input type="text" name="last_name" placeholder="Last name" [(ngModel)]="posts.last_name" />\n      <span class="text-validate">Last name is required.</span>\n    </label>\n    <label>\n      <input type="email" name="email" placeholder="Email address" [(ngModel)]="posts.email" />\n      <span class="text-validate">Email address is required.</span>\n    </label>\n    <label>\n      <input type="password" name="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" [(ngModel)]="posts.password" />\n      <span class="btn-show">SHOW</span><span class="text-validate">Password is required.</span>\n    </label>\n    <button class="btn-green" type="submit" (click)="signMeUp()">Sign Up</button>\n  </form>\n  <hr class="hr" />\n  <p class="description">Already have an account? <a href="#" (click)="goLogin()">Log In</a></p>\n</ion-content>\n'/*ion-inline-end:"/var/www/html/GoPage/mobile/src/pages/page-signup-email/page-signup-email.html"*/
     }),
     __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */],
         __WEBPACK_IMPORTED_MODULE_2__angular_http__["b" /* Http */],

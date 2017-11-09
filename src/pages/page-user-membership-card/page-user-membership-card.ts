@@ -15,7 +15,6 @@ import { UserInboxPage } from '../page-user-inbox/page-user-inbox';
   templateUrl: 'page-user-membership-card.html'
 })
 
-
 export class UserMembershipCardPage {
   pages: Array<{title: string, component: any}>;
   qrData = null;
@@ -35,28 +34,32 @@ export class UserMembershipCardPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   viewInbox() {
     this.navCtrl.setRoot(UserInboxPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 

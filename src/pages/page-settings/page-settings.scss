@@ -13,9 +13,32 @@ page-settings {
         display: none !important;
       }
 
+      .back-btn {
+        background: transparent;
+
+        &:focus,
+        &:active {
+          background: transparent;
+        }
+
+        &.button-ios {
+          position: absolute;
+          top: 17px;
+          left: 0;
+
+          height: 2.3em;
+        }
+
+        &.button-md {
+          position: absolute;
+          top: 10px;
+          left: 0;
+
+          box-shadow: none;
+        }
+      }
+
       i.fa {
-        position: absolute;
-        top: 20px;
         font-size: 30px;
         color: #b1b1b1 !important;
 
@@ -36,6 +59,10 @@ page-settings {
         .toolbar-content-ios {
           i {
             top: 24px;
+          }
+
+          .page-title {
+            margin-top: 7px;
           }
         }
       }

@@ -5,9 +5,32 @@ page-user-loyalty-card-deals {
       display: none !important;
     }
 
+    .back-btn {
+      background: transparent;
+
+      &:focus,
+      &:active {
+        background: transparent;
+      }
+
+      &.button-ios {
+        position: absolute;
+        top: 17px;
+        left: 0;
+
+        height: 2.3em;
+      }
+
+      &.button-md {
+        position: absolute;
+        top: 10px;
+        left: 0;
+
+        box-shadow: none;
+      }
+    }
+
     i.fa {
-      position: absolute;
-      top: 20px;
       font-size: 30px;
       color: #b1b1b1 !important;
 
@@ -22,6 +45,18 @@ page-user-loyalty-card-deals {
       font-family: "Raleway Medium";
       font-size: 18px;
       color: #aaa;
+    }
+
+    &.toolbar-ios {
+      .toolbar-content-ios {
+        i {
+          top: 24px;
+        }
+
+        .business-title {
+          margin-top: 7px;
+        }
+      }
     }
   }
 

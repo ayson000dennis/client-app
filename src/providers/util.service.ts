@@ -25,12 +25,13 @@ export class UtilService {
     });
   }
 
-  static formatMessageRequest(user_id: string, business_id: string,first_name: string, last_name: string,message: string): ChatMessage {
+  static formatMessageRequest(user_id: string, business_id: string,first_name: string, last_name: string,member_full_name: string,message: string): ChatMessage {
     return {
       user_id: user_id,
       business_id: business_id,
       first_name: first_name,
       last_name: last_name,
+      member_full_name: member_full_name,
       message: message,
       is_read : false,
       message_by: "member"

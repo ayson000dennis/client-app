@@ -10,7 +10,7 @@
     <p>Back to Loyalty Cards</p>
   </div> -->
   <ion-navbar *ngIf="hasData">
-    <i class="fa fa-angle-left fa-lg" (click)="goPrevious()"></i>
+    <button ion-button class="back-btn" (click)="goPrevious()"><i class="fa fa-angle-left fa-lg"></i></button>
     <span class="business-title">{{business_name}}</span>
   </ion-navbar>
 </ion-header>

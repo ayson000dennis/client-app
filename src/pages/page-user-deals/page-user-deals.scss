@@ -1,8 +1,31 @@
 page-user-deals {
   ion-navbar {
+    .back-btn {
+      background: transparent;
+
+      &:focus,
+      &:active {
+        background: transparent;
+      }
+
+      &.button-ios {
+        position: absolute;
+        top: 17px;
+        left: 0;
+
+        height: 2.3em;
+      }
+
+      &.button-md {
+        position: absolute;
+        top: 10px;
+        left: 0;
+
+        box-shadow: none;
+      }
+    }
+
     i.fa {
-      position: absolute;
-      top: 20px;
       font-size: 30px;
       color: #b1b1b1 !important;
 
@@ -17,6 +40,18 @@ page-user-deals {
       font-family: "Raleway Medium";
       font-size: 18px;
       color: #aaa;
+    }
+
+    &.toolbar-ios {
+      .toolbar-content-ios {
+        i {
+          top: 24px;
+        }
+
+        .business-title {
+          margin-top: 7px;
+        }
+      }
     }
   }
 
@@ -152,6 +187,9 @@ page-user-deals {
 
         &.open {
           display: block;
+          padding-left: 30px;
+
+          line-height: 1.5;
         }
       }
 
@@ -264,7 +302,6 @@ page-user-deals {
             width: 100%;
             height: 180px;
           }
-
         }
 
         .business-button {
@@ -356,7 +393,7 @@ page-user-deals {
           // }
 
           .about-description {
-            padding: 15px;
+            padding: 10px 15px 5px;
             margin: 0;
             margin-left: -15px;
             margin-right: -15px;
@@ -378,6 +415,14 @@ page-user-deals {
 
              &.short-description {
                margin-top: 0;
+
+               .hidden {
+                 display: none;
+               }
+
+               a {
+                 color: #4267B2;
+               }
              }
             }
           }
@@ -388,11 +433,15 @@ page-user-deals {
           // }
 
           .info-text {
-            margin-left: 15px;
+            // margin-left: 15px;
+            line-height: 1.5;
           }
 
           .social-links {
-            display: inline;
+            // display: inline;
+            padding-left: 0;
+            margin-bottom: 0;
+
             list-style: none;
 
             br {
@@ -403,13 +452,23 @@ page-user-deals {
               display: block;
               // margin: 15px 0;
 
+              .col-2 {
+                align-self: center;
+              }
+
+              .col-10 {
+                margin-left: 13px;
+              }
+
               &.info-link {
+                display: flex;
                 padding-bottom: 15px;
+
                 a {
                   display: flex;
                   align-items: center;
 
-                  font-family: "Raleway Regular";
+                  font-family: "Raleway Medium";
                   font-size: 14px;
                   color: #444;
                   text-decoration: none;
@@ -417,62 +476,116 @@ page-user-deals {
                   &.clickable-link {
                     display: inline;
                     span {
-                      color: #347ae4;
-                    }
-
-                    span {
-                      text-decoration: underline;
+                      color: #4267B2;
                     }
                   }
+                }
+
+                &.active-deals {
+                  padding-top: 15px;
                 }
               }
 
               &.address-link {
+                display: flex;
                 padding-bottom: 15px;
+
                 a {
                   display: flex;
                   align-items: center;
 
-                  font-family: "Raleway Regular";
+                  font-family: "Raleway Medium";
                   font-size: 14px;
                   color: #444;
                   text-decoration: none;
 
                   &.clickable-link {
                     display: inline;
-                    color: #347ae4;
-
-                    span {
-                      text-decoration: underline;
-                    }
+                    color: #4267B2;
                   }
                 }
               }
 
 
               &.operations-link {
-                padding-bottom: 15px;
+                display: flex;
+                // padding-bottom: 15px;
+                padding-bottom: 0;
+
+                color: #444 !important;
+
+                .op-hours {
+                  margin-left: 3px;
+                }
+
+                span {
+                  font-family: "Raleway Medium";
+                }
+
                 a {
                   align-items: center;
 
-                  font-family: "Raleway Regular";
+                  font-family: "Raleway Medium";
                   font-size: 14px;
-                  color: #444;
+                  color: #4267B2;
                   text-decoration: none;
 
                   &.clickable-link {
-                    color: #347ae4;
-
+                    color: #4267B2;
                     span {
                       text-decoration: underline;
                     }
                   }
+                }
+
+                .fa-clock-o {
+                  margin-right: 10px;
                 }
               }
 
               i {
                 color: #aaa;
                 font-size: 1.5em;
+              }
+            }
+
+            &.isClickable {
+              i {
+                color: #c0c4cb;
+              }
+
+              .social-media {
+                display: flex;
+                justify-content: space-around;
+
+                padding-top: 12px;
+                margin-left: -15px;
+                margin-right: -15px;
+
+                border-top: 1px solid #ececec;
+                border-bottom: 1px solid #ececec;
+
+
+                li {
+                  display: inline;
+
+                  i {
+                    font-size: 33px;
+                    color: #a4c73a;
+                  }
+
+                  .clickable-link {
+                    &.inactive {
+                      color: #b1b1b1;
+                    }
+                  }
+                }
+              }
+
+              li {
+                &.operations-link {
+                  color: #4267B2;
+                }
               }
             }
           }

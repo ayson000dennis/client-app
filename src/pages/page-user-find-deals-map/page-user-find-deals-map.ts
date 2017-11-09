@@ -89,9 +89,10 @@ export class UserFindDealsMapPage {
     var self = this;
     this.selectedMapCenter.address = this.navParams.get('map_address');
     this.business_deals = this.navParams.get('business_deals');
-
+    console.log(this.business_deals)
     $('#deal-location2').on('click', function() {
-      $(this).select();
+      $(this).get(0).setSelectionRange(0,9999);
+      // $(this).select();
       // $('.locations-holder').css('visibility', 'visible');
     });
 
@@ -102,6 +103,14 @@ export class UserFindDealsMapPage {
     // $('#deal-location2').on('blur', function() {
     //   $('.locations-holder').css('visibility', 'hidden');
     // });
+
+    //location input tweak for ios
+    $('#deal-location').on('keypress', function(){
+      $('.scroll-content').animate({scrollTop: 1}, 'fast');
+      setTimeout(()=>{
+        $('.scroll-content').animate({scrollTop: 0}, 'fast');
+      }, 50)
+    });
 
     $('#deal-location2').contextmenu(function() {
       return false;
@@ -140,11 +149,11 @@ export class UserFindDealsMapPage {
 
       } else {
         console.log('creating all')
-        this.storage.get('all_business_deals').then(all_business_deals => {
-          setTimeout(() => {
-            this.createMarker(all_business_deals);
-          });
-        });
+        // this.storage.get('all_business_deals').then(all_business_deals => {
+        //   setTimeout(() => {
+        //     this.createMarker(all_business_deals);
+        //   });
+        // });
       }
     } else {
       console.log('map center null')
@@ -191,7 +200,6 @@ export class UserFindDealsMapPage {
 
     var autocomplete = new google.maps.places.Autocomplete(location, options);
     autocomplete.bindTo('bounds', self.map);
-
     // var searchBox = new google.maps.places.SearchBox(deal);
     // searchBox.bindTo('bounds', self.map);
 
@@ -201,7 +209,18 @@ export class UserFindDealsMapPage {
     });
 
     autocomplete.addListener('place_changed', function() {
-
+      // need to stop prop of the touchend event
+      if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
+        setTimeout(function() {
+              var container = document.getElementsByClassName('pac-container')[0];
+              console.log(container);
+              container.addEventListener('touchstart', function(e) {
+                  e.stopImmediatePropagation();
+                  setTimeout(function(){
+                  },300);
+              });
+          }, 500);
+      }
       var place = autocomplete.getPlace();
       var city, state, country;
       place.address_components.forEach(result => {
@@ -226,6 +245,7 @@ export class UserFindDealsMapPage {
 
       self.storage.set('user_selected_latlng', user_selected_latlng)
       self.storage.set('user_short_location', location);
+      self.storage.set('user_long_location', place.formatted_address);
 
       if (!place.geometry) return;
 
@@ -301,7 +321,6 @@ export class UserFindDealsMapPage {
   }
 
   createMarker(data) {
-
     var infowindow = new google.maps.InfoWindow();
     data.forEach(d => {
         var position = new google.maps.LatLng(d.lat, d.lng);
@@ -324,15 +343,37 @@ export class UserFindDealsMapPage {
           });
 
           this.markers.push(marker);
-
-          if (d.photo !== undefined) {
-            this.thumb = d.photo;
+          if (d.deal_id.length !== 0) {
+            d.deal_id.forEach(deal => {
+              if(deal.is_featured) {
+                var img = deal.photo.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                d.featured_img = img;
+              }
+            });
+            if(d.featured_img !== undefined) {
+              this.thumb = d.featured_img;
+            } else {
+              if(d.deal_id[0].photo.url !== undefined) {
+                this.thumb = d.deal_id[0].photo.url;
+              } else {
+                this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+              }
+            }
           } else {
-            this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+            if(d.files.length !== 0) {
+              d.files.forEach(files => {
+                var img = files.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+                files.url = img;
+              });
+                this.thumb = d.files[0].url;
+            } else {
+              this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
+            }
           }
+
           var self = this;
           var address = d.city + ', ' + d.state + ', ' + d.country;
-          var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
+          // var template = d.company_name.replace(/\s+/g, '-').replace(/'/g, "quote").toLowerCase().replace(/[^\w\-]+/g, '') + '&' + d.city.replace(/\s+/g, '-').toLowerCase().replace(/[^\w\-]+/g, '');
 
           var content = '<div class="d-flex info-window"><div class="img-holder"><img src="'+this.thumb+'"/></div>' +
                         '<div class="info-holder">' +
@@ -534,7 +575,8 @@ export class UserFindDealsMapPage {
       console.log(business)
       this.navCtrl.push(UserDealsPage, {business: business}, {
         animate: true,
-        direction: 'forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
     });
   }
@@ -542,28 +584,32 @@ export class UserFindDealsMapPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
-    this.navCtrl.setRoot(DashboardPage, {
+    this.navCtrl.setRoot(UserFindDealsPage, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   showCategoryMenu() {
     this.navCtrl.push(CategoryMenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -584,7 +630,8 @@ export class UserFindDealsMapPage {
       },
       {
         animate: true,
-        direction: 'back'
+        direction: 'forward',
+        animation: 'md-transition'
         }
     );
   }

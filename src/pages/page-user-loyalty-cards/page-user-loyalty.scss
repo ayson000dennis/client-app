@@ -9,13 +9,36 @@ page-user-loyalty-cards {
         }
       }
 
+      .back-btn {
+        background: transparent;
+
+        &:focus,
+        &:active {
+          background: transparent;
+        }
+
+        &.button-ios {
+          position: absolute;
+          top: 17px;
+          left: 0;
+
+          height: 2.3em;
+        }
+
+        &.button-md {
+          position: absolute;
+          top: 10px;
+          left: 0;
+
+          box-shadow: none;
+        }
+      }
+
       .back-button {
         display: none !important;
       }
 
       i.fa {
-        position: absolute;
-        top: 20px;
         font-size: 30px;
         color: #b1b1b1 !important;
 
@@ -36,6 +59,10 @@ page-user-loyalty-cards {
         .toolbar-content-ios {
           i {
             top: 24px;
+          }
+
+          .page-title {
+            margin-top: 7px;
           }
         }
       }
@@ -110,7 +137,7 @@ page-user-loyalty-cards {
           top: 0;
           right: 0;
           bottom: 0;
-          
+
           margin: auto;
           height: 26px;
 

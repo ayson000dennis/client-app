@@ -49,18 +49,15 @@ export class DashboardPage {
     this.storage.get('user').then(user => {
       this.user = user;
       this.firstname = user.first_name;
-      this.hasData = true;
     });
   }
 
   getNotificationCount() {
-
     this.storage.get('user').then(user =>{
       this.user = user;
 
       if(user._id) {
         this.api.Message.room_list(user._id).then(members => {
-
           if(members.length) {
             var withChats = [];
 
@@ -73,6 +70,8 @@ export class DashboardPage {
             this.notifCountTotal = withChats.length;
 
           }
+
+        this.hasData = true;
 
         }).catch((error) => {
             console.log(error);
@@ -116,42 +115,48 @@ export class DashboardPage {
   ToMembership() {
     this.navCtrl.setRoot(UserMembershipCardPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToLoyalty() {
     this.navCtrl.setRoot(UserLoyaltyCardsPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToFindDeals() {
     this.navCtrl.setRoot(UserFindDealsPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToFavorites() {
     this.navCtrl.setRoot(UserFavoritesPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToInbox() {
     this.navCtrl.setRoot(UserInboxPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 
   ToSettings() {
     this.navCtrl.setRoot(SettingsPage, {}, {
       animate: true,
-      direction: ' forward'
+      direction: 'forward',
+      animation : 'md-transition'
     });
   }
 }

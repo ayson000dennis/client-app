@@ -49,7 +49,7 @@ export class LoginPage {
     var baseUrl = Config.baseUrl;
 
     this.fb.login(['email', 'public_profile']).then((res: FacebookLoginResponse) => {
-      this.fb.api('me?fields=id,email', []).then(profile => {        
+      this.fb.api('me?fields=id,email', []).then(profile => {
         this.http.post(baseUrl + 'api/users/login',{email: profile['email'], is_social: '1', permission: '3'}).subscribe(res => {
           this.getUser(res.json());
         }, err => {

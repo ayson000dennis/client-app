@@ -1,5 +1,7 @@
 .pac-container {
-  cursor: pointer;
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  z-index: 999999999;
   box-shadow: none;
   &:nth-of-type(even) {
     // margin-top: 46px !important;
@@ -10,6 +12,7 @@
     border-bottom: 1px solid #eee;
     box-shadow: none;
     .pac-item {
+      z-index: 999999999;
       padding: 10px 15px;
       height: 41px;
       width: 100%;
@@ -27,6 +30,7 @@
     // box-shadow: 0px 0px 0px 1px #eee !important;
     border-bottom: 1px solid #eee;
     .pac-item {
+      z-index: 999999999;
       padding: 10px 15px;
       height: 41px;
       border: none;
@@ -53,13 +57,36 @@ page-user-find-deals {
         }
       }
 
+      .back-btn {
+        background: transparent;
+
+        &:focus,
+        &:active {
+          background: transparent;
+        }
+
+        &.button-ios {
+          position: absolute;
+          top: 17px;
+          left: 0;
+
+          height: 2.3em;
+        }
+
+        &.button-md {
+          position: absolute;
+          top: 10px;
+          left: 0;
+
+          box-shadow: none;
+        }
+      }
+
       .back-button {
         display: none !important;
       }
 
       i.fa {
-        position: absolute;
-        top: 20px;
         font-size: 30px;
         color: #b1b1b1 !important;
 
@@ -80,6 +107,10 @@ page-user-find-deals {
         .toolbar-content-ios {
           i {
             top: 24px;
+          }
+
+          .page-title {
+            margin-top: 7px;
           }
         }
       }
@@ -212,7 +243,7 @@ page-user-find-deals {
       visibility: hidden;
       // position: relative;
       .location-holder {
-        z-index: 9999999;
+        // z-index: 9999999;
         height: 41px;
         width: 257px;
 
@@ -372,6 +403,12 @@ page-user-find-deals {
     }
 
     .categories-main {
+      .loader-holder {
+        text-align: center;
+        color: #a4c73a;
+        font-size: 16px;
+        padding: 50px 0;
+      }
       .holder-categories-result1 {
         padding: 0;
         .row ~ .row {

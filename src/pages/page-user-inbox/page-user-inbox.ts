@@ -30,10 +30,11 @@ export class UserInboxPage {
   hasData: boolean = false;
   hasNoData : boolean = false;
   hasNotify : boolean = false;
-  // hasNotify2 : boolean = false;
-  // hasNotifyDone : boolean = false;
   isRefetch : boolean = false;
   inInbox : boolean = true;
+
+  items: any;
+
   constructor(
     public navCtrl: NavController,
     private storage: Storage,
@@ -58,6 +59,25 @@ export class UserInboxPage {
     this.hasData = false;
     this.inInbox = false;
   }
+
+  initializeItems() {
+   this.items = this.businessList;
+  }
+
+  getItems(ev: any) {
+    // Reset items back to all of the items
+    this.initializeItems();
+
+     // set val to the value of the searchbar
+     let val = ev.target.value;
+
+     // if the value is an empty string don't filter the items
+     if (val && val.trim() != '') {
+       this.items = this.items.filter((item) => {
+         return (item.business_id[0].company_name.toLowerCase().indexOf(val.toLowerCase()) > -1)
+       })
+     }
+   }
 
   fetchInboxData() {
 
@@ -109,10 +129,13 @@ export class UserInboxPage {
                 } else {
 
                   this.businessList = newChats;
+                  this.initializeItems();
 
                   this.hasData = true;
 
                   $('body').find('.fa.loader').remove();
+
+                  this.hasData = true;
 
                   console.log('Inbox data loaded');
                 }
@@ -181,7 +204,8 @@ export class UserInboxPage {
   showMenu() {
     this.navCtrl.push(MenuPage, {
       animate: true,
-      direction: 'forward'
+      direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
@@ -192,15 +216,15 @@ export class UserInboxPage {
     }, {
       animate: true,
       direction: 'forward',
+      animation: 'md-transition'
     });
   }
 
   goBack() {
     this.navCtrl.setRoot(DashboardPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
-
-
 }

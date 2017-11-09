@@ -104,6 +104,8 @@ export class UserDealsPage {
 
   ionViewWillEnter(){
     this.business = this.navParams.get('business');
+    this.resizeImgs();
+
     if(this.business.operations){
 
       var days = this.business.operations;
@@ -116,24 +118,25 @@ export class UserDealsPage {
       } else {
         days.forEach((day, i) => {
           var d = Object.keys(day)[0];
+          var isClosed = eval("day." + d + ".isChecked");
+          // if(isClosed) {
+            var work = {
+              dayCount: i+1,
+              day: d,
+              start: eval("day." + d + ".start"),
+              end: eval("day." + d + ".end"),
+              isClosed: isClosed
+            }
+          // }
 
-          var work = {
-            dayCount: i+1,
-            day: d,
-            start: eval("day." + d + ".start"),
-            end: eval("day." + d + ".end"),
-            isClosed: eval("day." + d + ".isChecked")
-          }
           this.operatingHours.push(work);
         });
-
         this.operatingHours.forEach(operations => {
           var today = new Date().getDay();
           if(operations.dayCount === today) {
             this.currentDay.push(operations);
           }
         });
-        console.log(this.business.operations)
       }
     }
 
@@ -141,6 +144,24 @@ export class UserDealsPage {
       this.hasData = true;
     }
     this.getFavorites();
+  }
+
+  resizeImgs() {
+    if (this.business.files.length !== 0) {
+      //resize banner imgs
+      this.business.files.forEach(files => {
+        var banner_imgs = files.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:500/");
+        files.url = banner_imgs;
+      });
+    }
+
+    if (this.business.deal_id.length !== 0) {
+      //resize deal imgs
+      this.business.deal_id.forEach(deal => {
+        var deal_imgs = deal.photo.url.replace("https://cdn.filestackcontent.com/", "https://cdn.filestackcontent.com/resize=width:200/");
+        deal.photo.url = deal_imgs;
+      });
+    }
   }
 
   getFavorites() {
@@ -199,7 +220,8 @@ export class UserDealsPage {
   goToFavorites() {
       this.navCtrl.setRoot(UserFavoritesPage, {
         animate: true,
-        direction: 'back'
+        direction: 'back',
+        animation: 'md-transition'
       });
   }
 
@@ -214,14 +236,16 @@ export class UserDealsPage {
   goHome() {
     this.navCtrl.setRoot(LoginPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
   goListView() {
     this.navCtrl.setRoot(UserFindDealsPage, {}, {
       animate: true,
-      direction: 'back'
+      direction: 'back',
+      animation: 'md-transition'
     });
   }
 
@@ -236,6 +260,20 @@ export class UserDealsPage {
     }
   }
 
+  readMore() {
+    $(".shorten").addClass("hidden");
+    $(".read-more").addClass("hidden");
+    $(".read-less").removeClass("hidden");
+    $(".full-text").removeClass("hidden");
+  }
+
+  readLess() {
+    $(".shorten").removeClass("hidden");
+    $(".read-more").removeClass("hidden");
+    $(".read-less").addClass("hidden");
+    $(".full-text").addClass("hidden");
+  }
+
   sendMessage() {
     this.storage.get('user').then(user =>{
 
@@ -245,7 +283,8 @@ export class UserDealsPage {
         userDetail: user
       },{
         animate: true,
-        direction: ' forward'
+        direction: 'forward',
+        animation: 'md-transition'
       });
 
     });
@@ -253,7 +292,10 @@ export class UserDealsPage {
   }
 
   goPrevious() {
-    this.navCtrl.pop();
+    this.navCtrl.pop({
+      animate: true,
+      direction: 'back',
+      animation: 'md-transition'
+    });
   }
-
 }
