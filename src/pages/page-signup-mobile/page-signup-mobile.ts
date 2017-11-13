@@ -22,6 +22,7 @@ import Config from '../../app/config';
 
 export class SignupMobilePage {
   userData: any;
+  areaCode: any;
 
   posts: {email: string, password: string, number: string, account_type: string, status: string, permission: string} = {
     email: ' ',
@@ -39,18 +40,42 @@ export class SignupMobilePage {
     private gp: GooglePlus,
     public platform: Platform) {
 
-    platform.ready().then(() => {
-      $('body').on('click', '.country-code, .country-dropdown-val', function() {
-        console.log('1');
-        $(this).closest('.holder-country-code').toggleClass('showDropdown');
+    // platform.ready().then(() => {
+    //   $('body').on('click', '.country-code, .country-dropdown-val', function() {
+    //     console.log('1');
+    //     $(this).closest('.holder-country-code').toggleClass('showDropdown');
+    //
+    //     if ($(this).hasClass('country-dropdown-val')) {
+    //       var getImg = $(this).find('img').attr('src');
+    //
+    //       $(this).parent('.country-dropdown').siblings('.country-code').find('img').attr('src', getImg);
+    //     }
+    //   });
+    // });
+  }
 
-        if ($(this).hasClass('country-dropdown-val')) {
-          var getImg = $(this).find('img').attr('src');
+  ionViewWillEnter() {
+    this.areaCode = '1';
+  }
 
-          $(this).parent('.country-dropdown').siblings('.country-code').find('img').attr('src', getImg);
-        }
-      });
+  ionViewDidLoad() {
+    console.log()
+    var self = this;
+    $('body').on('click', '.country-code, .country-dropdown-val', function() {
+      $(this).closest('.holder-country-code').toggleClass('showDropdown');
+      console.log('yes');
+
+      if ($(this).hasClass('country-dropdown-val')) {
+        var getImg = $(this).find('img').attr('src');
+        self.areaCode = $(this).data('area');
+
+        $(this).parent('.country-dropdown').siblings('.country-code').find('img').attr('src', getImg);
+      }
     });
+  }
+
+  ionViewWillLeave() {
+    $('body').off('click', '.country-code, .country-dropdown-val');
   }
 
   goBack() {
@@ -112,7 +137,8 @@ export class SignupMobilePage {
     if (getMobileVal) {
       getMobile.removeClass('has-error').next('.text-validate').text('');
       if (mobileRegex.test(getMobileVal)) {
-        getMobileVal = '+1' + getMobileVal;
+        getMobileVal = "+" + this.areaCode + getMobileVal;
+
         $.ajax({
           url: '//gopage-api.herokuapp.com/api/users/send_sms/' + getMobileVal,
           type: 'POST',
@@ -126,6 +152,9 @@ export class SignupMobilePage {
           }
         }).fail(function(err) {
           $('.form-signup .btn-green[type="submit"]').find('.fa-spinner').remove();
+          if (err.status == 406) {
+            getMobile.addClass('has-error').next('.text-validate').text('Mobile number has already been used.');
+          }
           console.log(err);
         }).done(function(res) {
           $('.form-signup .btn-green[type="submit"]').find('.fa-spinner').remove();
@@ -188,12 +217,14 @@ export class SignupMobilePage {
     if (getPassVal && getPassConfirmVal) {
       if (getPassVal == getPassConfirmVal) {
         getPassConfirm.removeClass('has-error').next('.text-validate').text('');
-        var numberVal = '+1' + this.posts.number;
+        var numberVal = '+' + this.areaCode + this.posts.number;
         $.ajax({
           url: '//gopage-api.herokuapp.com/api/users/add',
           type: 'POST',
           dataType: 'json',
           data: {
+            first_name: ' ',
+            last_name: ' ',
             number: numberVal,
             password: getPassConfirmVal,
             email: this.posts.email,
