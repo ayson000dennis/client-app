@@ -29,6 +29,9 @@ export class UserInboxPage {
   user: string[];
   hasData: boolean = false;
   hasNoData : boolean = false;
+  hasSearch : boolean = false;
+  hasSearchData : boolean;
+  hasNoSearchData : boolean;
   hasNotify : boolean = false;
   isRefetch : boolean = false;
   inInbox : boolean = true;
@@ -50,10 +53,6 @@ export class UserInboxPage {
     this.fetchInboxData();
   }
 
-  ionViewDidLoad() {
-
-  }
-
   ionViewWillLeave() {
     this.socketService.disconnect();
     this.hasData = false;
@@ -65,19 +64,52 @@ export class UserInboxPage {
   }
 
   getItems(ev: any) {
+    this.hasSearch = true;
+    this.hasSearchData = false;
+
     // Reset items back to all of the items
     this.initializeItems();
 
-     // set val to the value of the searchbar
+     // set val to the value ocaf the searchbar
      let val = ev.target.value;
 
      // if the value is an empty string don't filter the items
      if (val && val.trim() != '') {
+
        this.items = this.items.filter((item) => {
-         return (item.business_id[0].company_name.toLowerCase().indexOf(val.toLowerCase()) > -1)
-       })
+
+         if(item.business_id.length != 0 && item.business_id[0].company_name && item.last_chat.length != 0) {
+
+           if(item.business_id[0].company_name.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+             this.hasSearchData = true;
+             return (item.business_id[0].company_name.toLowerCase().indexOf(val.toLowerCase()) > -1);
+           } else {
+             console.log('No search data');
+           }
+
+           if(this.hasSearchData) {
+             this.hasNoSearchData = false;
+           } else {
+             this.hasNoSearchData = true;
+           }
+
+         } else {
+
+           if(this.hasSearchData) {
+             this.hasNoSearchData = false;
+           } else {
+             this.hasNoSearchData = true;
+           }
+
+           console.log('No company name or chat');
+         }
+
+       });
+       
+     } else {
+       this.hasNoSearchData = false;
      }
-   }
+  }
 
   fetchInboxData() {
 
@@ -87,8 +119,6 @@ export class UserInboxPage {
 
         this.api.Message.room_list(user._id).then(business => {
           console.log('Inbox data fetching....');
-
-          console.log(business);
 
           if(business.length) {
                 var withChats = [],
@@ -130,12 +160,11 @@ export class UserInboxPage {
 
                   this.businessList = newChats;
                   this.initializeItems();
+                  console.log(newChats)
 
                   this.hasData = true;
 
                   $('body').find('.fa.loader').remove();
-
-                  this.hasData = true;
 
                   console.log('Inbox data loaded');
                 }

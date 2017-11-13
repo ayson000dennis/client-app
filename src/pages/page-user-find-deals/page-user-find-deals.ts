@@ -339,7 +339,7 @@ export class UserFindDealsPage {
    this.getUser();
    this.api.Business.business_deals_list().then(deals => {
      this.business_deals = [];
-     var all_business_deals = deals.hits.hits;
+     var all_business_deals = deals;
      this.getFavorites();
      this.sortData(all_business_deals);
      this.hasData = true;
@@ -486,15 +486,15 @@ export class UserFindDealsPage {
     $('#deal-location').attr('disabled', true);
     $(btn_spinner).appendTo('.search-banner .form-inline .btn-search-deals');
     $(main_spinner).appendTo('.scroll-content .categories-main');
-
+    var businessApi;
     if (this.search.input !== '') {
-      var businessApi = this.api.Business.business_deals_search(this.search.input);
+      businessApi = this.api.Business.business_deals_search(this.search.input);
     } else {
-      var businessApi = this.api.Business.business_deals_list();
+      businessApi = this.api.Business.business_deals_list();
     }
 
     businessApi.then(results => {
-      var result = results.hits.hits;
+      var result = results;
       var filtered_deals = this.getDealsWithinBound(result);
       if (filtered_deals.length !== 0) {
         this.business_deals = [];
@@ -513,6 +513,9 @@ export class UserFindDealsPage {
       $('.scroll-content .categories-main .loader-holder').remove();
 
     }).catch(error => {
+      this.api.Business.catch(error).then(res => {
+        alert(res.json());
+      });
       this.hasData = false;
       $('.btn-search-deals').removeAttr('disabled');
       $('#deal-location').removeAttr('disabled');

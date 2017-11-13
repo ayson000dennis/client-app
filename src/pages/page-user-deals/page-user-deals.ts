@@ -34,32 +34,11 @@ export class UserDealsPage {
   template : any;
   operatingHours = [];
   currentDay = [];
+  currentTime: any;
   map: any;
   lat: any;
   lng: any;
   room_id: string;
-
-  //place.icon
-  // googleMarker = {
-  //   url: 'https://cdn.filestackcontent.com/8BeI5gTQrG7u1R98oogt',
-  //   size: new google.maps.Size(50, 50),
-  //   origin: new google.maps.Point(0, 0),
-  //   scaledSize: new google.maps.Size(48, 50)
-  // };
-  //
-  // memberMarker = {
-  //   url: 'https://cdn.filestackcontent.com/yRYj4h7URfKVAJfxNlLd',
-  //   size: new google.maps.Size(50, 50),
-  //   origin: new google.maps.Point(0, 0),
-  //   scaledSize: new google.maps.Size(48, 50)
-  // };
-  //
-  // premiumMemberMarker = {
-  //   url: 'https://cdn.filestackcontent.com/spT9FsVTTiqszaTddma0',
-  //   size: new google.maps.Size(50, 50),
-  //   origin: new google.maps.Point(0, 0),
-  //   scaledSize: new google.maps.Size(48, 50)
-  // };
 
   //in app browser option
   private iabOptions: InAppBrowserOptions = {
@@ -119,16 +98,39 @@ export class UserDealsPage {
         days.forEach((day, i) => {
           var d = Object.keys(day)[0];
           var isClosed = eval("day." + d + ".isChecked");
+          var start = eval("day." + d + ".start");
+          var end = eval("day." + d + ".end");
+
+          var startDecimal = start.replace(':','.');
+          var endDecimal = end.replace(':','.');
+
+          //convert 24hrs to 12hrs time format
+          //start time
+          if(start.length === 4) {
+            start = "0" + start;
+          }
+          var startH = +start.substr(0, 2);
+          var starth = (startH % 12) || 12;
+          var startampm = startH < 12 ? " AM" : " PM";
+          start = starth + start.substr(2, 3) + startampm;
+
+          //end time
+          var endH = +end.substr(0, 2);
+          var endh = (endH % 12) || 12;
+          var endampm = endH < 12 ? " AM" : " PM";
+          end = endh + end.substr(2, 3) + endampm;
+
           // if(isClosed) {
             var work = {
               dayCount: i+1,
               day: d,
-              start: eval("day." + d + ".start"),
-              end: eval("day." + d + ".end"),
+              start: start,
+              end: end,
+              startDecimal: startDecimal,
+              endDecimal: endDecimal,
               isClosed: isClosed
             }
           // }
-
           this.operatingHours.push(work);
         });
         this.operatingHours.forEach(operations => {
@@ -137,6 +139,14 @@ export class UserDealsPage {
             this.currentDay.push(operations);
           }
         });
+
+        console.log(this.currentDay)
+        //get current time
+        var hrs = new Date().getHours();
+        var mins = new Date().getMinutes();
+        this.currentTime = hrs + '.' + mins;
+        
+
       }
     }
 
@@ -173,6 +183,7 @@ export class UserDealsPage {
             // this.business.forEach((business, i) => {
               if(this.business._id === favorite.business_id[0]._id){
                 this.business.is_favorite = true;
+                $('#favHeart').css('color', '#a4c73a');
               }
             // });
           });
@@ -187,6 +198,8 @@ export class UserDealsPage {
 
     let addedToFavBtn = document.getElementById('addedToFavorite2');
     addedToFavBtn.style.display = "block";
+
+    $('#favHeart').css('color', '#a4c73a');
 
     this.storage.get('user').then(user =>{
       var deal_id = [];

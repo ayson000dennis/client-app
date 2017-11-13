@@ -9,11 +9,11 @@ export class ApiService {
     private http :Http
     ) { }
 
-  private userAuth = btoa(Config.elasticUsername + ":" + Config.elasticPassword);
+  // private userAuth = btoa(Config.elasticUsername + ":" + Config.elasticPassword);
 
-  getHeaders() {
-    return new Headers({'Authorization': 'Basic ' + this.userAuth});
-  }
+  // getHeaders() {
+  //   return new Headers({'Authorization': 'Basic ' + this.userAuth});
+  // }
 
   categoryQuery(data) {
   let category = {
@@ -41,30 +41,63 @@ export class ApiService {
 
   Business = {
 
+    catch: (err) => {
+      return this.http.post(Config.baseUrl + "api/catch/error", {error: err}).map(response => {
+        return response.json();
+      }).toPromise();
+    },
+
+    // business_deals_search: (input) => {
+    //       return this.http.get(Config.ElasticSearch + "business/list/_search?size=1000&q=" + input, {
+    //         headers : this.getHeaders()}).map(response => {
+    //         return response.json();
+    //       }).toPromise();
+    // },
+
+    // business_deals_list: () => {
+    //       return this.http.get(Config.ElasticSearch + "business/list/_search?size=1000", {
+    //         headers : this.getHeaders()}).map(response => {
+    //           return response.json();
+    //       }).toPromise();
+    // },
+
+    // business_deals_category: (input, category) => {
+    //   let url;
+    //   if (input !== '') {
+    //     url = "business/list/_search?size=1000&q=" + input;
+    //   } else {
+    //     url = "business/list/_search?size=1000";
+    //   }
+    //   return this.http.post(Config.ElasticSearch + url , JSON.stringify(this.categoryQuery(category)), {
+    //     headers : this.getHeaders()
+    //   }).map(response => {
+    //     return response.json();
+    //   }).toPromise();
+    // },
+
     business_deals_search: (input) => {
-          return this.http.get(Config.ElasticSearch + "business/list/_search?size=1000&q=" + input, {
-            headers : this.getHeaders()}).map(response => {
-            return response.json();
-          }).toPromise();
+      return this.http.post(Config.baseUrl + "api/business/search/" + input, {})
+      .map(response => {
+        return response.json();
+      }).toPromise();
     },
 
     business_deals_list: () => {
-          return this.http.get(Config.ElasticSearch + "business/list/_search?size=1000", {
-            headers : this.getHeaders()}).map(response => {
-              return response.json();
-          }).toPromise();
+      return this.http.post(Config.baseUrl + "api/business/search", {})
+      .map(response => {
+          return response.json();
+      }).toPromise();
     },
 
     business_deals_category: (input, category) => {
       let url;
       if (input !== '') {
-        url = "business/list/_search?size=1000&q=" + input;
+        url = "api/business/search/" + input;
       } else {
-        url = "business/list/_search?size=1000";
+        url = "api/business/search";
       }
-      return this.http.post(Config.ElasticSearch + url , JSON.stringify(this.categoryQuery(category)), {
-        headers : this.getHeaders()
-      }).map(response => {
+      return this.http.post(Config.baseUrl + url , JSON.stringify(this.categoryQuery(category)))
+      .map(response => {
         return response.json();
       }).toPromise();
     },
@@ -80,7 +113,6 @@ export class ApiService {
           return response.json();
       }).toPromise();
     },
-
     business_view: (id) => {
       return this.http.get(Config.baseUrl + "api/business/view/" + id).map(response =>{
           return response.json();

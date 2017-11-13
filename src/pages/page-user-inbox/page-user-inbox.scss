@@ -92,8 +92,14 @@ page-user-inbox {
       font-family: "Raleway Regular";
       font-size: 25px;
     }
-  }
 
+    .searchbar {
+      background: #EAEAEB;
+    }
+
+    .searchbar .searchbar-input::-webkit-input-placeholder, searchbar-search-icon { color: #d8d8de; }
+
+  }
 
   #inbox-list {
 

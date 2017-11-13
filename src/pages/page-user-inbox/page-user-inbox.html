@@ -9,7 +9,9 @@
 
     <h5 *ngIf="hasNoData"> No Conversations </h5>
 
-    <ion-searchbar placeholder="Search inbox" *ngIf="hasData" (ionInput)="getItems($event)"></ion-searchbar>
+    <ion-searchbar placeholder="Search Inbox" *ngIf="hasData" [spellcheck]="true" [type]="search" (ionInput)="getItems($event)"></ion-searchbar>
+
+    <h5 *ngIf="this.hasSearch && this.hasNoSearchData"> No results </h5>
 
     <ion-list id="inbox-list" *ngFor="let business of items;">
 

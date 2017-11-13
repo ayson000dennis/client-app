@@ -28771,6 +28771,14 @@ page-user-inbox ion-content h5 {
   font-size: 25px;
 }
 
+page-user-inbox ion-content .searchbar {
+  background: #EAEAEB;
+}
+
+page-user-inbox ion-content .searchbar .searchbar-input::-webkit-input-placeholder, page-user-inbox ion-content searchbar-search-icon {
+  color: #d8d8de;
+}
+
 page-user-inbox #inbox-list .searchbar-md {
   border-bottom: 1px #d6d6d6 solid;
 }

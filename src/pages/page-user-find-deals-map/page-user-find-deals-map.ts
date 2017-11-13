@@ -539,19 +539,20 @@ export class UserFindDealsMapPage {
 
     $('#deal-location2').val(this.selectedMapCenter.address);
     var user_input = $('#deal-name2').val();
+    var businessApi;
     if (user_input !== '') {
-      var businessApi = this.api.Business.business_deals_search(user_input);
+      businessApi = this.api.Business.business_deals_search(user_input);
       console.log(user_input);
     } else {
       console.log('empty deal name');
-      var businessApi = this.api.Business.business_deals_list();
+      businessApi = this.api.Business.business_deals_list();
     }
 
     businessApi.then(business => {
 
-      this.searched_business_deals = business.hits.hits;
+      this.searched_business_deals = business;
 
-      var businessHolder = business.hits.hits;
+      var businessHolder = business;
 
       businessHolder.forEach(bus => {
         this.mapResults.push(bus._source)

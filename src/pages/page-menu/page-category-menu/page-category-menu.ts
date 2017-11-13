@@ -70,7 +70,7 @@ export class CategoryMenuPage {
 
     this.api.Business.business_deals_category(input, business_cat).then(businesses => {
       console.log(businesses)
-      this.navCtrl.setRoot(UserFindDealsPage, { user_input: input, filtered_business_deals: businesses.hits.hits, business_cat: business_cat }, {
+      this.navCtrl.setRoot(UserFindDealsPage, { user_input: input, filtered_business_deals: businesses, business_cat: business_cat }, {
         animate: true,
         direction: 'back'
       });
