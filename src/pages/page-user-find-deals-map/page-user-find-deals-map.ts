@@ -124,6 +124,7 @@ export class UserFindDealsMapPage {
       self.initMap();
       console.log('map initializing')
       $('#searchBtn2').click();
+      this.searched_business_deals = undefined;
     }, 650);
   }
 
@@ -209,6 +210,7 @@ export class UserFindDealsMapPage {
     });
 
     autocomplete.addListener('place_changed', function() {
+<<<<<<< HEAD
       // need to stop prop of the touchend event
       if (navigator.userAgent.match(/(iPad|iPhone|iPod)/g)) {
         setTimeout(function() {
@@ -221,6 +223,9 @@ export class UserFindDealsMapPage {
               });
           }, 500);
       }
+=======
+      self.business_deals = undefined;
+>>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
       var place = autocomplete.getPlace();
       var city, state, country;
       place.address_components.forEach(result => {
@@ -343,6 +348,7 @@ export class UserFindDealsMapPage {
           });
 
           this.markers.push(marker);
+<<<<<<< HEAD
           if (d.deal_id.length !== 0) {
             d.deal_id.forEach(deal => {
               if(deal.is_featured) {
@@ -359,6 +365,11 @@ export class UserFindDealsMapPage {
                 this.thumb = 'https://cdn.filestackcontent.com/YLUX5rX8RAWVTNsDRPww';
               }
             }
+=======
+
+          if (d.files.length !== 0) {
+            this.thumb = d.files[0].url;
+>>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
           } else {
             if(d.files.length !== 0) {
               d.files.forEach(files => {
@@ -631,9 +642,15 @@ export class UserFindDealsMapPage {
       },
       {
         animate: true,
+<<<<<<< HEAD
         direction: 'forward',
         animation: 'md-transition'
         }
+=======
+        direction: 'back',
+        animation: 'md-transition'
+        }
+>>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
     );
   }
 }

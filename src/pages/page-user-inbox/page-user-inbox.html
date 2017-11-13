@@ -11,7 +11,11 @@
 
     <ion-searchbar placeholder="Search Inbox" *ngIf="hasData" [spellcheck]="true" [type]="search" (ionInput)="getItems($event)"></ion-searchbar>
 
+<<<<<<< HEAD
     <h5 *ngIf="this.hasSearch && this.hasNoSearchData"> No results </h5>
+=======
+    <h5 *ngIf="hasNoData"> No Conversations </h5>
+>>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
 
     <ion-list id="inbox-list" *ngFor="let business of items;">
 

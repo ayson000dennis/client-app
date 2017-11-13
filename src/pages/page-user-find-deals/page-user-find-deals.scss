@@ -1,7 +1,13 @@
 .pac-container {
+<<<<<<< HEAD
   cursor: pointer !important;
   pointer-events: auto !important;
   z-index: 999999999;
+=======
+  z-index: 9999999;
+  cursor: pointer;
+  pointer-events: auto;
+>>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
   box-shadow: none;
   &:nth-of-type(even) {
     // margin-top: 46px !important;
