@@ -83,10 +83,7 @@ export class UserDealsPage {
 
   ionViewWillEnter(){
     this.business = this.navParams.get('business');
-<<<<<<< HEAD
     this.resizeImgs();
-=======
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
 
     if(this.business.operations){
 

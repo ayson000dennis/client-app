@@ -63,7 +63,6 @@
         <div class="about-description">
           <p class="business-name">{{business.company_name}}</p>
 
-<<<<<<< HEAD
           <div *ngIf="business.description !== undefined; then hasDesc else noDesc"></div>
 
           <ng-template #hasDesc>
@@ -83,18 +82,6 @@
             <!-- //do something -->
           </ng-template>
 
-=======
-          <p class="short-description" [hidden]="!business.description" *ngIf="business.description.length >= 70">
-            <span class="shorten">{{business.description.substr(0, 70)}}... </span>
-            <span class="full-text hidden">{{business.description}}</span>
-            <a class="read-more" (click)="readMore()">Read more</a>
-            <a class="read-less hidden" (click)="readLess()">Read less</a>
-          </p>
-
-          <p class="short-description" [hidden]="!business.description" *ngIf="business.description.length <= 69">
-            {{business.description}}
-          </p>
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
         </div>
         <!-- <p class="about-description">Lorem ipsum dolor sit amet, consectetuer adipiscing elit aenean commodo ligula</p> -->
         <div *ngIf="business.business_type != '0' ; then isClickable else isNotClickable"></div>
@@ -110,7 +97,6 @@
                   <span class="info-text">{{business.address}}, {{business.state}}, {{business.zip_postal}} </span>
                 </a>
               </div>
-<<<<<<< HEAD
             </li>
 
             <li class="info-link" [hidden]="!business.phone_number">
@@ -124,21 +110,6 @@
               </div>
             </li>
 
-=======
-            </li>
-
-            <li class="info-link" [hidden]="!business.phone_number">
-              <div class="col-2">
-                <i class="fa fa-phone fa-2x"></i>
-              </div>
-              <div class="col-10">
-                <a class="clickable-link" href="tel:{{business.phone_number}}">
-                  <span class="info-text">{{business.phone_number}}</span>
-                </a>
-              </div>
-            </li>
-
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
             <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>
             <ng-template #hasOperations>
               <li *ngIf="business.operations[0] === '0'"></li>
@@ -160,7 +131,6 @@
                 <div class="col-2">
                   <i class="fa fa-clock-o fa-2x"></i>
                 </div>
-<<<<<<< HEAD
                 <div *ngIf="currentDay[0].isClosed !== true; then isOpen else isClosed"></div>
                 <div class="col-10">
                   <ng-template #isOpen>
@@ -171,12 +141,6 @@
                     <ng-template #businessClosed>
                       <span>Closed Today</span>
                     </ng-template>
-=======
-                <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>
-                <div class="col-10">
-                  <ng-template #isOpen>
-                    <span>Open Today {{currentDay[0].start}} - {{currentDay[0].end}}</span>
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
                    </ng-template>
                   <ng-template #isClosed>
                     <span>Closed Today</span>
@@ -206,17 +170,10 @@
 
             <li class="info-link">
               <div class="col-2">
-<<<<<<< HEAD
                 <i class="fa fa-heart fa-2x" id="favHeart"></i>
               </div>
               <div class="col-10">
                 <a class="clickable-link" tappable (click)="addToFavorites(business)">
-=======
-                <i class="fa fa-heart fa-2x"></i>
-              </div>
-              <div class="col-10">
-                <a class="clickable-link" id="addToFavorite1" tappable (click)="addToFavorites(business)">
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
                   <span class="info-text">Add to favorites</span>
                 </a>
               </div>
@@ -288,7 +245,6 @@
               <div class="col-10">
                 <span class="info-text">{{business.address}}, {{business.state}}, {{business.country}}, {{business.zip_postal}} </span>
               </div>
-<<<<<<< HEAD
             </li>
 
             <li class="info-link" [hidden]="!business.phone_number">
@@ -300,19 +256,6 @@
               </div>
             </li>
 
-=======
-            </li>
-
-            <li class="info-link" [hidden]="!business.phone_number">
-              <div class="col-2">
-                <i class="fa fa-phone fa-2x"></i>
-              </div>
-              <div class="col-10">
-                <span class="info-text"> {{business.phone_number}}</span>
-              </div>
-            </li>
-
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
             <li *ngIf="business.operations.length !== 0; then hasOperations else noOperations"></li>
             <ng-template #hasOperations>
               <li class="operations-link" *ngIf="business.operations[0] === '0'"></li>
@@ -333,15 +276,10 @@
                   <i class="fa fa-clock-o fa-2x"></i>
                 </div>
                 <div class="col-10 op-hours">
-<<<<<<< HEAD
                   <div *ngIf="currentDay[0].isClosed !== true; then isOpen else isClosed"></div>
                   <ng-template #isOpen>
                     <span>Open Today {{currentDay[0].start}} - {{currentDay[0].end}}</span>
                    </ng-template>
-=======
-                  <div *ngIf="operatingHours.isClosed !== true; then isOpen else isClosed"></div>
-                  <ng-template #isOpen>Open Today </ng-template>
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
                   <ng-template #isClosed>
                     Closed Today
                     <span *ngIf="operatingHours.dayCount === currentDay">{{operatingHours[0].day}}</span>
@@ -369,15 +307,9 @@
               </div>
             </li>
 
-<<<<<<< HEAD
             <li class="info-link" tappable (click)="addToFavorites(business)">
               <div class="col-2">
                 <i class="fa fa-heart fa-2x" id="favHeart"></i>
-=======
-            <li class="info-link" id="addToFavorite1" tappable (click)="addToFavorites(business)">
-              <div class="col-2">
-                <i class="fa fa-heart fa-2x" ></i>
->>>>>>> 7143f90bc3113a0c1e0adaf06ab60796eaa9a366
               </div>
               <div class="col-10">
                 <span class="info-text">Add to favorites</span>
